@@ -1,9 +1,13 @@
-import { HTMLAttributes, useState } from 'react'
+import { HTMLAttributes } from 'react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Link } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import { IconBrandFacebook, IconBrandGithub } from '@tabler/icons-react'
+import { Mutation } from '@/graphql/codegen/graphql'
+import { SIGN_IN } from '@/graphql/operation/mutation/user'
+import { useMutation } from '@apollo/client'
+import _ from 'lodash'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import {
@@ -35,7 +39,9 @@ const formSchema = z.object({
 })
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
-  const [isLoading, setIsLoading] = useState(false)
+  // const [isLoading, setIsLoading] = useState(false)
+  const navigate = useNavigate()
+  const [login, { loading }] = useMutation<Mutation>(SIGN_IN)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -46,13 +52,24 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   })
 
   function onSubmit(data: z.infer<typeof formSchema>) {
-    setIsLoading(true)
-    // eslint-disable-next-line no-console
-    console.log(data)
-
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 3000)
+    login({
+      variables: {
+        signInInput: {
+          email: data.email,
+          password: data.password,
+        },
+      },
+      onCompleted: (data) => {
+        console.log('data == >', data)
+        if (!_.isEmpty(data?.signin)) {
+          window.location.href = '/'
+        }
+      },
+      onError: (error) => {
+        console.log('error ===== >', error.message)
+          window.location.href = '/sign-in'
+      },
+    })
   }
 
   return (
@@ -94,7 +111,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             </FormItem>
           )}
         />
-        <Button className='mt-2' disabled={isLoading}>
+        <Button className='mt-2' disabled={loading}>
           Login
         </Button>
 
@@ -110,10 +127,10 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         </div>
 
         <div className='grid grid-cols-2 gap-2'>
-          <Button variant='outline' type='button' disabled={isLoading}>
+          <Button variant='outline' type='button' disabled={loading}>
             <IconBrandGithub className='h-4 w-4' /> GitHub
           </Button>
-          <Button variant='outline' type='button' disabled={isLoading}>
+          <Button variant='outline' type='button' disabled={loading}>
             <IconBrandFacebook className='h-4 w-4' /> Facebook
           </Button>
         </div>

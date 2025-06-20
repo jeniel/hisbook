@@ -7,7 +7,7 @@ import {
   IconMoon,
   IconSun,
 } from '@tabler/icons-react'
-import { useSearch } from '@/context/search-context'
+// import { useSearch } from '@/context/search-context'
 import { useTheme } from '@/context/theme-context'
 import {
   CommandDialog,
@@ -24,18 +24,19 @@ import { ScrollArea } from './ui/scroll-area'
 export function CommandMenu() {
   const navigate = useNavigate()
   const { setTheme } = useTheme()
-  const { open, setOpen } = useSearch()
+  // const { open, setOpen } = useSearch()
 
-  const runCommand = React.useCallback(
-    (command: () => unknown) => {
-      setOpen(false)
-      command()
-    },
-    [setOpen]
-  )
+  // const runCommand = React.useCallback(
+  //   (command: () => unknown) => {
+  //     setOpen(false)
+  //     command()
+  //   },
+  //   [setOpen]
+  // )
 
   return (
-    <CommandDialog modal open={open} onOpenChange={setOpen}>
+    // <CommandDialog modal open={open} onOpenChange={setOpen}>
+    <>
       <CommandInput placeholder='Type a command or search...' />
       <CommandList>
         <ScrollArea type='hover' className='h-72 pr-1'>
@@ -92,6 +93,7 @@ export function CommandMenu() {
           </CommandGroup>
         </ScrollArea>
       </CommandList>
-    </CommandDialog>
+    </>
+    // </CommandDialog>
   )
 }
