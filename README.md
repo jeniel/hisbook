@@ -24,8 +24,6 @@
 
 **Icons:** [Tabler Icons](https://tabler.io/icons)
 
-**Auth (partial):** [Clerk](https://go.clerk.com/GttUAaK)
-
 ## Run Locally
 
 Install dependencies
