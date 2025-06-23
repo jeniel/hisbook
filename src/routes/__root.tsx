@@ -1,9 +1,9 @@
-import { NavigationProgress } from '@/components/navigation-progress'
+import { createRootRouteWithContext, Outlet } from '@tanstack/react-router'
+import { MeQuery } from '@/graphql/codegen/graphql'
 import { Toaster } from '@/components/ui/sonner'
+import { NavigationProgress } from '@/components/navigation-progress'
 import GeneralError from '@/features/errors/general-error'
 import NotFoundError from '@/features/errors/not-found-error'
-import { MeQuery } from '@/graphql/codegen/graphql'
-import { createRootRouteWithContext, Outlet } from '@tanstack/react-router'
 
 interface MyRouterContext {
   user: MeQuery | undefined

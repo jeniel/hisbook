@@ -19,9 +19,27 @@ export type Scalars = {
   JSON: { input: any; output: any; }
 };
 
+export type BigIntFilter = {
+  equals?: InputMaybe<Scalars['String']['input']>;
+  gt?: InputMaybe<Scalars['String']['input']>;
+  gte?: InputMaybe<Scalars['String']['input']>;
+  in?: InputMaybe<Array<Scalars['String']['input']>>;
+  lt?: InputMaybe<Scalars['String']['input']>;
+  lte?: InputMaybe<Scalars['String']['input']>;
+  not?: InputMaybe<NestedBigIntFilter>;
+  notIn?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
 export type BoolFilter = {
   equals?: InputMaybe<Scalars['Boolean']['input']>;
   not?: InputMaybe<NestedBoolFilter>;
+};
+
+export type CreatePostPage = {
+  /** The message to post on the Facebook Page */
+  message: Scalars['String']['input'];
+  /** The Facebook Page ID */
+  pageId: Scalars['String']['input'];
 };
 
 export type CreateProfileInput = {
@@ -101,6 +119,12 @@ export type DepartmentWhereInput = {
   profile?: InputMaybe<ProfileListRelationFilter>;
 };
 
+export type DocumentsListRelationFilter = {
+  every?: InputMaybe<DocumentsWhereInput>;
+  none?: InputMaybe<DocumentsWhereInput>;
+  some?: InputMaybe<DocumentsWhereInput>;
+};
+
 export type Embedding = {
   __typename?: 'Embedding';
   content?: Maybe<Scalars['JSON']['output']>;
@@ -114,6 +138,110 @@ export type EnumRoleNullableListFilter = {
   hasEvery?: InputMaybe<Array<Role>>;
   hasSome?: InputMaybe<Array<Role>>;
   isEmpty?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type FaceBookPageList = {
+  __typename?: 'FaceBookPageList';
+  data: Array<FacebookPage>;
+  meta?: Maybe<Meta>;
+};
+
+export type FacebookPage = {
+  __typename?: 'FacebookPage';
+  _count: FacebookPageCount;
+  about?: Maybe<Scalars['String']['output']>;
+  accessToken?: Maybe<Scalars['String']['output']>;
+  category?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  engagementCount?: Maybe<Scalars['Int']['output']>;
+  engagementMessage?: Maybe<Scalars['String']['output']>;
+  facebookPagePost?: Maybe<Array<FacebookPagePost>>;
+  fanCount?: Maybe<Scalars['Int']['output']>;
+  fbId?: Maybe<Scalars['String']['output']>;
+  followersCount?: Maybe<Scalars['Int']['output']>;
+  id: Scalars['ID']['output'];
+  imageUrl?: Maybe<Scalars['String']['output']>;
+  link?: Maybe<Scalars['String']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  overallStarRating?: Maybe<Scalars['Float']['output']>;
+  updatedAt: Scalars['DateTime']['output'];
+  username?: Maybe<Scalars['String']['output']>;
+  website?: Maybe<Scalars['String']['output']>;
+};
+
+export type FacebookPageCount = {
+  __typename?: 'FacebookPageCount';
+  facebookPagePost: Scalars['Int']['output'];
+};
+
+export type FacebookPagePost = {
+  __typename?: 'FacebookPagePost';
+  createdAt: Scalars['DateTime']['output'];
+  createdTime?: Maybe<Scalars['DateTime']['output']>;
+  id: Scalars['ID']['output'];
+  message?: Maybe<Scalars['String']['output']>;
+  page: FacebookPage;
+  pageId: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export type FacebookPagePostListRelationFilter = {
+  every?: InputMaybe<FacebookPagePostWhereInput>;
+  none?: InputMaybe<FacebookPagePostWhereInput>;
+  some?: InputMaybe<FacebookPagePostWhereInput>;
+};
+
+export type FacebookPagePostWhereInput = {
+  AND?: InputMaybe<Array<FacebookPagePostWhereInput>>;
+  NOT?: InputMaybe<Array<FacebookPagePostWhereInput>>;
+  OR?: InputMaybe<Array<FacebookPagePostWhereInput>>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  createdTime?: InputMaybe<DateTimeNullableFilter>;
+  id?: InputMaybe<StringFilter>;
+  message?: InputMaybe<StringNullableFilter>;
+  page?: InputMaybe<FacebookPageScalarRelationFilter>;
+  pageId?: InputMaybe<StringFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+};
+
+export type FacebookPageScalarRelationFilter = {
+  is?: InputMaybe<FacebookPageWhereInput>;
+  isNot?: InputMaybe<FacebookPageWhereInput>;
+};
+
+export type FacebookPageWhereInput = {
+  AND?: InputMaybe<Array<FacebookPageWhereInput>>;
+  NOT?: InputMaybe<Array<FacebookPageWhereInput>>;
+  OR?: InputMaybe<Array<FacebookPageWhereInput>>;
+  about?: InputMaybe<StringNullableFilter>;
+  accessToken?: InputMaybe<StringNullableFilter>;
+  category?: InputMaybe<StringNullableFilter>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  engagementCount?: InputMaybe<IntNullableFilter>;
+  engagementMessage?: InputMaybe<StringNullableFilter>;
+  facebookPagePost?: InputMaybe<FacebookPagePostListRelationFilter>;
+  fanCount?: InputMaybe<IntNullableFilter>;
+  fbId?: InputMaybe<StringNullableFilter>;
+  followersCount?: InputMaybe<IntNullableFilter>;
+  id?: InputMaybe<StringFilter>;
+  imageUrl?: InputMaybe<StringNullableFilter>;
+  link?: InputMaybe<StringNullableFilter>;
+  name?: InputMaybe<StringNullableFilter>;
+  overallStarRating?: InputMaybe<FloatNullableFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+  username?: InputMaybe<StringNullableFilter>;
+  website?: InputMaybe<StringNullableFilter>;
+};
+
+export type FloatNullableFilter = {
+  equals?: InputMaybe<Scalars['Float']['input']>;
+  gt?: InputMaybe<Scalars['Float']['input']>;
+  gte?: InputMaybe<Scalars['Float']['input']>;
+  in?: InputMaybe<Array<Scalars['Float']['input']>>;
+  lt?: InputMaybe<Scalars['Float']['input']>;
+  lte?: InputMaybe<Scalars['Float']['input']>;
+  not?: InputMaybe<NestedFloatNullableFilter>;
+  notIn?: InputMaybe<Array<Scalars['Float']['input']>>;
 };
 
 export type GeneralMsg = {
@@ -168,6 +296,7 @@ export type Meta = {
 export type Mutation = {
   __typename?: 'Mutation';
   createEmbedding: Embedding;
+  createPagePost: GeneralMsg;
   createUser: GeneralMsg;
   logOut: GeneralMsg;
   signin: SignResponse;
@@ -178,6 +307,11 @@ export type Mutation = {
 
 export type MutationCreateEmbeddingArgs = {
   content: Scalars['JSON']['input'];
+};
+
+
+export type MutationCreatePagePostArgs = {
+  CreatePostInput: CreatePostPage;
 };
 
 
@@ -199,6 +333,17 @@ export type MutationSignupArgs = {
 export type MutationUpsertDepartmentArgs = {
   deptId?: InputMaybe<Scalars['String']['input']>;
   payload: UpsertDepartmentInput;
+};
+
+export type NestedBigIntFilter = {
+  equals?: InputMaybe<Scalars['String']['input']>;
+  gt?: InputMaybe<Scalars['String']['input']>;
+  gte?: InputMaybe<Scalars['String']['input']>;
+  in?: InputMaybe<Array<Scalars['String']['input']>>;
+  lt?: InputMaybe<Scalars['String']['input']>;
+  lte?: InputMaybe<Scalars['String']['input']>;
+  not?: InputMaybe<NestedBigIntFilter>;
+  notIn?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type NestedBoolFilter = {
@@ -226,6 +371,17 @@ export type NestedDateTimeNullableFilter = {
   lte?: InputMaybe<Scalars['DateTime']['input']>;
   not?: InputMaybe<NestedDateTimeNullableFilter>;
   notIn?: InputMaybe<Array<Scalars['DateTime']['input']>>;
+};
+
+export type NestedFloatNullableFilter = {
+  equals?: InputMaybe<Scalars['Float']['input']>;
+  gt?: InputMaybe<Scalars['Float']['input']>;
+  gte?: InputMaybe<Scalars['Float']['input']>;
+  in?: InputMaybe<Array<Scalars['Float']['input']>>;
+  lt?: InputMaybe<Scalars['Float']['input']>;
+  lte?: InputMaybe<Scalars['Float']['input']>;
+  not?: InputMaybe<NestedFloatNullableFilter>;
+  notIn?: InputMaybe<Array<Scalars['Float']['input']>>;
 };
 
 export type NestedIntNullableFilter = {
@@ -327,9 +483,11 @@ export type ProfileWhereInput = {
 export type Query = {
   __typename?: 'Query';
   findAllDepartments: DepartmentList;
+  findAllFbDetails: FaceBookPageList;
   findAllUsers: UserList;
   findOneUser: Profile;
   meQuery: MeQuery;
+  syncToGraphApi: GeneralMsg;
 };
 
 
@@ -337,6 +495,13 @@ export type QueryFindAllDepartmentsArgs = {
   page?: InputMaybe<Scalars['Int']['input']>;
   perPage?: InputMaybe<Scalars['Int']['input']>;
   where?: InputMaybe<DepartmentWhereInput>;
+};
+
+
+export type QueryFindAllFbDetailsArgs = {
+  page?: InputMaybe<Scalars['Int']['input']>;
+  perPage?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<FacebookPageWhereInput>;
 };
 
 
@@ -358,6 +523,8 @@ export enum QueryMode {
 
 export enum Role {
   Admin = 'ADMIN',
+  Client = 'CLIENT',
+  SuperAdmin = 'SUPER_ADMIN',
   User = 'USER'
 }
 
@@ -415,6 +582,46 @@ export type StringNullableFilter = {
   startsWith?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type Tenant = {
+  __typename?: 'Tenant';
+  _count: TenantCount;
+  createdAt: Scalars['DateTime']['output'];
+  description?: Maybe<Scalars['String']['output']>;
+  documents?: Maybe<Array<Documents>>;
+  id: Scalars['ID']['output'];
+  isActive: Scalars['Boolean']['output'];
+  isApprove: Scalars['Boolean']['output'];
+  name: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+  users?: Maybe<Array<User>>;
+};
+
+export type TenantCount = {
+  __typename?: 'TenantCount';
+  documents: Scalars['Int']['output'];
+  users: Scalars['Int']['output'];
+};
+
+export type TenantNullableScalarRelationFilter = {
+  is?: InputMaybe<TenantWhereInput>;
+  isNot?: InputMaybe<TenantWhereInput>;
+};
+
+export type TenantWhereInput = {
+  AND?: InputMaybe<Array<TenantWhereInput>>;
+  NOT?: InputMaybe<Array<TenantWhereInput>>;
+  OR?: InputMaybe<Array<TenantWhereInput>>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  description?: InputMaybe<StringNullableFilter>;
+  documents?: InputMaybe<DocumentsListRelationFilter>;
+  id?: InputMaybe<StringFilter>;
+  isActive?: InputMaybe<BoolFilter>;
+  isApprove?: InputMaybe<BoolFilter>;
+  name?: InputMaybe<StringFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+  users?: InputMaybe<UserListRelationFilter>;
+};
+
 export type UpsertDepartmentInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
@@ -432,6 +639,8 @@ export type User = {
   isApprove: Scalars['Boolean']['output'];
   profile?: Maybe<Profile>;
   role?: Maybe<Array<Role>>;
+  tenant?: Maybe<Tenant>;
+  tenantId?: Maybe<Scalars['String']['output']>;
   updatedAt: Scalars['DateTime']['output'];
   updatedBy?: Maybe<Scalars['String']['output']>;
   username: Scalars['String']['output'];
@@ -441,6 +650,12 @@ export type UserList = {
   __typename?: 'UserList';
   data: Array<Profile>;
   meta?: Maybe<Meta>;
+};
+
+export type UserListRelationFilter = {
+  every?: InputMaybe<UserWhereInput>;
+  none?: InputMaybe<UserWhereInput>;
+  some?: InputMaybe<UserWhereInput>;
 };
 
 export type UserNullableScalarRelationFilter = {
@@ -462,7 +677,29 @@ export type UserWhereInput = {
   isApprove?: InputMaybe<BoolFilter>;
   profile?: InputMaybe<ProfileNullableScalarRelationFilter>;
   role?: InputMaybe<EnumRoleNullableListFilter>;
+  tenant?: InputMaybe<TenantNullableScalarRelationFilter>;
+  tenantId?: InputMaybe<StringNullableFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   updatedBy?: InputMaybe<StringNullableFilter>;
   username?: InputMaybe<StringFilter>;
+};
+
+export type Documents = {
+  __typename?: 'documents';
+  content?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  metadata?: Maybe<Scalars['JSON']['output']>;
+  tenant?: Maybe<Tenant>;
+  tenantId?: Maybe<Scalars['String']['output']>;
+};
+
+export type DocumentsWhereInput = {
+  AND?: InputMaybe<Array<DocumentsWhereInput>>;
+  NOT?: InputMaybe<Array<DocumentsWhereInput>>;
+  OR?: InputMaybe<Array<DocumentsWhereInput>>;
+  content?: InputMaybe<StringNullableFilter>;
+  id?: InputMaybe<BigIntFilter>;
+  metadata?: InputMaybe<JsonNullableFilter>;
+  tenant?: InputMaybe<TenantNullableScalarRelationFilter>;
+  tenantId?: InputMaybe<StringNullableFilter>;
 };

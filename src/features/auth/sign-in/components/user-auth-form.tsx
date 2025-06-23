@@ -67,7 +67,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       },
       onError: (error) => {
         console.log('error ===== >', error.message)
-          window.location.href = '/sign-in'
+        window.location.href = '/sign-in'
       },
     })
   }

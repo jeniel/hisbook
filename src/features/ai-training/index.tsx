@@ -1,7 +1,7 @@
 import { Header } from '@/components/layout/header'
 import { ThemeSwitch } from '@/components/theme-switch'
 
-const ContentPage = () => {
+const AiTrainingPage = () => {
   return (
     <>
       <Header>
@@ -13,4 +13,4 @@ const ContentPage = () => {
   )
 }
 
-export default ContentPage
+export default AiTrainingPage

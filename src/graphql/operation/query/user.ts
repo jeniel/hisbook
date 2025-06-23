@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client'
 
 export const FIND_ALL_USER = gql`
   query FindAllUsers($page: Int, $perPage: Int, $where: ProfileWhereInput) {
@@ -27,7 +27,7 @@ export const FIND_ALL_USER = gql`
       }
     }
   }
-`;
+`
 
 export const ME_QUERY = gql`
   query MeQuery {
@@ -51,7 +51,7 @@ export const ME_QUERY = gql`
       }
     }
   }
-`;
+`
 
 export const FIND_USER_BY_ID = gql`
   query Query($profileId: String!) {
@@ -75,4 +75,4 @@ export const FIND_USER_BY_ID = gql`
       }
     }
   }
-`;
+`

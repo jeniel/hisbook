@@ -60,19 +60,19 @@ const sidebarNavItems = [
     icon: <IconTool size={18} />,
     href: '/settings/account',
   },
-  {
-    title: 'Appearance',
-    icon: <IconPalette size={18} />,
-    href: '/settings/appearance',
-  },
-  {
-    title: 'Notifications',
-    icon: <IconNotification size={18} />,
-    href: '/settings/notifications',
-  },
-  {
-    title: 'Display',
-    icon: <IconBrowserCheck size={18} />,
-    href: '/settings/display',
-  },
+  // {
+  //   title: 'Appearance',
+  //   icon: <IconPalette size={18} />,
+  //   href: '/settings/appearance',
+  // },
+  // {
+  //   title: 'Notifications',
+  //   icon: <IconNotification size={18} />,
+  //   href: '/settings/notifications',
+  // },
+  // {
+  //   title: 'Display',
+  //   icon: <IconBrowserCheck size={18} />,
+  //   href: '/settings/display',
+  // },
 ]
