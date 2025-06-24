@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { IconThumbUp, IconUser } from '@tabler/icons-react'
+import { useNavigate } from '@tanstack/react-router'
+import { IconBrandFacebook, IconThumbUp, IconUser } from '@tabler/icons-react'
 import { Query } from '@/graphql/codegen/graphql'
 import { GET_FACEBOOK_DETALS } from '@/graphql/operation/query/socials'
 import { useQuery } from '@apollo/client'
@@ -47,10 +48,10 @@ const channels: Channel[] = [
 const ChannelsPage = () => {
   const [appType, setAppType] = useState<any>(channels[0].name) // Default to Facebook
   // const [searchTerm, setSearchTerm] = useState('')
-
   const { data, loading } = useQuery<Query>(GET_FACEBOOK_DETALS)
-
   const facebookDetails = data?.findAllFbDetails.data || []
+
+  const navigate = useNavigate()
 
   return (
     <>
@@ -79,11 +80,11 @@ const ChannelsPage = () => {
             />
             <Select value={appType} onValueChange={setAppType}>
               <SelectTrigger className='w-50'>
-                <SelectValue>{appText.get(appType.name)}</SelectValue>
+                <SelectValue>{appType}</SelectValue>
               </SelectTrigger>
               <SelectContent>
                 {channels.map((channel) => (
-                  <SelectItem key={channel.id} value={channel.id}>
+                  <SelectItem key={channel.id} value={channel.name}>
                     {appText.get(channel.id) || channel.name}
                   </SelectItem>
                 ))}
@@ -106,16 +107,35 @@ const ChannelsPage = () => {
                 />
                 {/* {item.imageUrl} */}
 
-                <Button variant='outline' size='sm'>
-                  View
-                </Button>
+                <div className='flex items-center space-x-2'>
+                  <Button
+                    onClick={() =>
+                      navigate({
+                        to: `/channels/$pageId`,
+                        params: { pageId: item.id },
+                      })
+                    }
+                    variant='outline'
+                    size='sm'
+                  >
+                    View
+                  </Button>
+                </div>
               </div>
               <div>
                 <h2 className='mb-1 font-semibold'>{item.name}</h2>
-                <p className='text-muted-foreground text-sm'>
-                  <IconThumbUp className='inline h-4 w-4' /> {item.fanCount} |
-                  <IconUser className='inline h-4 w-4' /> {item.followersCount}
-                </p>
+              </div>
+              <div className='text-muted-foreground text-sm'>
+                <IconThumbUp className='inline h-4 w-4' /> {item.fanCount} |
+                <IconUser className='inline h-4 w-4' /> {item.followersCount} |
+                <IconBrandFacebook
+                  onClick={() => {
+                    if (item.link) {
+                      window.open(item.link, '_blank')
+                    }
+                  }}
+                  className='inline h-4 w-4 cursor-pointer'
+                />
               </div>
             </li>
           ))}
