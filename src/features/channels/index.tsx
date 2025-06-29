@@ -55,12 +55,6 @@ const ChannelsPage = () => {
 
   return (
     <>
-      <Header>
-        <div className='ml-auto flex items-center space-x-4'>
-          <ThemeSwitch />
-        </div>
-      </Header>
-
       <Main fixed>
         <div>
           <h1 className='text-2xl font-bold tracking-tight'>

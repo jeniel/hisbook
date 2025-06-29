@@ -51,9 +51,20 @@ export const sidebarData: SidebarData = {
           icon: IconLayoutDashboard,
         },
         {
-          title: 'Ai-Training',
-          url: '/ai-training',
+          title: 'Ai-Agent',
           icon: IconRobot,
+          items: [
+            {
+              title: 'Client',
+              url: '/ai-agent/client',
+              icon: IconUserCog,
+            },
+            {
+              title: 'Config',
+              url: '/ai-agent/config',
+              icon: IconSettings,
+            },
+          ],
         },
         {
           title: 'Channels',

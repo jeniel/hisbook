@@ -9,6 +9,8 @@ const AiTrainingPage = () => {
           <ThemeSwitch />
         </div>
       </Header>
+
+      
     </>
   )
 }

@@ -4,6 +4,9 @@ import { cn } from '@/lib/utils'
 import { SidebarProvider } from '@/components/ui/sidebar'
 import { AppSidebar } from '@/components/layout/app-sidebar'
 import SkipToMain from '@/components/skip-to-main'
+import { ProfileDropdown } from '../profile-dropdown'
+import { ThemeSwitch } from '../theme-switch'
+import { Header } from './header'
 
 interface Props {
   children?: React.ReactNode
@@ -30,7 +33,19 @@ export function AuthenticatedLayout({ children }: Props) {
             'has-[main.fixed-main]:group-data-[scroll-locked=1]/body:h-svh'
           )}
         >
-          {children ? children : <Outlet />}
+          {children ? (
+            children
+          ) : (
+            <>
+              <Header>
+                <div className='ml-auto flex items-center space-x-4'>
+                  <ThemeSwitch />
+                  <ProfileDropdown />
+                </div>
+              </Header>
+              <Outlet />
+            </>
+          )}
         </div>
       </SidebarProvider>
     </>
