@@ -1,9 +1,7 @@
+import ClientPage from '@/features/ai-agent/client'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_authenticated/ai-agent/client/')({
-  component: RouteComponent,
+  component: ClientPage,
 })
 
-function RouteComponent() {
-  return <div>Hello "/_authenticated/ai-agent/client/"!</div>
-}

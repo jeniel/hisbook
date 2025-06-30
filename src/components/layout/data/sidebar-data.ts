@@ -22,7 +22,7 @@ export const sidebarData: SidebarData = {
   user: {
     name: 'joem',
     email: 'joemdev@gmail.com',
-    avatar: '/avatars/shadcn.jpg',
+    avatar: '/images/shadcn.jpg',
   },
   teams: [
     {

@@ -53,6 +53,8 @@ const ChannelsPage = () => {
 
   const navigate = useNavigate()
 
+  //console.log('facebookDetails', facebookDetails)
+
   return (
     <>
       <Main fixed>
