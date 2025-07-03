@@ -36,6 +36,7 @@ import { Route as AuthenticatedSettingsAccountRouteImport } from './routes/_auth
 import { Route as AuthenticatedChannelsPageIdRouteImport } from './routes/_authenticated/channels/$pageId'
 import { Route as AuthenticatedAiAgentConfigIndexRouteImport } from './routes/_authenticated/ai-agent/config/index'
 import { Route as AuthenticatedAiAgentClientIndexRouteImport } from './routes/_authenticated/ai-agent/client/index'
+import { Route as AuthenticatedAiAgentClientIdRouteImport } from './routes/_authenticated/ai-agent/client/$id'
 
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
@@ -182,6 +183,12 @@ const AuthenticatedAiAgentClientIndexRoute =
     path: '/ai-agent/client/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAiAgentClientIdRoute =
+  AuthenticatedAiAgentClientIdRouteImport.update({
+    id: '/ai-agent/client/$id',
+    path: '/ai-agent/client/$id',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
@@ -208,6 +215,7 @@ export interface FileRoutesByFullPath {
   '/settings/': typeof AuthenticatedSettingsIndexRoute
   '/tasks': typeof AuthenticatedTasksIndexRoute
   '/users': typeof AuthenticatedUsersIndexRoute
+  '/ai-agent/client/$id': typeof AuthenticatedAiAgentClientIdRoute
   '/ai-agent/client': typeof AuthenticatedAiAgentClientIndexRoute
   '/ai-agent/config': typeof AuthenticatedAiAgentConfigIndexRoute
 }
@@ -235,6 +243,7 @@ export interface FileRoutesByTo {
   '/settings': typeof AuthenticatedSettingsIndexRoute
   '/tasks': typeof AuthenticatedTasksIndexRoute
   '/users': typeof AuthenticatedUsersIndexRoute
+  '/ai-agent/client/$id': typeof AuthenticatedAiAgentClientIdRoute
   '/ai-agent/client': typeof AuthenticatedAiAgentClientIndexRoute
   '/ai-agent/config': typeof AuthenticatedAiAgentConfigIndexRoute
 }
@@ -265,6 +274,7 @@ export interface FileRoutesById {
   '/_authenticated/settings/': typeof AuthenticatedSettingsIndexRoute
   '/_authenticated/tasks/': typeof AuthenticatedTasksIndexRoute
   '/_authenticated/users/': typeof AuthenticatedUsersIndexRoute
+  '/_authenticated/ai-agent/client/$id': typeof AuthenticatedAiAgentClientIdRoute
   '/_authenticated/ai-agent/client/': typeof AuthenticatedAiAgentClientIndexRoute
   '/_authenticated/ai-agent/config/': typeof AuthenticatedAiAgentConfigIndexRoute
 }
@@ -295,6 +305,7 @@ export interface FileRouteTypes {
     | '/settings/'
     | '/tasks'
     | '/users'
+    | '/ai-agent/client/$id'
     | '/ai-agent/client'
     | '/ai-agent/config'
   fileRoutesByTo: FileRoutesByTo
@@ -322,6 +333,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/tasks'
     | '/users'
+    | '/ai-agent/client/$id'
     | '/ai-agent/client'
     | '/ai-agent/config'
   id:
@@ -351,6 +363,7 @@ export interface FileRouteTypes {
     | '/_authenticated/settings/'
     | '/_authenticated/tasks/'
     | '/_authenticated/users/'
+    | '/_authenticated/ai-agent/client/$id'
     | '/_authenticated/ai-agent/client/'
     | '/_authenticated/ai-agent/config/'
   fileRoutesById: FileRoutesById
@@ -560,6 +573,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAiAgentClientIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/ai-agent/client/$id': {
+      id: '/_authenticated/ai-agent/client/$id'
+      path: '/ai-agent/client/$id'
+      fullPath: '/ai-agent/client/$id'
+      preLoaderRoute: typeof AuthenticatedAiAgentClientIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
@@ -596,6 +616,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedHelpCenterIndexRoute: typeof AuthenticatedHelpCenterIndexRoute
   AuthenticatedTasksIndexRoute: typeof AuthenticatedTasksIndexRoute
   AuthenticatedUsersIndexRoute: typeof AuthenticatedUsersIndexRoute
+  AuthenticatedAiAgentClientIdRoute: typeof AuthenticatedAiAgentClientIdRoute
   AuthenticatedAiAgentClientIndexRoute: typeof AuthenticatedAiAgentClientIndexRoute
   AuthenticatedAiAgentConfigIndexRoute: typeof AuthenticatedAiAgentConfigIndexRoute
 }
@@ -610,6 +631,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedHelpCenterIndexRoute: AuthenticatedHelpCenterIndexRoute,
   AuthenticatedTasksIndexRoute: AuthenticatedTasksIndexRoute,
   AuthenticatedUsersIndexRoute: AuthenticatedUsersIndexRoute,
+  AuthenticatedAiAgentClientIdRoute: AuthenticatedAiAgentClientIdRoute,
   AuthenticatedAiAgentClientIndexRoute: AuthenticatedAiAgentClientIndexRoute,
   AuthenticatedAiAgentConfigIndexRoute: AuthenticatedAiAgentConfigIndexRoute,
 }

@@ -19,17 +19,6 @@ export type Scalars = {
   JSON: { input: any; output: any; }
 };
 
-export type BigIntFilter = {
-  equals?: InputMaybe<Scalars['String']['input']>;
-  gt?: InputMaybe<Scalars['String']['input']>;
-  gte?: InputMaybe<Scalars['String']['input']>;
-  in?: InputMaybe<Array<Scalars['String']['input']>>;
-  lt?: InputMaybe<Scalars['String']['input']>;
-  lte?: InputMaybe<Scalars['String']['input']>;
-  not?: InputMaybe<NestedBigIntFilter>;
-  notIn?: InputMaybe<Array<Scalars['String']['input']>>;
-};
-
 export type BoolFilter = {
   equals?: InputMaybe<Scalars['Boolean']['input']>;
   not?: InputMaybe<NestedBoolFilter>;
@@ -48,6 +37,14 @@ export type CreateProfileInput = {
   firstName?: InputMaybe<Scalars['String']['input']>;
   lastName?: InputMaybe<Scalars['String']['input']>;
   middleName?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type CreateTenant = {
+  chatTableName?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  documentTableName?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+  slug: Scalars['String']['input'];
 };
 
 export type CreateUserInput = {
@@ -117,19 +114,6 @@ export type DepartmentWhereInput = {
   id?: InputMaybe<StringFilter>;
   name?: InputMaybe<StringFilter>;
   profile?: InputMaybe<ProfileListRelationFilter>;
-};
-
-export type DocumentsListRelationFilter = {
-  every?: InputMaybe<DocumentsWhereInput>;
-  none?: InputMaybe<DocumentsWhereInput>;
-  some?: InputMaybe<DocumentsWhereInput>;
-};
-
-export type Embedding = {
-  __typename?: 'Embedding';
-  content?: Maybe<Scalars['JSON']['output']>;
-  embedding?: Maybe<Array<Scalars['Float']['output']>>;
-  metadata?: Maybe<Scalars['JSON']['output']>;
 };
 
 export type EnumRoleNullableListFilter = {
@@ -295,23 +279,31 @@ export type Meta = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createEmbedding: Embedding;
+  createEmbbedings: GeneralMsg;
   createPagePost: GeneralMsg;
+  createTenant: GeneralMsg;
   createUser: GeneralMsg;
   logOut: GeneralMsg;
   signin: SignResponse;
   signup: SignResponse;
+  updateEmbbedings: GeneralMsg;
   upsertDepartment: GeneralMsg;
 };
 
 
-export type MutationCreateEmbeddingArgs = {
-  content: Scalars['JSON']['input'];
+export type MutationCreateEmbbedingsArgs = {
+  content: Scalars['String']['input'];
+  tenantId: Scalars['String']['input'];
 };
 
 
 export type MutationCreatePagePostArgs = {
   CreatePostInput: CreatePostPage;
+};
+
+
+export type MutationCreateTenantArgs = {
+  createTenant: CreateTenant;
 };
 
 
@@ -330,20 +322,15 @@ export type MutationSignupArgs = {
 };
 
 
+export type MutationUpdateEmbbedingsArgs = {
+  content: Scalars['String']['input'];
+  id: Scalars['Float']['input'];
+};
+
+
 export type MutationUpsertDepartmentArgs = {
   deptId?: InputMaybe<Scalars['String']['input']>;
   payload: UpsertDepartmentInput;
-};
-
-export type NestedBigIntFilter = {
-  equals?: InputMaybe<Scalars['String']['input']>;
-  gt?: InputMaybe<Scalars['String']['input']>;
-  gte?: InputMaybe<Scalars['String']['input']>;
-  in?: InputMaybe<Array<Scalars['String']['input']>>;
-  lt?: InputMaybe<Scalars['String']['input']>;
-  lte?: InputMaybe<Scalars['String']['input']>;
-  not?: InputMaybe<NestedBigIntFilter>;
-  notIn?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type NestedBoolFilter = {
@@ -482,10 +469,14 @@ export type ProfileWhereInput = {
 
 export type Query = {
   __typename?: 'Query';
+  chatWithModel: Scalars['String']['output'];
+  chats: Array<N8n_Chat_Histories>;
   findAllDepartments: DepartmentList;
   findAllFbDetails: FaceBookPageList;
+  findAllTenants: Array<Tenant>;
   findAllUsers: UserList;
   findOneUser: Profile;
+  findTenantById: Tenant;
   meQuery: MeQuery;
   syncToGraphApi: GeneralMsg;
 };
@@ -514,6 +505,11 @@ export type QueryFindAllUsersArgs = {
 
 export type QueryFindOneUserArgs = {
   profileId: Scalars['String']['input'];
+};
+
+
+export type QueryFindTenantByIdArgs = {
+  tenantId: Scalars['String']['input'];
 };
 
 export enum QueryMode {
@@ -585,20 +581,22 @@ export type StringNullableFilter = {
 export type Tenant = {
   __typename?: 'Tenant';
   _count: TenantCount;
+  chatTableName?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['DateTime']['output'];
   description?: Maybe<Scalars['String']['output']>;
-  documents?: Maybe<Array<Documents>>;
+  documentTableName?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   isActive: Scalars['Boolean']['output'];
   isApprove: Scalars['Boolean']['output'];
   name: Scalars['String']['output'];
+  nanoid: Scalars['String']['output'];
+  slug: Scalars['String']['output'];
   updatedAt: Scalars['DateTime']['output'];
   users?: Maybe<Array<User>>;
 };
 
 export type TenantCount = {
   __typename?: 'TenantCount';
-  documents: Scalars['Int']['output'];
   users: Scalars['Int']['output'];
 };
 
@@ -611,13 +609,16 @@ export type TenantWhereInput = {
   AND?: InputMaybe<Array<TenantWhereInput>>;
   NOT?: InputMaybe<Array<TenantWhereInput>>;
   OR?: InputMaybe<Array<TenantWhereInput>>;
+  chatTableName?: InputMaybe<StringNullableFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   description?: InputMaybe<StringNullableFilter>;
-  documents?: InputMaybe<DocumentsListRelationFilter>;
+  documentTableName?: InputMaybe<StringNullableFilter>;
   id?: InputMaybe<StringFilter>;
   isActive?: InputMaybe<BoolFilter>;
   isApprove?: InputMaybe<BoolFilter>;
   name?: InputMaybe<StringFilter>;
+  nanoid?: InputMaybe<StringFilter>;
+  slug?: InputMaybe<StringFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   users?: InputMaybe<UserListRelationFilter>;
 };
@@ -684,22 +685,9 @@ export type UserWhereInput = {
   username?: InputMaybe<StringFilter>;
 };
 
-export type Documents = {
-  __typename?: 'documents';
-  content?: Maybe<Scalars['String']['output']>;
+export type N8n_Chat_Histories = {
+  __typename?: 'n8n_chat_histories';
   id: Scalars['ID']['output'];
-  metadata?: Maybe<Scalars['JSON']['output']>;
-  tenant?: Maybe<Tenant>;
-  tenantId?: Maybe<Scalars['String']['output']>;
-};
-
-export type DocumentsWhereInput = {
-  AND?: InputMaybe<Array<DocumentsWhereInput>>;
-  NOT?: InputMaybe<Array<DocumentsWhereInput>>;
-  OR?: InputMaybe<Array<DocumentsWhereInput>>;
-  content?: InputMaybe<StringNullableFilter>;
-  id?: InputMaybe<BigIntFilter>;
-  metadata?: InputMaybe<JsonNullableFilter>;
-  tenant?: InputMaybe<TenantNullableScalarRelationFilter>;
-  tenantId?: InputMaybe<StringNullableFilter>;
+  message: Scalars['JSON']['output'];
+  session_id: Scalars['String']['output'];
 };
