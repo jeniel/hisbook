@@ -6,6 +6,7 @@ import NotFoundError from '@/features/errors/not-found-error'
 import { MeQuery, Query } from '../graphql/codegen/graphql'
 import { ME_QUERY } from '../graphql/operation/query/user'
 import { AccountConsumer, AccountProvider } from './accountContext'
+import Spinner from '@/components/spinner'
 
 // import { ModalProvider } from "react-modal-hook";
 
@@ -52,7 +53,7 @@ const AuthManager = (props: any) => {
   }
 
   if (loading) {
-    return <p>Loading...</p>
+    return <Spinner />
   }
 
   return (
