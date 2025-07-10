@@ -25,8 +25,8 @@ export default defineConfig({
   },
   server: {
     host: true,
-    //allowedHosts: true || ['*',""],
-    port: 3000,
+    allowedHosts: true || ['*',""],
+    port: 4173,
     watch: {
       usePolling: true,
     },
