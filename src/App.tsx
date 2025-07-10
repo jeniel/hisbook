@@ -1,6 +1,7 @@
 import { createRouter, RouterProvider } from '@tanstack/react-router'
 import { ApolloProvider } from '@apollo/client'
 import { useStore } from '@tanstack/react-store'
+import { ModalProvider } from 'react-modal-hook'
 import AuthManager from './context/authManager'
 import { FontProvider } from './context/font-context'
 import { ThemeProvider } from './context/theme-context'
@@ -29,12 +30,15 @@ const App = () => {
         <AuthManager>
           <ThemeProvider defaultTheme='light' storageKey='vite-ui-theme'>
             <FontProvider>
-              <RouterProvider router={router} context={user} />
+              <ModalProvider>
+                {/* <RouterProvider router={router} context={{ user }} /> */}
+                <RouterProvider router={router} context={user} />
+              </ModalProvider>
             </FontProvider>
           </ThemeProvider>
         </AuthManager>
       </ApolloProvider>
-    </>
+    </> 
   )
 }
 

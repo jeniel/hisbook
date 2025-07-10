@@ -24,6 +24,20 @@ export type BoolFilter = {
   not?: InputMaybe<NestedBoolFilter>;
 };
 
+export type Content = {
+  __typename?: 'Content';
+  content?: Maybe<Scalars['String']['output']>;
+  /** Unique identifier for the content */
+  id: Scalars['ID']['output'];
+};
+
+export type ContentResponse = {
+  __typename?: 'ContentResponse';
+  content: Array<Content>;
+  message: Scalars['String']['output'];
+  pagination: Pagination;
+};
+
 export type CreatePostPage = {
   /** The message to post on the Facebook Page */
   message: Scalars['String']['input'];
@@ -40,9 +54,9 @@ export type CreateProfileInput = {
 };
 
 export type CreateTenant = {
-  chatTableName?: InputMaybe<Scalars['String']['input']>;
+  chatTableName: Scalars['String']['input'];
   description?: InputMaybe<Scalars['String']['input']>;
-  documentTableName?: InputMaybe<Scalars['String']['input']>;
+  documentTableName: Scalars['String']['input'];
   name: Scalars['String']['input'];
   slug: Scalars['String']['input'];
 };
@@ -279,19 +293,20 @@ export type Meta = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createEmbbedings: GeneralMsg;
+  createEmbeddings: GeneralMsg;
   createPagePost: GeneralMsg;
   createTenant: GeneralMsg;
   createUser: GeneralMsg;
+  deleteEmbedding: GeneralMsg;
   logOut: GeneralMsg;
   signin: SignResponse;
   signup: SignResponse;
-  updateEmbbedings: GeneralMsg;
+  updateEmbeddings: GeneralMsg;
   upsertDepartment: GeneralMsg;
 };
 
 
-export type MutationCreateEmbbedingsArgs = {
+export type MutationCreateEmbeddingsArgs = {
   content: Scalars['String']['input'];
   tenantId: Scalars['String']['input'];
 };
@@ -312,6 +327,12 @@ export type MutationCreateUserArgs = {
 };
 
 
+export type MutationDeleteEmbeddingArgs = {
+  id: Scalars['Int']['input'];
+  tenantId: Scalars['String']['input'];
+};
+
+
 export type MutationSigninArgs = {
   signInInput: SignInInput;
 };
@@ -322,9 +343,10 @@ export type MutationSignupArgs = {
 };
 
 
-export type MutationUpdateEmbbedingsArgs = {
+export type MutationUpdateEmbeddingsArgs = {
   content: Scalars['String']['input'];
   id: Scalars['Float']['input'];
+  tenantId: Scalars['String']['input'];
 };
 
 
@@ -410,6 +432,16 @@ export type NestedStringNullableFilter = {
   startsWith?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type Pagination = {
+  __typename?: 'Pagination';
+  currentPage: Scalars['Int']['output'];
+  hasNextPage: Scalars['Boolean']['output'];
+  hasPrevPage: Scalars['Boolean']['output'];
+  limit: Scalars['Int']['output'];
+  totalCount: Scalars['Int']['output'];
+  totalPages: Scalars['Int']['output'];
+};
+
 export type Profile = {
   __typename?: 'Profile';
   address?: Maybe<Scalars['JSON']['output']>;
@@ -475,6 +507,7 @@ export type Query = {
   findAllFbDetails: FaceBookPageList;
   findAllTenants: Array<Tenant>;
   findAllUsers: UserList;
+  findContent: ContentResponse;
   findOneUser: Profile;
   findTenantById: Tenant;
   meQuery: MeQuery;
@@ -500,6 +533,13 @@ export type QueryFindAllUsersArgs = {
   page?: InputMaybe<Scalars['Int']['input']>;
   perPage?: InputMaybe<Scalars['Int']['input']>;
   where?: InputMaybe<ProfileWhereInput>;
+};
+
+
+export type QueryFindContentArgs = {
+  limit?: Scalars['Int']['input'];
+  page?: Scalars['Int']['input'];
+  tenantId: Scalars['String']['input'];
 };
 
 

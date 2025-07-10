@@ -1,13 +1,13 @@
-import { Separator } from '@radix-ui/react-separator'
-import { useNavigate } from '@tanstack/react-router'
+import { Main } from '@/components/layout/main'
+import { Button } from '@/components/ui/button'
 import { Query } from '@/graphql/codegen/graphql'
 import { FIND_ALL_TENANTS } from '@/graphql/operation/query/tenant'
 import { useQuery } from '@apollo/client'
-import { Button } from '@/components/ui/button'
-import { Main } from '@/components/layout/main'
+import { Separator } from '@radix-ui/react-separator'
+import { useNavigate } from '@tanstack/react-router'
 
 const ClientPage = () => {
-  const { data, loading, error } = useQuery<Query>(FIND_ALL_TENANTS)
+  const { data } = useQuery<Query>(FIND_ALL_TENANTS)
   const clientList = data?.findAllTenants
 
   const navigate = useNavigate()

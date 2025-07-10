@@ -1,14 +1,4 @@
-import { HTMLAttributes } from 'react'
-import { z } from 'zod'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Link, useNavigate } from '@tanstack/react-router'
-import { IconBrandFacebook, IconBrandGithub } from '@tabler/icons-react'
-import { Mutation } from '@/graphql/codegen/graphql'
-import { SIGN_IN } from '@/graphql/operation/mutation/user'
-import { useMutation } from '@apollo/client'
-import _ from 'lodash'
-import { cn } from '@/lib/utils'
+import { PasswordInput } from '@/components/password-input'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -19,7 +9,17 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { PasswordInput } from '@/components/password-input'
+import { Mutation } from '@/graphql/codegen/graphql'
+import { SIGN_IN } from '@/graphql/operation/mutation/user'
+import { cn } from '@/lib/utils'
+import { useMutation } from '@apollo/client'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { IconBrandFacebook, IconBrandGithub } from '@tabler/icons-react'
+import { Link } from '@tanstack/react-router'
+import _ from 'lodash'
+import { HTMLAttributes } from 'react'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 
 type UserAuthFormProps = HTMLAttributes<HTMLFormElement>
 
@@ -40,7 +40,7 @@ const formSchema = z.object({
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   // const [isLoading, setIsLoading] = useState(false)
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
   const [login, { loading }] = useMutation<Mutation>(SIGN_IN)
 
   const form = useForm<z.infer<typeof formSchema>>({

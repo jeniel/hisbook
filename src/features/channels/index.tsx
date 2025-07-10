@@ -14,9 +14,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
-import { Header } from '@/components/layout/header'
 import { Main } from '@/components/layout/main'
-import { ThemeSwitch } from '@/components/theme-switch'
 
 const appText = new Map<string, string>([
   // ['all', 'All Apps'],
@@ -48,7 +46,7 @@ const channels: Channel[] = [
 const ChannelsPage = () => {
   const [appType, setAppType] = useState<any>(channels[0].name) // Default to Facebook
   // const [searchTerm, setSearchTerm] = useState('')
-  const { data, loading } = useQuery<Query>(GET_FACEBOOK_DETALS)
+  const { data } = useQuery<Query>(GET_FACEBOOK_DETALS)
   const facebookDetails = data?.findAllFbDetails.data || []
 
   const navigate = useNavigate()

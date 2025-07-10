@@ -1,19 +1,13 @@
 import {
-  IconArrowAutofitContent,
-  IconBrowserCheck,
-  IconChecklist,
-  IconHelp,
   IconLayoutDashboard,
   IconMessages,
-  IconNotification,
   IconPackages,
-  IconPalette,
   IconRobot,
   IconSettings,
   IconSocial,
   IconTool,
   IconUserCog,
-  IconUsers,
+  IconUsers
 } from '@tabler/icons-react'
 import { Command } from 'lucide-react'
 import { type SidebarData } from '../types'
