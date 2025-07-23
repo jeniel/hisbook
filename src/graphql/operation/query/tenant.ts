@@ -20,7 +20,7 @@ export const FIND_TENANT_BY_ID = gql`
       name
       slug
       chatTableName
-      documentTableName
+      collectionName
     }
   }
 `

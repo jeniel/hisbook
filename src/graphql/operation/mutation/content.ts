@@ -30,3 +30,18 @@ export const DELETE_CONTENT = gql`
     }
   }
 `
+
+
+//new implementation using qdrant
+
+export const UPSERT_DOCUMENT = gql`
+  mutation ProcessAndStoreDocuments($input: ProcessDocumentsInput!) {
+    processAndStoreDocuments(input: $input)
+  }
+`
+
+export const DELETE_DOCUMENT = gql`
+  mutation DeleteQdrantPoints($collectionName: String!, $ids: [ID!]!) {
+    deleteQdrantPoints(collectionName: $collectionName, ids: $ids)
+  }
+`
