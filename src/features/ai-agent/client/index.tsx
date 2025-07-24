@@ -1,33 +1,25 @@
 import { Separator } from '@radix-ui/react-separator'
 import { useNavigate } from '@tanstack/react-router'
 import { Query } from '@/graphql/codegen/graphql'
-import { CREATE_TENANT } from '@/graphql/operation/mutation/tenant'
 import { FIND_ALL_TENANTS } from '@/graphql/operation/query/tenant'
-import { useMutation, useQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client'
 import { Plus } from 'lucide-react'
+import UseDialog from '@/hooks/use-dialog'
 import { Button } from '@/components/ui/button'
 import { Main } from '@/components/layout/main'
+import AddCLient from '../components/add-client'
 
 const ClientPage = () => {
-  const { data } = useQuery<Query>(FIND_ALL_TENANTS)
+  const { data, refetch } = useQuery<Query>(FIND_ALL_TENANTS)
   const clientList = data?.findAllTenants
   const navigate = useNavigate()
 
-  const [createTenant] = useMutation(CREATE_TENANT)
+  const onAdd = UseDialog(AddCLient)
 
   const handleAddClient = () => {
-    //createTenant({
-    //   variables: {
-    //     createTenant: {
-    //       chatTableName: 'becker_chat_demo',
-    //       collectionName: 'becker_collection_demo',
-    //       distance: 'Cosine',
-    //       name: 'BECKER',
-    //       size: 1536,
-    //       slug: 'becker',
-    //     },
-    //   },
-    // })
+    onAdd({}, () => {
+      refetch()
+    })
   }
 
   return (
