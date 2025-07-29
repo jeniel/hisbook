@@ -19,3 +19,16 @@ export const FIND_CONTENT = gql`
     }
   }
 `
+
+export const FIND_DOCUMENTS = gql`
+  query QdrantScrollPoints($input: ScrollPointsInput!) {
+    qdrantScrollPoints(input: $input) {
+      next_page_offset
+      points {
+        id
+        payload
+      }
+    }
+  }
+`
+

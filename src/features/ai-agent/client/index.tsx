@@ -1,25 +1,41 @@
-import { Main } from '@/components/layout/main'
-import { Button } from '@/components/ui/button'
+import { Separator } from '@radix-ui/react-separator'
+import { useNavigate } from '@tanstack/react-router'
 import { Query } from '@/graphql/codegen/graphql'
 import { FIND_ALL_TENANTS } from '@/graphql/operation/query/tenant'
 import { useQuery } from '@apollo/client'
-import { Separator } from '@radix-ui/react-separator'
-import { useNavigate } from '@tanstack/react-router'
+import { Plus } from 'lucide-react'
+import UseDialog from '@/hooks/use-dialog'
+import { Button } from '@/components/ui/button'
+import { Main } from '@/components/layout/main'
+import AddCLient from '../components/add-client'
 
 const ClientPage = () => {
-  const { data } = useQuery<Query>(FIND_ALL_TENANTS)
+  const { data, refetch } = useQuery<Query>(FIND_ALL_TENANTS)
   const clientList = data?.findAllTenants
-
   const navigate = useNavigate()
+
+  const onAdd = UseDialog(AddCLient)
+
+  const handleAddClient = () => {
+    onAdd({}, () => {
+      refetch()
+    })
+  }
 
   return (
     <>
       <Main fixed>
-        <div>
-          <h1 className='text-2xl font-bold tracking-tight'>
-            A.I Agent Client Integrations
-          </h1>
-          <p className='text-muted-foreground'>Client List</p>
+        <div className='flex items-center justify-between'>
+          <div>
+            <h1 className='text-2xl font-bold tracking-tight'>
+              A.I Agent Client Integrations
+            </h1>
+            <p className='text-muted-foreground'>Client List</p>
+          </div>
+          <Button onClick={handleAddClient} className='flex items-center gap-2'>
+            <Plus className='h-4 w-4' />
+            Add Client
+          </Button>
         </div>
         <Separator className='shadow-sm' />
         <ul className='faded-bottom no-scrollbar grid gap-4 overflow-auto pt-4 pb-16 md:grid-cols-2 lg:grid-cols-3'>

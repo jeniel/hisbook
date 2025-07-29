@@ -24,18 +24,29 @@ export type BoolFilter = {
   not?: InputMaybe<NestedBoolFilter>;
 };
 
-export type Content = {
-  __typename?: 'Content';
-  content?: Maybe<Scalars['String']['output']>;
-  /** Unique identifier for the content */
+export type Chat = {
+  __typename?: 'Chat';
   id: Scalars['ID']['output'];
+  message: MessageContent;
+  session_id: Scalars['String']['output'];
 };
 
-export type ContentResponse = {
-  __typename?: 'ContentResponse';
-  content: Array<Content>;
-  message: Scalars['String']['output'];
-  pagination: Pagination;
+export type ChatResponse = {
+  __typename?: 'ChatResponse';
+  data: Array<Chat>;
+  pagination: PaginationChat;
+};
+
+export type CreateCollectionInput = {
+  distance?: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+  size: Scalars['Int']['input'];
+};
+
+export type CreateIndexInput = {
+  collectionName: Scalars['String']['input'];
+  fieldName: Scalars['String']['input'];
+  fieldSchema?: Scalars['String']['input'];
 };
 
 export type CreatePostPage = {
@@ -55,9 +66,12 @@ export type CreateProfileInput = {
 
 export type CreateTenant = {
   chatTableName: Scalars['String']['input'];
+  collectionName: Scalars['String']['input'];
   description?: InputMaybe<Scalars['String']['input']>;
-  documentTableName: Scalars['String']['input'];
+  distance?: Scalars['String']['input'];
+  documentTableName?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
+  size: Scalars['Int']['input'];
   slug: Scalars['String']['input'];
 };
 
@@ -128,6 +142,27 @@ export type DepartmentWhereInput = {
   id?: InputMaybe<StringFilter>;
   name?: InputMaybe<StringFilter>;
   profile?: InputMaybe<ProfileListRelationFilter>;
+};
+
+export enum DistanceMetric {
+  Cosine = 'Cosine',
+  Dot = 'Dot',
+  Euclid = 'Euclid'
+}
+
+export type DocumentToEmbedInput = {
+  content: Scalars['String']['input'];
+  documentType: Scalars['String']['input'];
+  id?: InputMaybe<Scalars['String']['input']>;
+  metadata?: InputMaybe<Scalars['JSON']['input']>;
+  tenantId: Scalars['String']['input'];
+};
+
+export type EnumDistanceMetricFilter = {
+  equals?: InputMaybe<DistanceMetric>;
+  in?: InputMaybe<Array<DistanceMetric>>;
+  not?: InputMaybe<NestedEnumDistanceMetricFilter>;
+  notIn?: InputMaybe<Array<DistanceMetric>>;
 };
 
 export type EnumRoleNullableListFilter = {
@@ -275,10 +310,32 @@ export type JsonNullableFilter = {
   string_starts_with?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type Keyword_DailyListRelationFilter = {
+  every?: InputMaybe<Keyword_DailyWhereInput>;
+  none?: InputMaybe<Keyword_DailyWhereInput>;
+  some?: InputMaybe<Keyword_DailyWhereInput>;
+};
+
+export type KeywordsListRelationFilter = {
+  every?: InputMaybe<KeywordsWhereInput>;
+  none?: InputMaybe<KeywordsWhereInput>;
+  some?: InputMaybe<KeywordsWhereInput>;
+};
+
 export type MeQuery = {
   __typename?: 'MeQuery';
   isSignedIn: Scalars['Boolean']['output'];
   user: User;
+};
+
+export type MessageContent = {
+  __typename?: 'MessageContent';
+  additional_kwargs?: Maybe<Scalars['String']['output']>;
+  content: Scalars['String']['output'];
+  invalid_tool_calls: Array<Scalars['String']['output']>;
+  response_metadata?: Maybe<Scalars['String']['output']>;
+  tool_calls: Array<Scalars['String']['output']>;
+  type: Scalars['String']['output'];
 };
 
 export type Meta = {
@@ -293,27 +350,36 @@ export type Meta = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createEmbeddings: GeneralMsg;
   createPagePost: GeneralMsg;
+  createQdrantCollection: Scalars['Boolean']['output'];
+  createQdrantIndex: Scalars['Boolean']['output'];
   createTenant: GeneralMsg;
   createUser: GeneralMsg;
-  deleteEmbedding: GeneralMsg;
+  deleteQdrantCollection: Scalars['Boolean']['output'];
+  deleteQdrantPoints: Scalars['Boolean']['output'];
+  deleteTenantDocuments: Scalars['String']['output'];
+  initializeDocumentCollection: Scalars['Boolean']['output'];
   logOut: GeneralMsg;
+  processAndStoreDocuments: Scalars['Boolean']['output'];
   signin: SignResponse;
   signup: SignResponse;
-  updateEmbeddings: GeneralMsg;
   upsertDepartment: GeneralMsg;
-};
-
-
-export type MutationCreateEmbeddingsArgs = {
-  content: Scalars['String']['input'];
-  tenantId: Scalars['String']['input'];
+  upsertQdrantPoints: Scalars['Boolean']['output'];
 };
 
 
 export type MutationCreatePagePostArgs = {
   CreatePostInput: CreatePostPage;
+};
+
+
+export type MutationCreateQdrantCollectionArgs = {
+  input: CreateCollectionInput;
+};
+
+
+export type MutationCreateQdrantIndexArgs = {
+  input: CreateIndexInput;
 };
 
 
@@ -327,9 +393,31 @@ export type MutationCreateUserArgs = {
 };
 
 
-export type MutationDeleteEmbeddingArgs = {
-  id: Scalars['Int']['input'];
+export type MutationDeleteQdrantCollectionArgs = {
+  name: Scalars['String']['input'];
+};
+
+
+export type MutationDeleteQdrantPointsArgs = {
+  collectionName: Scalars['String']['input'];
+  ids: Array<Scalars['ID']['input']>;
+};
+
+
+export type MutationDeleteTenantDocumentsArgs = {
+  collectionName?: Scalars['String']['input'];
   tenantId: Scalars['String']['input'];
+};
+
+
+export type MutationInitializeDocumentCollectionArgs = {
+  collectionName: Scalars['String']['input'];
+  vectorSize?: Scalars['Float']['input'];
+};
+
+
+export type MutationProcessAndStoreDocumentsArgs = {
+  input: ProcessDocumentsInput;
 };
 
 
@@ -343,16 +431,14 @@ export type MutationSignupArgs = {
 };
 
 
-export type MutationUpdateEmbeddingsArgs = {
-  content: Scalars['String']['input'];
-  id: Scalars['Float']['input'];
-  tenantId: Scalars['String']['input'];
-};
-
-
 export type MutationUpsertDepartmentArgs = {
   deptId?: InputMaybe<Scalars['String']['input']>;
   payload: UpsertDepartmentInput;
+};
+
+
+export type MutationUpsertQdrantPointsArgs = {
+  input: UpsertPointsInput;
 };
 
 export type NestedBoolFilter = {
@@ -380,6 +466,13 @@ export type NestedDateTimeNullableFilter = {
   lte?: InputMaybe<Scalars['DateTime']['input']>;
   not?: InputMaybe<NestedDateTimeNullableFilter>;
   notIn?: InputMaybe<Array<Scalars['DateTime']['input']>>;
+};
+
+export type NestedEnumDistanceMetricFilter = {
+  equals?: InputMaybe<DistanceMetric>;
+  in?: InputMaybe<Array<DistanceMetric>>;
+  not?: InputMaybe<NestedEnumDistanceMetricFilter>;
+  notIn?: InputMaybe<Array<DistanceMetric>>;
 };
 
 export type NestedFloatNullableFilter = {
@@ -432,14 +525,30 @@ export type NestedStringNullableFilter = {
   startsWith?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type Pagination = {
-  __typename?: 'Pagination';
+export type NestedUuidFilter = {
+  equals?: InputMaybe<Scalars['String']['input']>;
+  gt?: InputMaybe<Scalars['String']['input']>;
+  gte?: InputMaybe<Scalars['String']['input']>;
+  in?: InputMaybe<Array<Scalars['String']['input']>>;
+  lt?: InputMaybe<Scalars['String']['input']>;
+  lte?: InputMaybe<Scalars['String']['input']>;
+  not?: InputMaybe<NestedUuidFilter>;
+  notIn?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+export type PaginationChat = {
+  __typename?: 'PaginationChat';
   currentPage: Scalars['Int']['output'];
   hasNextPage: Scalars['Boolean']['output'];
   hasPrevPage: Scalars['Boolean']['output'];
   limit: Scalars['Int']['output'];
   totalCount: Scalars['Int']['output'];
   totalPages: Scalars['Int']['output'];
+};
+
+export type ProcessDocumentsInput = {
+  collectionName?: Scalars['String']['input'];
+  documents: Array<DocumentToEmbedInput>;
 };
 
 export type Profile = {
@@ -499,18 +608,82 @@ export type ProfileWhereInput = {
   userId?: InputMaybe<StringNullableFilter>;
 };
 
+export type QdrantCollectionInfoType = {
+  __typename?: 'QdrantCollectionInfoType';
+  config?: Maybe<Scalars['JSON']['output']>;
+  indexed_vectors_count: Scalars['Int']['output'];
+  payload_schema?: Maybe<Scalars['JSON']['output']>;
+  points_count: Scalars['Int']['output'];
+  status: Scalars['String']['output'];
+  vectors_count: Scalars['Int']['output'];
+};
+
+export type QdrantCollectionType = {
+  __typename?: 'QdrantCollectionType';
+  name: Scalars['String']['output'];
+};
+
+export type QdrantCountResultType = {
+  __typename?: 'QdrantCountResultType';
+  count: Scalars['Int']['output'];
+};
+
+export type QdrantPointInput = {
+  id: Scalars['ID']['input'];
+  payload?: InputMaybe<Scalars['JSON']['input']>;
+  vector: Array<Scalars['Float']['input']>;
+};
+
+export type QdrantPointType = {
+  __typename?: 'QdrantPointType';
+  id: Scalars['ID']['output'];
+  payload?: Maybe<Scalars['JSON']['output']>;
+  score?: Maybe<Scalars['Float']['output']>;
+  vector?: Maybe<Array<Scalars['Float']['output']>>;
+  version?: Maybe<Scalars['Int']['output']>;
+};
+
+export type QdrantScrollResultType = {
+  __typename?: 'QdrantScrollResultType';
+  next_page_offset?: Maybe<Scalars['String']['output']>;
+  points: Array<QdrantPointType>;
+};
+
+export type QdrantSearchResultType = {
+  __typename?: 'QdrantSearchResultType';
+  content?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  metadata?: Maybe<Scalars['JSON']['output']>;
+  payload?: Maybe<Scalars['JSON']['output']>;
+  score: Scalars['Float']['output'];
+  vector?: Maybe<Array<Scalars['Float']['output']>>;
+};
+
 export type Query = {
   __typename?: 'Query';
   chatWithModel: Scalars['String']['output'];
-  chats: Array<N8n_Chat_Histories>;
   findAllDepartments: DepartmentList;
   findAllFbDetails: FaceBookPageList;
   findAllTenants: Array<Tenant>;
   findAllUsers: UserList;
-  findContent: ContentResponse;
+  findChatBySession: ChatResponse;
   findOneUser: Profile;
+  findSimilarDocuments: Array<QdrantSearchResultType>;
   findTenantById: Tenant;
+  getAllKeyWorkByTenant: Reports;
+  hybridSearch: Array<QdrantSearchResultType>;
   meQuery: MeQuery;
+  qdrantCollection: QdrantCollectionInfoType;
+  qdrantCollectionAnalytics: Scalars['String']['output'];
+  qdrantCollectionExists: Scalars['Boolean']['output'];
+  qdrantCollections: Array<QdrantCollectionType>;
+  qdrantPoint?: Maybe<QdrantPointType>;
+  qdrantPoints: Array<QdrantPointType>;
+  qdrantPointsCount: QdrantCountResultType;
+  qdrantQueryPoints: Array<QdrantSearchResultType>;
+  qdrantScrollPoints: QdrantScrollResultType;
+  qdrantSearchPoints: Array<QdrantSearchResultType>;
+  semanticSearch: Array<QdrantSearchResultType>;
   syncToGraphApi: GeneralMsg;
 };
 
@@ -536,9 +709,10 @@ export type QueryFindAllUsersArgs = {
 };
 
 
-export type QueryFindContentArgs = {
+export type QueryFindChatBySessionArgs = {
   limit?: Scalars['Int']['input'];
   page?: Scalars['Int']['input'];
+  sessionId?: InputMaybe<Scalars['String']['input']>;
   tenantId: Scalars['String']['input'];
 };
 
@@ -548,8 +722,84 @@ export type QueryFindOneUserArgs = {
 };
 
 
+export type QueryFindSimilarDocumentsArgs = {
+  collectionName?: Scalars['String']['input'];
+  documentId: Scalars['String']['input'];
+  limit?: Scalars['Float']['input'];
+  tenantId: Scalars['String']['input'];
+  threshold?: Scalars['Float']['input'];
+};
+
+
 export type QueryFindTenantByIdArgs = {
   tenantId: Scalars['String']['input'];
+};
+
+
+export type QueryGetAllKeyWorkByTenantArgs = {
+  where?: InputMaybe<KeywordsWhereInput>;
+};
+
+
+export type QueryHybridSearchArgs = {
+  collectionName?: Scalars['String']['input'];
+  keywords: Array<Scalars['String']['input']>;
+  limit?: Scalars['Float']['input'];
+  query: Scalars['String']['input'];
+  tenantId: Scalars['String']['input'];
+};
+
+
+export type QueryQdrantCollectionArgs = {
+  name: Scalars['String']['input'];
+};
+
+
+export type QueryQdrantCollectionAnalyticsArgs = {
+  collectionName?: Scalars['String']['input'];
+};
+
+
+export type QueryQdrantCollectionExistsArgs = {
+  name: Scalars['String']['input'];
+};
+
+
+export type QueryQdrantPointArgs = {
+  collectionName: Scalars['String']['input'];
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryQdrantPointsArgs = {
+  collectionName: Scalars['String']['input'];
+  ids: Array<Scalars['ID']['input']>;
+};
+
+
+export type QueryQdrantPointsCountArgs = {
+  collectionName: Scalars['String']['input'];
+  filter?: InputMaybe<Scalars['JSON']['input']>;
+};
+
+
+export type QueryQdrantQueryPointsArgs = {
+  input: SearchPointsInput;
+};
+
+
+export type QueryQdrantScrollPointsArgs = {
+  input: ScrollPointsInput;
+};
+
+
+export type QueryQdrantSearchPointsArgs = {
+  input: SearchPointsInput;
+};
+
+
+export type QuerySemanticSearchArgs = {
+  input: SemanticSearchInput;
 };
 
 export enum QueryMode {
@@ -557,12 +807,43 @@ export enum QueryMode {
   Insensitive = 'insensitive'
 }
 
+export type Reports = {
+  __typename?: 'Reports';
+  keywords: Array<Keywords>;
+  totalKeyWord?: Maybe<Scalars['Int']['output']>;
+};
+
 export enum Role {
   Admin = 'ADMIN',
   Client = 'CLIENT',
   SuperAdmin = 'SUPER_ADMIN',
   User = 'USER'
 }
+
+export type ScrollPointsInput = {
+  collectionName: Scalars['String']['input'];
+  filter?: InputMaybe<Scalars['JSON']['input']>;
+  limit?: Scalars['Int']['input'];
+  offset?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type SearchPointsInput = {
+  collectionName: Scalars['String']['input'];
+  filter?: InputMaybe<Scalars['JSON']['input']>;
+  limit?: Scalars['Int']['input'];
+  vector: Array<Scalars['Float']['input']>;
+  withPayload?: Scalars['Boolean']['input'];
+  withVector?: Scalars['Boolean']['input'];
+};
+
+export type SemanticSearchInput = {
+  collectionName?: Scalars['String']['input'];
+  documentType?: InputMaybe<Scalars['String']['input']>;
+  limit?: Scalars['Int']['input'];
+  query: Scalars['String']['input'];
+  tenantId: Scalars['String']['input'];
+  threshold?: Scalars['Float']['input'];
+};
 
 export type SignInInput = {
   email?: InputMaybe<Scalars['String']['input']>;
@@ -622,14 +903,19 @@ export type Tenant = {
   __typename?: 'Tenant';
   _count: TenantCount;
   chatTableName?: Maybe<Scalars['String']['output']>;
+  collectionName?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['DateTime']['output'];
   description?: Maybe<Scalars['String']['output']>;
+  distance: DistanceMetric;
   documentTableName?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   isActive: Scalars['Boolean']['output'];
   isApprove: Scalars['Boolean']['output'];
+  keywordDailies?: Maybe<Array<Keyword_Daily>>;
+  keywords?: Maybe<Array<Keywords>>;
   name: Scalars['String']['output'];
   nanoid: Scalars['String']['output'];
+  size?: Maybe<Scalars['Int']['output']>;
   slug: Scalars['String']['output'];
   updatedAt: Scalars['DateTime']['output'];
   users?: Maybe<Array<User>>;
@@ -637,6 +923,8 @@ export type Tenant = {
 
 export type TenantCount = {
   __typename?: 'TenantCount';
+  keywordDailies: Scalars['Int']['output'];
+  keywords: Scalars['Int']['output'];
   users: Scalars['Int']['output'];
 };
 
@@ -650,14 +938,19 @@ export type TenantWhereInput = {
   NOT?: InputMaybe<Array<TenantWhereInput>>;
   OR?: InputMaybe<Array<TenantWhereInput>>;
   chatTableName?: InputMaybe<StringNullableFilter>;
+  collectionName?: InputMaybe<StringNullableFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   description?: InputMaybe<StringNullableFilter>;
+  distance?: InputMaybe<EnumDistanceMetricFilter>;
   documentTableName?: InputMaybe<StringNullableFilter>;
   id?: InputMaybe<StringFilter>;
   isActive?: InputMaybe<BoolFilter>;
   isApprove?: InputMaybe<BoolFilter>;
+  keywordDailies?: InputMaybe<Keyword_DailyListRelationFilter>;
+  keywords?: InputMaybe<KeywordsListRelationFilter>;
   name?: InputMaybe<StringFilter>;
   nanoid?: InputMaybe<StringFilter>;
+  size?: InputMaybe<IntNullableFilter>;
   slug?: InputMaybe<StringFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   users?: InputMaybe<UserListRelationFilter>;
@@ -666,6 +959,11 @@ export type TenantWhereInput = {
 export type UpsertDepartmentInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
+};
+
+export type UpsertPointsInput = {
+  collectionName: Scalars['String']['input'];
+  points: Array<QdrantPointInput>;
 };
 
 export type User = {
@@ -725,9 +1023,56 @@ export type UserWhereInput = {
   username?: InputMaybe<StringFilter>;
 };
 
-export type N8n_Chat_Histories = {
-  __typename?: 'n8n_chat_histories';
+export type UuidFilter = {
+  equals?: InputMaybe<Scalars['String']['input']>;
+  gt?: InputMaybe<Scalars['String']['input']>;
+  gte?: InputMaybe<Scalars['String']['input']>;
+  in?: InputMaybe<Array<Scalars['String']['input']>>;
+  lt?: InputMaybe<Scalars['String']['input']>;
+  lte?: InputMaybe<Scalars['String']['input']>;
+  mode?: InputMaybe<QueryMode>;
+  not?: InputMaybe<NestedUuidFilter>;
+  notIn?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+export type Keyword_Daily = {
+  __typename?: 'keyword_daily';
+  count?: Maybe<Scalars['Int']['output']>;
+  date?: Maybe<Scalars['DateTime']['output']>;
   id: Scalars['ID']['output'];
-  message: Scalars['JSON']['output'];
-  session_id: Scalars['String']['output'];
+  keyword: Scalars['String']['output'];
+  tenant?: Maybe<Tenant>;
+  tenantId?: Maybe<Scalars['String']['output']>;
+};
+
+export type Keyword_DailyWhereInput = {
+  AND?: InputMaybe<Array<Keyword_DailyWhereInput>>;
+  NOT?: InputMaybe<Array<Keyword_DailyWhereInput>>;
+  OR?: InputMaybe<Array<Keyword_DailyWhereInput>>;
+  count?: InputMaybe<IntNullableFilter>;
+  date?: InputMaybe<DateTimeNullableFilter>;
+  id?: InputMaybe<UuidFilter>;
+  keyword?: InputMaybe<StringFilter>;
+  tenant?: InputMaybe<TenantNullableScalarRelationFilter>;
+  tenantId?: InputMaybe<StringNullableFilter>;
+};
+
+export type Keywords = {
+  __typename?: 'keywords';
+  count?: Maybe<Scalars['Int']['output']>;
+  id: Scalars['ID']['output'];
+  keyword: Scalars['String']['output'];
+  tenant?: Maybe<Tenant>;
+  tenantId?: Maybe<Scalars['String']['output']>;
+};
+
+export type KeywordsWhereInput = {
+  AND?: InputMaybe<Array<KeywordsWhereInput>>;
+  NOT?: InputMaybe<Array<KeywordsWhereInput>>;
+  OR?: InputMaybe<Array<KeywordsWhereInput>>;
+  count?: InputMaybe<IntNullableFilter>;
+  id?: InputMaybe<UuidFilter>;
+  keyword?: InputMaybe<StringFilter>;
+  tenant?: InputMaybe<TenantNullableScalarRelationFilter>;
+  tenantId?: InputMaybe<StringNullableFilter>;
 };
