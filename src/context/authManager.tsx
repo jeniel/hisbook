@@ -11,7 +11,10 @@ import Spinner from '@/components/spinner'
 // import { ModalProvider } from "react-modal-hook";
 
 const AuthManager = (props: any) => {
-  const { loading, error, data } = useQuery<Query>(ME_QUERY, {
+  const { loading, error, data, refetch } = useQuery<Query>(ME_QUERY, {
+    fetchPolicy: 'cache-and-network', // Always fetch from network first
+    errorPolicy: 'all',
+    notifyOnNetworkStatusChange: true,
     onCompleted: (data) => {
       if (!_.isEmpty(data?.meQuery)) {
         userStore.setState((state) => {
@@ -34,11 +37,19 @@ const AuthManager = (props: any) => {
       userStore.setState((state) => {
         return {
           ...state,
-          user: {} as MeQuery,
+          user: {
+            isSignedIn: false,
+            user: {} as any,
+          } as MeQuery,
         }
       })
     },
   })
+
+  // Add refetch function to global scope for re-authentication
+  React.useEffect(() => {
+    (window as any).refetchAuth = refetch
+  }, [refetch])
 
   // const blank = "loading...";
 

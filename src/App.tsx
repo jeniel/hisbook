@@ -23,7 +23,7 @@ const router = createRouter({
 })
 
 const App = () => {
-  const user = useStore(userStore)
+  const userState = useStore(userStore)
   return (
     <>
       <ApolloProvider client={client}>
@@ -31,8 +31,7 @@ const App = () => {
           <ThemeProvider defaultTheme='light' storageKey='vite-ui-theme'>
             <FontProvider>
               <ModalProvider>
-                {/* <RouterProvider router={router} context={{ user }} /> */}
-                <RouterProvider router={router} context={user} />
+                <RouterProvider router={router} context={{ user: userState.user }} />
               </ModalProvider>
             </FontProvider>
           </ThemeProvider>
