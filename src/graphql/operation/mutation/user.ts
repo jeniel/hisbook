@@ -22,3 +22,10 @@ export const SIGN_IN = gql`
     }
   }
 `
+export const LOGOUT = gql`
+  mutation LogOut {
+    logOut {
+      message
+    }
+  }
+`
