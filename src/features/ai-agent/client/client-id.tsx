@@ -1,18 +1,5 @@
-import { useState } from 'react'
-import { DotsHorizontalIcon } from '@radix-ui/react-icons'
-import { useParams } from '@tanstack/react-router'
-import { IconTrash } from '@tabler/icons-react'
-import { Query } from '@/graphql/codegen/graphql'
-import { DELETE_DOCUMENT } from '@/graphql/operation/mutation/content'
-import { FIND_DOCUMENTS } from '@/graphql/operation/query/content'
-import {
-  FIND_ALL_TENANTS,
-  FIND_TENANT_BY_ID,
-} from '@/graphql/operation/query/tenant'
-import { useMutation, useQuery } from '@apollo/client'
-import { ChevronLeft, ChevronRight, InfoIcon, Plus } from 'lucide-react'
-import UseDialog from '@/hooks/use-dialog'
-import { useTenantInfo, useTenantById } from '@/hooks/use-tenant'
+import { Main } from '@/components/layout/main'
+import Spinner from '@/components/spinner'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import {
@@ -23,8 +10,17 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Main } from '@/components/layout/main'
-import Spinner from '@/components/spinner'
+import { Query } from '@/graphql/codegen/graphql'
+import { DELETE_DOCUMENT } from '@/graphql/operation/mutation/content'
+import { FIND_DOCUMENTS } from '@/graphql/operation/query/content'
+import UseDialog from '@/hooks/use-dialog'
+import { useTenantById } from '@/hooks/use-tenant'
+import { useMutation, useQuery } from '@apollo/client'
+import { DotsHorizontalIcon } from '@radix-ui/react-icons'
+import { IconTrash } from '@tabler/icons-react'
+import { useParams } from '@tanstack/react-router'
+import { ChevronLeft, ChevronRight, InfoIcon, Plus } from 'lucide-react'
+import { useState } from 'react'
 import UpsertContent from '../components/upsert-content'
 
 const ClientIdPage = () => {

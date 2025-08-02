@@ -1,9 +1,3 @@
-import { z } from 'zod'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { UPSERT_DOCUMENT } from '@/graphql/operation/mutation/content'
-import { useMutation } from '@apollo/client'
-import { useTenantById } from '@/hooks/use-tenant'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -22,6 +16,11 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
+import { UPSERT_DOCUMENT } from '@/graphql/operation/mutation/content'
+import { useMutation } from '@apollo/client'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 
 interface ModalProps {
   hide: () => void

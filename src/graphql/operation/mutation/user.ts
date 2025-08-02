@@ -22,11 +22,3 @@ export const SIGN_IN = gql`
     }
   }
 `
-
-export const LOG_OUT = gql`
-  mutation LogOut {
-    logOut {
-      message
-    }
-  }
-`
