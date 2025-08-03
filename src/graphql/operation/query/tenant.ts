@@ -24,3 +24,12 @@ export const FIND_TENANT_BY_ID = gql`
     }
   }
 `
+
+export const FIND_ALL_TENANTS_OPTIONS = gql`
+  query FindAllTenants {
+    findAllTenants {
+      id
+      name
+    }
+  }
+`

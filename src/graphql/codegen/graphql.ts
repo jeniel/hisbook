@@ -26,6 +26,7 @@ export type BoolFilter = {
 
 export type Chat = {
   __typename?: 'Chat';
+  created_at?: Maybe<Scalars['DateTime']['output']>;
   id: Scalars['ID']['output'];
   message: MessageContent;
   session_id: Scalars['String']['output'];
@@ -662,12 +663,14 @@ export type QdrantSearchResultType = {
 export type Query = {
   __typename?: 'Query';
   chatWithModel: Scalars['String']['output'];
+  findAllChat: ChatResponse;
   findAllDepartments: DepartmentList;
   findAllFbDetails: FaceBookPageList;
   findAllTenants: Array<Tenant>;
   findAllUsers: UserList;
   findChatBySession: ChatResponse;
   findOneUser: Profile;
+  findSessionChat: SessionChatResponse;
   findSimilarDocuments: Array<QdrantSearchResultType>;
   findTenantById: Tenant;
   getAllKeyWorkByTenant: Reports;
@@ -684,7 +687,15 @@ export type Query = {
   qdrantScrollPoints: QdrantScrollResultType;
   qdrantSearchPoints: Array<QdrantSearchResultType>;
   semanticSearch: Array<QdrantSearchResultType>;
+  sendMail: GeneralMsg;
   syncToGraphApi: GeneralMsg;
+};
+
+
+export type QueryFindAllChatArgs = {
+  limit?: Scalars['Int']['input'];
+  page?: Scalars['Int']['input'];
+  tenantId: Scalars['String']['input'];
 };
 
 
@@ -719,6 +730,13 @@ export type QueryFindChatBySessionArgs = {
 
 export type QueryFindOneUserArgs = {
   profileId: Scalars['String']['input'];
+};
+
+
+export type QueryFindSessionChatArgs = {
+  limit?: Scalars['Int']['input'];
+  page?: Scalars['Int']['input'];
+  tenantId: Scalars['String']['input'];
 };
 
 
@@ -815,7 +833,10 @@ export type Reports = {
 
 export enum Role {
   Admin = 'ADMIN',
+  AlUser = 'AL_USER',
   Client = 'CLIENT',
+  ClientAdmin = 'CLIENT_ADMIN',
+  ClientUser = 'CLIENT_USER',
   SuperAdmin = 'SUPER_ADMIN',
   User = 'USER'
 }
@@ -843,6 +864,18 @@ export type SemanticSearchInput = {
   query: Scalars['String']['input'];
   tenantId: Scalars['String']['input'];
   threshold?: Scalars['Float']['input'];
+};
+
+export type SessionChat = {
+  __typename?: 'SessionChat';
+  latest_activity: Scalars['DateTime']['output'];
+  session_id: Scalars['String']['output'];
+};
+
+export type SessionChatResponse = {
+  __typename?: 'SessionChatResponse';
+  data: Array<SessionChat>;
+  pagination: PaginationChat;
 };
 
 export type SignInInput = {

@@ -3,12 +3,11 @@ import { cn } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
 import LongText from '@/components/long-text'
-import { callTypes, userTypes } from '../data/data'
-import { User } from '../data/schema'
+import { callTypes, userTypes, TransformedUser } from '../types'
 import { DataTableColumnHeader } from './data-table-column-header'
 import { DataTableRowActions } from './data-table-row-actions'
 
-export const columns: ColumnDef<User>[] = [
+export const columns: ColumnDef<TransformedUser>[] = [
   {
     id: 'select',
     header: ({ table }) => (
@@ -77,14 +76,14 @@ export const columns: ColumnDef<User>[] = [
       <div className='w-fit text-nowrap'>{row.getValue('email')}</div>
     ),
   },
-  {
-    accessorKey: 'phoneNumber',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Phone Number' />
-    ),
-    cell: ({ row }) => <div>{row.getValue('phoneNumber')}</div>,
-    enableSorting: false,
-  },
+  // {
+  //   accessorKey: 'phoneNumber',
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader column={column} title='Phone Number' />
+  //   ),
+  //   cell: ({ row }) => <div>{row.getValue('phoneNumber')}</div>,
+  //   enableSorting: false,
+  // },
   {
     accessorKey: 'status',
     header: ({ column }) => (
@@ -134,6 +133,16 @@ export const columns: ColumnDef<User>[] = [
     },
     enableSorting: false,
     enableHiding: false,
+  },
+  {
+    accessorKey: 'tenantName',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='Tenant' />
+    ),
+    cell: ({ row }) => (
+      <div className='text-nowrap'>{row.getValue('tenantName')}</div>
+    ),
+    meta: { className: 'w-32' },
   },
   {
     id: 'actions',

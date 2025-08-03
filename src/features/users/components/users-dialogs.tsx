@@ -2,8 +2,13 @@ import { useUsers } from '../context/users-context'
 import { UsersActionDialog } from './users-action-dialog'
 import { UsersDeleteDialog } from './users-delete-dialog'
 import { UsersInviteDialog } from './users-invite-dialog'
+import { UsersPasswordResetDialog } from './users-password-reset-dialog'
 
-export function UsersDialogs() {
+interface Props {
+  refetch?: () => void
+}
+
+export function UsersDialogs({ refetch }: Props) {
   const { open, setOpen, currentRow, setCurrentRow } = useUsers()
   return (
     <>
@@ -11,6 +16,7 @@ export function UsersDialogs() {
         key='user-add'
         open={open === 'add'}
         onOpenChange={() => setOpen('add')}
+        refetch={refetch}
       />
 
       <UsersInviteDialog
@@ -31,6 +37,7 @@ export function UsersDialogs() {
               }, 500)
             }}
             currentRow={currentRow}
+            refetch={refetch}
           />
 
           <UsersDeleteDialog
@@ -43,6 +50,19 @@ export function UsersDialogs() {
               }, 500)
             }}
             currentRow={currentRow}
+          />
+
+          <UsersPasswordResetDialog
+            key={`user-password-reset-${currentRow.id}`}
+            open={open === 'password-reset'}
+            onOpenChange={() => {
+              setOpen('password-reset')
+              setTimeout(() => {
+                setCurrentRow(null)
+              }, 500)
+            }}
+            currentRow={currentRow}
+            refetch={refetch}
           />
         </>
       )}

@@ -21,7 +21,7 @@ const UseDialog = (Component: React.FC<any>) => {
   }, [myProps])
 
   return (props: any, onCloseCallback: Function) => {
-    let tProps = props || {}
+    const tProps = props || {}
     if (onCloseCallback) tProps.onCloseCallback = onCloseCallback
 
     setMyProps(tProps)

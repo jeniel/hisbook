@@ -29,3 +29,39 @@ export const LOGOUT = gql`
     }
   }
 `
+
+export const CREATE_AL_USER = gql`
+  mutation Mutation($createUserInput: CreateUserProfileInput!) {
+    createSuperAdmin(createUserInput: $createUserInput) {
+      message
+      success
+    }
+  }
+`
+
+// export const FIND_ALL_USERS = gql`
+//   query FindAllUsers {
+//     findAllUsers {
+//       meta {
+//         currentPage
+//         lastPage
+//         next
+//         perPage
+//         prev
+//         total
+//       }
+//       data {
+//         id
+//         lastName
+//         middleName
+//         firstName
+//         contact
+//         user {
+//           email
+//           isActive
+//           role
+//         }
+//       }
+//     }
+//   }
+// `
