@@ -1,11 +1,7 @@
 'use client'
 
-import { z } from 'zod'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { CREATE_AL_USER } from '@/graphql/operation/mutation/user'
-import { useMutation } from '@apollo/client'
-import { showSubmittedData } from '@/utils/show-submitted-data'
+import { PasswordInput } from '@/components/password-input'
+import { SelectDropdown } from '@/components/select-dropdown'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -24,9 +20,12 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { PasswordInput } from '@/components/password-input'
-import { SelectDropdown } from '@/components/select-dropdown'
-import { userTypes, TransformedUser } from '../types'
+import { CREATE_AL_USER } from '@/graphql/operation/mutation/user'
+import { useMutation } from '@apollo/client'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { TransformedUser, userTypes } from '../types'
 
 const formSchema = z
   .object({

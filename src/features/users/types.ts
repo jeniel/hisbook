@@ -1,11 +1,9 @@
-import {
-  IconCash,
-  IconShield,
-  IconUsersGroup,
-  IconUserShield,
-  IconUser,
-} from '@tabler/icons-react'
 import { Profile, Role } from '@/graphql/codegen/graphql'
+import {
+  IconShield,
+  IconUser,
+  IconUsersGroup
+} from '@tabler/icons-react'
 
 // API User type based on GraphQL schema
 export type ApiUser = Profile & {
