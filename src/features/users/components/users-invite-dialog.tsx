@@ -20,10 +20,16 @@ import {
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Query } from '@/graphql/codegen/graphql'
+import { INVITE_USER } from '@/graphql/operation/mutation/user'
 import { FIND_ALL_TENANTS_OPTIONS } from '@/graphql/operation/query/tenant'
-import { useQuery } from '@apollo/client'
+import { Toaster } from '@/utils/toast'
+import { useMutation, useQuery } from '@apollo/client'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { IconMailPlus, IconSend } from '@tabler/icons-react'
+import {
+  IconLoader,
+  IconMailPlus,
+  IconSend
+} from '@tabler/icons-react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { userClientTypes } from '../types'
@@ -42,10 +48,13 @@ type UserInviteForm = z.infer<typeof formSchema>
 interface Props {
   open: boolean
   onOpenChange: (open: boolean) => void
+  refetch?: () => void
 }
 
-export function UsersInviteDialog({ open, onOpenChange }: Props) {
+export function UsersInviteDialog({ open, onOpenChange, refetch }: Props) {
   const { data } = useQuery<Query>(FIND_ALL_TENANTS_OPTIONS)
+  const [inviteUser, { loading: inviteLoading }] = useMutation(INVITE_USER)
+
   const tenants = data?.findAllTenants || []
 
   const form = useForm<UserInviteForm>({
@@ -54,10 +63,39 @@ export function UsersInviteDialog({ open, onOpenChange }: Props) {
   })
 
   const onSubmit = (values: UserInviteForm) => {
-    form.reset()
-    // showSubmittedData(values)
+    //form.reset()
+    //showSubmittedData(values)
     //onOpenChange(false)
     console.log('Invited User:', values)
+    inviteUser({
+      variables: {
+        inviteUserInput: {
+          email: values.email,
+          role: values.role,
+          tenantId: values.tenantId,
+        },
+      },
+      onCompleted: (data) => {
+        console.log(data)
+        Toaster({
+          type: 'success',
+          title: 'Success!',
+          description: 'User invitation sent successfully',
+        })
+        form.reset()
+        onOpenChange(false)
+        refetch
+      },
+      onError: (error) => {
+        Toaster({
+          type: 'error',
+          title: 'Error!',
+          description: error.message || 'Failed to send invitation',
+          duration: 3000,
+          autoClose: true,
+        })
+      },
+    })
   }
 
   return (
@@ -105,7 +143,7 @@ export function UsersInviteDialog({ open, onOpenChange }: Props) {
               control={form.control}
               name='tenantId'
               render={({ field }) => (
-                <FormItem className='space-y-1 w-full'>
+                <FormItem className='w-full space-y-1'>
                   <FormLabel>Tenant</FormLabel>
                   <SelectDropdown
                     defaultValue={field.value}
@@ -164,8 +202,20 @@ export function UsersInviteDialog({ open, onOpenChange }: Props) {
           <DialogClose asChild>
             <Button variant='outline'>Cancel</Button>
           </DialogClose>
-          <Button type='submit' form='user-invite-form'>
-            Invite <IconSend />
+          <Button
+            disabled={inviteLoading}
+            type='submit'
+            form='user-invite-form'
+          >
+            {inviteLoading ? (
+              <>
+                Sending Email <IconLoader className='animate-spin' />
+              </>
+            ) : (
+              <>
+                Invite User <IconSend />
+              </>
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>
