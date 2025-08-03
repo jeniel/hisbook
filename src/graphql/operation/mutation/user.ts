@@ -39,6 +39,16 @@ export const CREATE_AL_USER = gql`
   }
 `
 
+export const INVITE_USER = gql`
+  mutation Mutation($inviteUserInput: InviteUserInput!) {
+    inviteUser(inviteUserInput: $inviteUserInput) {
+      invitationLink
+      invitationToken
+      message
+    }
+  }
+`
+
 // export const FIND_ALL_USERS = gql`
 //   query FindAllUsers {
 //     findAllUsers {

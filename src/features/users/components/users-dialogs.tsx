@@ -23,6 +23,7 @@ export function UsersDialogs({ refetch }: Props) {
         key='user-invite'
         open={open === 'invite'}
         onOpenChange={() => setOpen('invite')}
+        refetch={refetch}
       />
 
       {currentRow && (
