@@ -1,8 +1,4 @@
-import { z } from 'zod'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { IconMailPlus, IconSend } from '@tabler/icons-react'
-import { showSubmittedData } from '@/utils/show-submitted-data'
+import { SelectDropdown } from '@/components/select-dropdown'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -23,8 +19,14 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { SelectDropdown } from '@/components/select-dropdown'
-import { userTypes } from '../data/data'
+import { Query } from '@/graphql/codegen/graphql'
+import { FIND_ALL_TENANTS_OPTIONS } from '@/graphql/operation/query/tenant'
+import { useQuery } from '@apollo/client'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { IconMailPlus, IconSend } from '@tabler/icons-react'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { userClientTypes } from '../types'
 
 const formSchema = z.object({
   email: z
@@ -32,6 +34,7 @@ const formSchema = z.object({
     .min(1, { message: 'Email is required.' })
     .email({ message: 'Email is invalid.' }),
   role: z.string().min(1, { message: 'Role is required.' }),
+  tenantId: z.string().min(1, { message: 'Tenant is required.' }),
   desc: z.string().optional(),
 })
 type UserInviteForm = z.infer<typeof formSchema>
@@ -42,15 +45,19 @@ interface Props {
 }
 
 export function UsersInviteDialog({ open, onOpenChange }: Props) {
+  const { data } = useQuery<Query>(FIND_ALL_TENANTS_OPTIONS)
+  const tenants = data?.findAllTenants || []
+
   const form = useForm<UserInviteForm>({
     resolver: zodResolver(formSchema),
-    defaultValues: { email: '', role: '', desc: '' },
+    defaultValues: { email: '', role: '', tenantId: '', desc: '' },
   })
 
   const onSubmit = (values: UserInviteForm) => {
     form.reset()
-    showSubmittedData(values)
-    onOpenChange(false)
+    // showSubmittedData(values)
+    //onOpenChange(false)
+    console.log('Invited User:', values)
   }
 
   return (
@@ -96,6 +103,26 @@ export function UsersInviteDialog({ open, onOpenChange }: Props) {
             />
             <FormField
               control={form.control}
+              name='tenantId'
+              render={({ field }) => (
+                <FormItem className='space-y-1 w-full'>
+                  <FormLabel>Tenant</FormLabel>
+                  <SelectDropdown
+                    defaultValue={field.value}
+                    onValueChange={field.onChange}
+                    placeholder='Select a tenant'
+                    className='w-full'
+                    items={tenants.map((tenant) => ({
+                      label: tenant.name || tenant.id,
+                      value: tenant.id,
+                    }))}
+                  />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
               name='role'
               render={({ field }) => (
                 <FormItem className='space-y-1'>
@@ -104,7 +131,7 @@ export function UsersInviteDialog({ open, onOpenChange }: Props) {
                     defaultValue={field.value}
                     onValueChange={field.onChange}
                     placeholder='Select a role'
-                    items={userTypes.map(({ label, value }) => ({
+                    items={userClientTypes.map(({ label, value }) => ({
                       label,
                       value,
                     }))}
@@ -113,6 +140,7 @@ export function UsersInviteDialog({ open, onOpenChange }: Props) {
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name='desc'

@@ -1,4 +1,14 @@
-import { PasswordInput } from '@/components/password-input'
+import { HTMLAttributes } from 'react'
+import { z } from 'zod'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Link } from '@tanstack/react-router'
+import { IconBrandFacebook, IconBrandGithub } from '@tabler/icons-react'
+import { Mutation } from '@/graphql/codegen/graphql'
+import { SIGN_IN } from '@/graphql/operation/mutation/user'
+import { useMutation } from '@apollo/client'
+import _ from 'lodash'
+import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -9,17 +19,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Mutation } from '@/graphql/codegen/graphql'
-import { SIGN_IN } from '@/graphql/operation/mutation/user'
-import { cn } from '@/lib/utils'
-import { useMutation } from '@apollo/client'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { IconBrandFacebook, IconBrandGithub } from '@tabler/icons-react'
-import { Link } from '@tanstack/react-router'
-import _ from 'lodash'
-import { HTMLAttributes } from 'react'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import { PasswordInput } from '@/components/password-input'
 
 type UserAuthFormProps = HTMLAttributes<HTMLFormElement>
 
@@ -40,7 +40,6 @@ const formSchema = z.object({
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   // const [isLoading, setIsLoading] = useState(false)
-  // const navigate = useNavigate()
   const [login, { loading }] = useMutation<Mutation>(SIGN_IN)
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -59,15 +58,29 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           password: data.password,
         },
       },
-      onCompleted: (data) => {
+      onCompleted: async (data) => {
         console.log('data == >', data)
-        if (!_.isEmpty(data?.signin)) {
-          window.location.href = '/'
+        
+        // Wait a bit for cookies to be set
+        await new Promise(resolve => setTimeout(resolve, 100))
+        
+        // Refetch authentication state instead of full page reload
+        if (typeof window !== 'undefined' && (window as any).refetchAuth) {
+          try {
+            await (window as any).refetchAuth()
+          } catch (error) {
+            console.warn('Failed to refetch auth:', error)
+          }
         }
+        
+        // Navigate to dashboard or redirect URL
+        const urlParams = new URLSearchParams(window.location.search)
+        const redirectUrl = urlParams.get('redirect') || '/'
+        window.location.href = redirectUrl
       },
       onError: (error) => {
         console.log('error ===== >', error.message)
-        window.location.href = '/sign-in'
+        // Handle login error appropriately
       },
     })
   }

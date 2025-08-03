@@ -5,6 +5,7 @@ export const FIND_ALL_USER = gql`
     findAllUsers(page: $page, perPage: $perPage, where: $where) {
       data {
         id
+        userId
         firstName
         lastName
         middleName
@@ -15,6 +16,12 @@ export const FIND_ALL_USER = gql`
           role
           isActive
           isApprove
+          username
+          tenantId
+          tenant {
+            id
+            name
+          }
         }
       }
       meta {
