@@ -1,4 +1,4 @@
-name: Al Agent Platform Front CI
+name: Acebook Front
 
 on:
   push:
