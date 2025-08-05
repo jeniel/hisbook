@@ -20,12 +20,12 @@ export default function AuthLayout({ children }: Props) {
             <path d='M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3' />
           </svg> */}
           <img
-            src='/images/advacelocal.jpg'
+            src='/images/ace.png'
             alt='Logo'
             className='mr-2 h-12 w-12 rounded-full'
           />
 
-          <h1 className='text-xl font-medium'>Advanced Local Admin</h1>
+          <h1 className='text-xl font-medium'>ACE BOOK</h1>
         </div>
         {children}
       </div>

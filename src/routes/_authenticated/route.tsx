@@ -5,7 +5,7 @@ export const Route = createFileRoute('/_authenticated')({
   component: AuthenticatedLayout,
   beforeLoad: async ({ context }) => {
     console.log('beforeLoad authenticated == >', context)
-    
+
     // If user data is not available or not signed in, redirect to login
     if (!context.user || !context.user.isSignedIn) {
       // If we have a refetch function available, try to refresh auth state
@@ -19,11 +19,14 @@ export const Route = createFileRoute('/_authenticated')({
           console.warn('Auth refetch failed:', error)
         }
       }
-      
+
       throw redirect({
         to: '/sign-in',
-        search: { 
-          redirect: typeof window !== 'undefined' ? window.location.pathname : undefined 
+        search: {
+          redirect:
+            typeof window !== 'undefined'
+              ? window.location.pathname
+              : undefined,
         },
       })
     }

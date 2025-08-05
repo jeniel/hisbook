@@ -17,11 +17,6 @@ export const FIND_ALL_USER = gql`
           isActive
           isApprove
           username
-          tenantId
-          tenant {
-            id
-            name
-          }
         }
       }
       meta {

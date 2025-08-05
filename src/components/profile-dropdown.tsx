@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { useCurrentUser } from '@/hooks/use-tenant'
+
 import { useLogout } from '@/hooks/useLogout'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -13,10 +13,12 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import useCurrentUser from '@/hooks/useUser'
 
 export function ProfileDropdown() {
   const { user } = useCurrentUser()
   const { logout } = useLogout()
+  console.log('ProfileDropdown user:', user)
 
   return (
     <DropdownMenu modal={false}>
@@ -32,7 +34,7 @@ export function ProfileDropdown() {
         <DropdownMenuLabel className='font-normal'>
           <div className='flex flex-col space-y-1'>
             <p className='text-sm leading-none font-medium'>
-              {user.profile?.firstName}
+              {user?.profile?.firstName || 'Guest User'}
             </p>
             <p className='text-muted-foreground text-xs leading-none'>
               {user?.email || 'No email provided'}
