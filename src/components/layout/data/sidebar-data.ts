@@ -41,7 +41,7 @@ export const sidebarData: SidebarData = {
           icon: IconHome,
         },
         {
-          title: 'Dashboard',
+          title: 'Tickets',
           url: '/tickets',
           icon: IconLayoutDashboard,
         },
