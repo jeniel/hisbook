@@ -107,6 +107,7 @@ function FormControl({ ...props }: React.ComponentProps<typeof Slot>) {
   return (
     <Slot
       data-slot='form-control'
+      className="border-black border"
       id={formItemId}
       aria-describedby={
         !error

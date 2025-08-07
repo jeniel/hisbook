@@ -4,8 +4,9 @@ import {
   IconTool,
   IconUserCog
 } from '@tabler/icons-react'
-import { Command } from 'lucide-react'
+import { Command, GalleryVerticalEnd, AudioWaveform } from 'lucide-react'
 import { type SidebarData } from '../types'
+import { IconPalette, IconHelp, IconUsers, IconHome, IconBriefcase  } from '@tabler/icons-react'
 
 export const sidebarData: SidebarData = {
   user: {
@@ -13,61 +14,47 @@ export const sidebarData: SidebarData = {
     email: 'joemdev@gmail.com',
     avatar: '/images/shadcn.jpg',
   },
-  teams: [
-    {
-      name: 'ACE BOOK',
-      logo: Command,
-      plan: 'ACE BOOK',
-    },
-    // {
-    //   name: 'Acme Inc',
-    //   logo: GalleryVerticalEnd,
-    //   plan: 'Enterprise',
-    // },
-    // {
-    //   name: 'Acme Corp.',
-    //   logo: AudioWaveform,
-    //   plan: 'Startup',
-    // },
-  ],
+  // teams: [
+  //   {
+  //     name: 'ACE BOOK',
+  //     logo: Command,
+  //     plan: 'ACE BOOK',
+  //   },
+  //   {
+  //     name: 'Acme Inc',
+  //     logo: GalleryVerticalEnd,
+  //     plan: 'Enterprise',
+  //   },
+  //   {
+  //     name: 'Acme Corp.',
+  //     logo: AudioWaveform,
+  //     plan: 'Startup',
+  //   },
+  // ],
   navGroups: [
     {
       title: 'General',
       items: [
         {
-          title: 'Dashboard',
+          title: 'Home',
           url: '/',
+          icon: IconHome,
+        },
+        {
+          title: 'Dashboard',
+          url: '/tickets',
           icon: IconLayoutDashboard,
         },
-
-        // {
-        //   title: 'Channels',
-        //   url: '/channels',
-        //   icon: IconSocial,
-        // },
-        // {
-        //   title: 'Apps',
-        //   url: '/apps',
-        //   icon: IconPackages,
-        // },
-        // {
-        //   title: 'Chats',
-        //   url: '/chats',
-        //   //badge: '3',
-
-        //   icon: IconMessages,
-        // },
-        // {
-        //   title: 'Users',
-        //   url: '/users',
-        //   icon: IconUsers,
-        // },
-      ],
-    },
-
-    {
-      title: 'Other',
-      items: [
+        {
+          title: 'Users',
+          url: '/users',
+          icon: IconUsers,
+        },
+        {
+          title: 'Departments',
+          url: '/departments',
+          icon: IconBriefcase,
+        },
         {
           title: 'Settings',
           icon: IconSettings,
@@ -82,29 +69,19 @@ export const sidebarData: SidebarData = {
               url: '/settings/account',
               icon: IconTool,
             },
-            // {
-            //   title: 'Appearance',
-            //   url: '/settings/appearance',
-            //   icon: IconPalette,
-            // },
-            // {
-            //   title: 'Notifications',
-            //   url: '/settings/notifications',
-            //   icon: IconNotification,
-            // },
-            // {
-            //   title: 'Display',
-            //   url: '/settings/display',
-            //   icon: IconBrowserCheck,
-            // },
-          ],
+            {
+              title: 'Appearance',
+              url: '/settings/appearance',
+              icon: IconPalette,
+            }
+          ]
         },
         // {
         //   title: 'Help Center',
         //   url: '/help-center',
         //   icon: IconHelp,
-        // },
-      ],
-    },
-  ],
+        // }
+      ]
+    }
+  ]
 }

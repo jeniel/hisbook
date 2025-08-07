@@ -4,31 +4,33 @@ interface Props {
 
 export default function AuthLayout({ children }: Props) {
   return (
-    <div className='bg-primary-foreground container grid h-svh max-w-none items-center justify-center'>
-      <div className='mx-auto flex w-full flex-col justify-center space-y-2 py-8 sm:w-[480px] sm:p-8'>
-        <div className='mb-4 flex items-center justify-center'>
-          {/* <svg
-            xmlns='http://www.w3.org/2000/svg'
-            viewBox='0 0 24 24'
-            fill='none'
-            stroke='currentColor'
-            strokeWidth='2'
-            strokeLinecap='round'
-            strokeLinejoin='round'
-            className='mr-2 h-6 w-6'
-          >
-            <path d='M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3' />
-          </svg> */}
-          <img
-            src='/images/ace.png'
-            alt='Logo'
-            className='mr-2 h-12 w-12 rounded-full'
-          />
+    <div className="h-screen w-screen flex items-center justify-center">
+      <div className="flex w-full max-w-7xl h-[80vh] rounded-lg overflow-hidden border ">
 
-          <h1 className='text-xl font-medium'>ACE BOOK</h1>
+        {/* Login */}
+        <div className="flex-1 flex flex-col justify-center items-center p-8">
+          <div className="mb-4 text-center">
+            <img
+              src="/images/acebook-logo.png"
+              alt="Acebook Logo"
+              className="mx-auto"
+            />
+          </div>
+          <div className="w-full max-w-md space-y-4">
+            {children}
+          </div>
         </div>
-        {children}
+
+        {/* Image */}
+        <div className="flex-1 hidden md:block">
+          <img
+            src="/images/acebuilding.png"
+            alt="Building Image"
+            className="w-full h-full object-cover"
+          />
+        </div>
+
       </div>
     </div>
-  )
+  );
 }
