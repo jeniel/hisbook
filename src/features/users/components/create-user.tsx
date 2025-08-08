@@ -43,8 +43,6 @@ export default function CreateUser() {
       middleName: "",
       lastName: "",
       department: "",
-      contactNumber: "",
-      address: "",
     },
   })
 
@@ -59,7 +57,7 @@ export default function CreateUser() {
   }
 
   return (
-    <div className="text-white">
+    <div>
       <p className="font-semibold text-lg mb-4">Create User</p>
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="w-full max-w-4xl space-y-6">
@@ -70,8 +68,6 @@ export default function CreateUser() {
                         { name: "firstName", label: "First Name", type: "text", placeholder: "Juan" },
                         { name: "middleName", label: "Middle Name", type: "text", placeholder: "Santos" },
                         { name: "lastName", label: "Last Name", type: "text", placeholder: "Dela Cruz" },
-                        { name: "contactNumber", label: "Contact Number", type: "text", placeholder: "09123456789" },
-                        { name: "address", label: "Address", type: "text", placeholder: "123 Main St, City" },
                     ].map(({ name, label, type, placeholder }) => (
                         <FormField
                         key={name}

@@ -20,7 +20,7 @@ const TicketSchema = z.object({
   floor: z.string().min(1, { message: "Floor is required" }),
 })
 
-export default function CreateTickets() {
+export default function CreateTickets({ loggedInUser }: { loggedInUser: string }) {
   const form = useForm<z.infer<typeof TicketSchema>>({
     resolver: zodResolver(TicketSchema),
     defaultValues: {
@@ -35,15 +35,21 @@ export default function CreateTickets() {
     toast("Ticket Created", {
       description: (
         <pre className="mt-2 w-[320px] rounded-md bg-neutral-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
+          <code className="text-white">
+            {JSON.stringify({ ...data, name: loggedInUser }, null, 2)}
+          </code>
         </pre>
       ),
     })
   }
 
   return (
-    <div className="text-white">
+    <div>
       <p className="font-semibold text-lg mb-4">Create Ticket</p>
+      <p className="text-lg mb-4">
+        <span className="font-medium">Name:</span> {loggedInUser}
+      </p>
+
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-2 gap-4 max-w-3xl">
           <FormField
@@ -102,9 +108,12 @@ export default function CreateTickets() {
             )}
           />
 
-          <Button type="submit" className="col-span-2 w-full">
-            Submit
-          </Button>
+          <div className="col-span-2 w-full">
+            <Button type="submit" className="w-full mb-2">
+              Submit
+            </Button>
+            <p className="text-sm italic mb-4">Note: When Ticket is Submitted You Cannot Edit It. Please Double Check.</p>
+          </div>
         </form>
       </Form>
     </div>

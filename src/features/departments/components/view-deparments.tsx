@@ -24,7 +24,7 @@ const sampleData = [
 
 export default function ViewDepartments() {
     return (
-        <div className="text-white">
+        <div>
                     <p className="font-semibold">All Departments</p>
                 
                     {/* View Users */}

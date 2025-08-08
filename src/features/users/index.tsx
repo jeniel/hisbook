@@ -15,16 +15,16 @@ export default function Users() {
             <h1 className='text-2xl font-bold mb-4'>Users</h1>
             <Tabs defaultValue="view-users">
                 <TabsList>
-                    <TabsTrigger value="view-users">User Lists</TabsTrigger>
                     <TabsTrigger value="create-user">Create A User</TabsTrigger>
+                    <TabsTrigger value="view-users">User Lists</TabsTrigger> 
                 </TabsList>
-
-                <TabsContent value="view-users">
-                    <ViewUsers />
-                </TabsContent>
 
                 <TabsContent value="create-user">
                     <CreateUser />
+                </TabsContent>
+
+                <TabsContent value="view-users">
+                    <ViewUsers />
                 </TabsContent>
             </Tabs>
         </Main>

@@ -33,7 +33,7 @@ const sampleUsers = [
 ];
 export default function ViewUsers() {
     return (
-        <div className="text-white">
+        <div>
             <p className="font-semibold">All Users</p>
         
             {/* View Users */}

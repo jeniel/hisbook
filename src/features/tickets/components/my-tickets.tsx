@@ -38,38 +38,37 @@ const sampleTickets = [
   },
 ];
 
+
 export default function MyTickets() {
     return (
-        <div className="text-white">
-            <p className="font-semibold">All Tickets</p>
-
-            {/* View Tickets */}
-            <Table>
-                <TableHeader>
-                    <TableRow>
-                    <TableHead>#</TableHead>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Date</TableHead>
-                    <TableHead>Time</TableHead>
-                    <TableHead>Location</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Actions</TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {sampleTickets.map((tickets) => (
-                    <TableRow key={tickets.id}>
-                        <TableCell>{tickets.no}</TableCell>
-                        <TableCell>{tickets.name}</TableCell>
-                        <TableCell>{tickets.date}</TableCell>
-                        <TableCell>{tickets.time}</TableCell>
-                        <TableCell>{tickets.location}</TableCell>
-                        <TableCell>{tickets.status}</TableCell>
-                        <TableCell>Edit | View</TableCell>
-                    </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </div>
+        <div>
+                    <p className="font-semibold">My Submitted Tickets</p>
+       
+                    {/* View Tickets */}
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                            <TableHead>#</TableHead>
+                            <TableHead>Name</TableHead>
+                            <TableHead>Date</TableHead>
+                            <TableHead>Time</TableHead>
+                            <TableHead>Location</TableHead>
+                            <TableHead>Status</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {sampleTickets.map((tickets) => (
+                            <TableRow key={tickets.id}>
+                                <TableCell>{tickets.no}</TableCell>
+                                <TableCell>{tickets.name}</TableCell>
+                                <TableCell>{tickets.date}</TableCell>
+                                <TableCell>{tickets.time}</TableCell>
+                                <TableCell>{tickets.location}</TableCell>
+                                <TableCell>{tickets.status}</TableCell>
+                            </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </div>
     )
 }
