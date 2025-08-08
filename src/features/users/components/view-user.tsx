@@ -6,6 +6,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { Button } from "@/components/ui/button";
+import EditUser from "./edit-user";
 
 // Sample Data
 const sampleUsers = [
@@ -31,10 +33,12 @@ const sampleUsers = [
     department: "HR"
   },
 ];
+
 export default function ViewUsers() {
     return (
         <div>
-            <p className="font-semibold">All Users</p>
+            <p className="font-semibold font-semibold text-lg">All Users</p>
+            <p className="text-sm italic mb-4">Note: IT staff are only allowed Edit and Create Users</p>
         
             {/* View Users */}
             <Table>
@@ -54,7 +58,11 @@ export default function ViewUsers() {
                                 <TableCell>{user.name}</TableCell>
                                 <TableCell>{user.role}</TableCell>
                                 <TableCell>{user.department}</TableCell>
-                                <TableCell>Edit | View</TableCell>
+                                <TableCell className="flex flex-row items-center space-x-2">
+                                        <EditUser user={user}/>
+                                        <p>|</p>
+                                        <Button>Delete</Button>
+                                    </TableCell>
                             </TableRow>
                             ))}
                         </TableBody>

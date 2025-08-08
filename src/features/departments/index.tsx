@@ -12,20 +12,23 @@ export default function Departments() {
     return (
       <Main>
         <h1 className='text-2xl font-bold mb-4'>Departments</h1>
-        <Tabs defaultValue="view-departments">
+        <Tabs defaultValue="create-department">
                 <TabsList className="mb-4">
-                  <TabsTrigger value="view-departments">Department Lists</TabsTrigger>
                   <TabsTrigger value="create-department">Create A Department</TabsTrigger>
+                  <TabsTrigger value="view-departments">Department Lists</TabsTrigger>
                 </TabsList>
+
+                <TabsContent value="create-department">
+                  <CreateDepartment />
+                </TabsContent>
 
                 <TabsContent value="view-departments">
                   <ViewDepartments />
                 </TabsContent>
 
-                <TabsContent value="create-department">
-                  <CreateDepartment />
-                </TabsContent>
             </Tabs>
       </Main>  
     )
 }
+
+// Todo Connect Functionality from backend

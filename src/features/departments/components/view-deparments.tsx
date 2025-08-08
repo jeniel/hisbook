@@ -6,6 +6,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { Button } from "@/components/ui/button"
+import EditDepartment from "./edit-department"
 
 const sampleData = [
     {
@@ -43,7 +45,11 @@ export default function ViewDepartments() {
                                     <TableCell>{department.no}</TableCell>
                                     <TableCell>{department.name}</TableCell>
                                     <TableCell>{department.description}</TableCell>
-                                    <TableCell>Edit | View</TableCell>
+                                    <TableCell className="flex flex-row items-center space-x-2">
+                                        <EditDepartment department={department}/>
+                                        <p>|</p>
+                                        <Button>Delete</Button>
+                                    </TableCell>
                                 </TableRow>
                                 ))}
                         </TableBody>

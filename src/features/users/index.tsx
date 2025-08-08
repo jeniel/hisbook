@@ -13,7 +13,7 @@ export default function Users() {
     return (
         <Main>
             <h1 className='text-2xl font-bold mb-4'>Users</h1>
-            <Tabs defaultValue="view-users">
+            <Tabs defaultValue="create-user">
                 <TabsList>
                     <TabsTrigger value="create-user">Create A User</TabsTrigger>
                     <TabsTrigger value="view-users">User Lists</TabsTrigger> 
@@ -26,7 +26,10 @@ export default function Users() {
                 <TabsContent value="view-users">
                     <ViewUsers />
                 </TabsContent>
+                
             </Tabs>
         </Main>
     )
 }
+
+// Todo Connect Functionality from backend

@@ -35,16 +35,6 @@ export default function WorkTicket({ ticket }) {
   }
 
   const handleSubmit = () => {
-    console.log({
-      owner: ticket.name,
-      status,
-      date: ticket.date,
-      time: ticket.time,
-      location: ticket.location,
-      file,
-      reviewedBy: "IT Staff Member Name / Sir Anthony from Biomed",
-    })
-    // TODO: send status & file to backend
   }
 
   return (
