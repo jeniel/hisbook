@@ -1,3 +1,4 @@
+import { useQuery } from '@apollo/client';
 import {
   Table,
   TableBody,
@@ -5,70 +6,62 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from '@/components/ui/table';
+import { FIND_ALL_MISSED_LOGOUT_TICKETS_BY_USER } from '@/graphql/operation/query/ticket';
+import { Query } from '@/graphql/codegen/graphql';
 
-// Sample Ticket Data
-const sampleTickets = [
-  {
-    id: 1,
-    no: 1,
-    name: "ACE",
-    date: "2025-08-07",
-    time: "08:00 AM to 09:00 AM",
-    location: "B1",
-    status: "Pending",
-  },
-  {
-    id: 2,
-    no: 2,
-    name: "ACE",
-    date: "2025-08-05",
-    time: "07:50 AM to 09:00 AM",
-    location: "HR",
-    status: "Approved",
-  },
-  {
-    id: 3,
-    no: 3,
-    name: "ACE",
-    date: "2025-08-05",
-    time: "07:50 AM to 08:00 AM",
-    location: "Lab",
-    status: "Completed",
-  },
-];
-
+interface Ticket {
+  id: string;
+  missedAt: string;
+  floor?: string | null;
+  status?: string | null;
+  createdBy?: {
+    username: string;
+  } | null;
+}
 
 export default function MyTickets() {
-    return (
-        <div>
-                    <p className="font-semibold">My Submitted Tickets</p>
-       
-                    {/* View Tickets */}
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                            <TableHead>#</TableHead>
-                            <TableHead>Name</TableHead>
-                            <TableHead>Date</TableHead>
-                            <TableHead>Time</TableHead>
-                            <TableHead>Location</TableHead>
-                            <TableHead>Status</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {sampleTickets.map((tickets) => (
-                            <TableRow key={tickets.id}>
-                                <TableCell>{tickets.no}</TableCell>
-                                <TableCell>{tickets.name}</TableCell>
-                                <TableCell>{tickets.date}</TableCell>
-                                <TableCell>{tickets.time}</TableCell>
-                                <TableCell>{tickets.location}</TableCell>
-                                <TableCell>{tickets.status}</TableCell>
-                            </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </div>
-    )
+  // You would get userId from auth context or props
+  const userId = 'ccd4c115-866e-4427-9424-b19ae2c6842a'; // Change This
+
+  // Fetch first page with 10 items per page
+  const { loading, error, data } = useQuery<Query>(FIND_ALL_MISSED_LOGOUT_TICKETS_BY_USER, {
+    variables: { userId, page: 1, perPage: 10 },
+  });
+
+  if (loading) return <p>Loading tickets...</p>;
+  if (error) return <p>Error loading tickets: {error.message}</p>;
+
+  const tickets: Ticket[] = data?.findTicketsByUser?.data || [];
+
+  return (
+    <div>
+      <p className="font-semibold">My Submitted Tickets</p>
+
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>#</TableHead>
+            <TableHead>Name</TableHead>
+            <TableHead>Date</TableHead>
+            <TableHead>Time</TableHead>
+            <TableHead>Location</TableHead>
+            <TableHead>Status</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {tickets.map((ticket, index) => (
+            <TableRow key={ticket.id}>
+              <TableCell>{index + 1}</TableCell>
+              <TableCell>{ticket.createdBy?.username || 'Unknown'}</TableCell>
+              <TableCell>{new Date(ticket.missedAt).toLocaleDateString()}</TableCell>
+              <TableCell>{new Date(ticket.missedAt).toLocaleTimeString()}</TableCell>
+              <TableCell>{ticket.floor || '-'}</TableCell>
+              <TableCell>{ticket.status || '-'}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+  );
 }

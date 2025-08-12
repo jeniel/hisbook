@@ -37,7 +37,7 @@ const sampleUsers = [
 export default function ViewUsers() {
     return (
         <div>
-            <p className="font-semibold font-semibold text-lg">All Users</p>
+            <p className="font-semibold text-lg">All Users</p>
             <p className="text-sm italic mb-4">Note: IT staff are only allowed Edit and Create Users</p>
         
             {/* View Users */}

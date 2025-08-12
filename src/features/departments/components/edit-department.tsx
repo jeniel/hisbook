@@ -1,25 +1,52 @@
-import { useState } from "react"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { useState } from "react";
+import { useMutation } from "@apollo/client";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
+import { UPDATE_DEPARTMENT } from "@/graphql/operation/mutation/department";
+import { Mutation } from "@/graphql/codegen/graphql";
 
-export default function EditDepartment({ department }) {
-  const [open, setOpen] = useState(false)
+// Props
+type EditDepartmentProps = {
+  department: { id: string; name: string; description: string };
+  onUpdated?: () => void;
+};
+
+export default function EditDepartment({ department, onUpdated }: EditDepartmentProps) {
+  const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: department?.name || "",
     description: department?.description || "",
-  })
+  });
 
+  const [updateDepartment, { loading }] = useMutation<Mutation>(UPDATE_DEPARTMENT);
   const handleChange = (field: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }))
-  }
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // console.log("Updated Department Data:", formData)
-    setOpen(false)
-  }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const res = await updateDepartment({
+        variables: {
+          updateDepartmentId: department.id,
+          payload: {
+            name: formData.name,
+            description: formData.description,
+          },
+        },
+      });
+
+      toast.success(res.data?.updateDepartment?.message ?? "Department updated");
+      if (onUpdated) onUpdated();
+      setOpen(false);
+    } catch (error) {
+      toast.error("Failed to update department");
+    }
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -49,11 +76,11 @@ export default function EditDepartment({ department }) {
             />
           </div>
 
-          <Button type="submit" className="w-full">
-            Save Changes
+          <Button type="submit" className="w-full" disabled={loading}>
+            {loading ? "Saving..." : "Save Changes"}
           </Button>
         </form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

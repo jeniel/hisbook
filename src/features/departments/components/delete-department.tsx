@@ -1,21 +1,40 @@
-import { useState } from "react"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger, DialogFooter } from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { useState } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { useMutation } from "@apollo/client";
+import { DELETE_DEPARTMENT } from "@/graphql/operation/mutation/department";
+import { Mutation } from "@/graphql/codegen/graphql";
 
-export default function DeleteDepartment({ department, onDelete }) {
-  const [open, setOpen] = useState(false)
+// Props
+type DeleteDepartmentProps = {
+  department: { id: string; name: string };
+  onDelete?: () => void;
+};
 
-  const handleDelete = () => {
-    // Call your delete logic
-    console.log("Deleting department:", department.id)
-    if (onDelete) onDelete(department.id)
-    setOpen(false)
+export default function DeleteDepartment({ department, onDelete }: DeleteDepartmentProps) {
+  const [open, setOpen] = useState(false);
+  const [deleteDepartment] = useMutation<Mutation>(DELETE_DEPARTMENT);
+
+  const handleDelete = async () => {
+  try {
+    const res = await deleteDepartment({
+      variables: { deleteDepartmentId: department.id },
+    });
+
+    toast.success(res.data?.deleteDepartment?.message ?? "Department deleted");
+    if (onDelete) onDelete();
+    setOpen(false);
+  } catch (error) {
+    toast.error("Failed to delete department");
   }
+};
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="destructive">Delete</Button>
+        <Button>Delete</Button>
       </DialogTrigger>
 
       <DialogContent className="max-w-sm">
@@ -29,9 +48,9 @@ export default function DeleteDepartment({ department, onDelete }) {
 
         <DialogFooter className="flex justify-end gap-2">
           <Button variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
-          <Button variant="destructive" onClick={handleDelete}>Delete</Button>
+          <Button onClick={handleDelete}>Delete</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

@@ -1,23 +1,23 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { z } from "zod"
 import { Button } from "@/components/ui/button"
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-} from "@/components/ui/form"
+import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { useMutation } from "@apollo/client"
+import { CREATE_DEPARTMENT } from "@/graphql/operation/mutation/department"
+import { Mutation } from "@/graphql/codegen/graphql"
 
-const FormSchema = z.object({
+
+const FormSchema = z.object({ // Input Validation
   department: z.string().min(1, { message: "Department is required" }),
   description: z.string().min(1, { message: "Description is required" }),
 })
 
 export default function CreateDepartment() {
+  const [createDepartment] = useMutation<Mutation>(CREATE_DEPARTMENT)
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -26,14 +26,22 @@ export default function CreateDepartment() {
     },
   })
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    toast("You submitted the following values", {
-      description: (
-        <pre className="mt-2 w-[320px] rounded-md bg-neutral-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    })
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
+    try {
+      const res = await createDepartment({
+        variables: {
+          payload: {
+            name: data.department,
+            description: data.description,
+          },
+        },
+      })
+
+      toast.success(res.data?.createDepartment?.message ?? "Department created")
+      form.reset()
+    } catch (error) {
+      toast.error("Failed to Create Department")
+    }
   }
 
   return (

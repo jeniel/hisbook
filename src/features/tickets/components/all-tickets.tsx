@@ -5,82 +5,49 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 import WorkTickets from "./work-tickets";
-
-// Sample Ticket Data
-const sampleTickets = [
-  {
-    id: 1,
-    no: 1,
-    name: "ACE",
-    date: "2025-08-07",
-    time: "08:00 AM to 09:00 AM",
-    location: "B1",
-    status: "Pending",
-  },
-  {
-    id: 2,
-    no: 2,
-    name: "ACE",
-    date: "2025-08-05",
-    time: "07:50 AM to 09:00 AM",
-    location: "HR",
-    status: "Approved",
-  },
-  {
-    id: 3,
-    no: 3,
-    name: "ACE",
-    date: "2025-08-05",
-    time: "07:50 AM to 08:00 AM",
-    location: "Lab",
-    status: "Completed",
-  },
-  {
-    id: 4,
-    no: 4,
-    name: "ACE",
-    date: "2025-08-05",
-    time: "07:50 AM to 08:00 AM",
-    location: "Lab",
-    status: "Working",
-  },
-];
+import { useQuery } from '@apollo/client';
+import { FIND_ALL_MISSED_LOGOUT_TICKETS } from '@/graphql/operation/query/ticket';
+import { Query } from "@/graphql/codegen/graphql";
 
 export default function AllTickets() {
-    return (
-        <div>
-            <p className="font-semibold">All Tickets (Admin Only)</p>
-            <p className="text-sm italic mb-4">Note: IT staff are only allowed to upload CCTV Screenshot</p>
+  const { loading, error, data } = useQuery<Query>(FIND_ALL_MISSED_LOGOUT_TICKETS);
 
-            {/* View Tickets */}
-            <Table>
-                <TableHeader>
-                    <TableRow>
-                    <TableHead>#</TableHead>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Date</TableHead>
-                    <TableHead>Time</TableHead>
-                    <TableHead>Location</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Actions</TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {sampleTickets.map((tickets) => (
-                    <TableRow key={tickets.id}>
-                        <TableCell>{tickets.no}</TableCell>
-                        <TableCell>{tickets.name}</TableCell>
-                        <TableCell>{tickets.date}</TableCell>
-                        <TableCell>{tickets.time}</TableCell>
-                        <TableCell>{tickets.location}</TableCell>
-                        <TableCell>{tickets.status}</TableCell>
-                        <TableCell><WorkTickets ticket={tickets} /> </TableCell>
-                    </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </div>
-    )
+  if (loading) return <p>Loading tickets...</p>;
+  if (error) return <p>Error loading tickets: {error.message}</p>;
+
+  const tickets = data?.findAllMissedLogoutTickets?.data || [];
+
+  return (
+    <div>
+      <p className="font-semibold">All Submitted Tickets</p>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>#</TableHead>
+            <TableHead>Name</TableHead>
+            <TableHead>Date</TableHead>
+            <TableHead>Time</TableHead>
+            <TableHead>Location</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Actions</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {tickets.map((ticket, index: number) => (
+            <TableRow key={ticket.id}>
+              <TableCell>{index + 1}</TableCell>
+              <TableCell>{ticket.createdBy?.username || 'Unknown'}</TableCell>
+              <TableCell>{new Date(ticket.missedAt).toLocaleDateString()}</TableCell>
+              <TableCell>{new Date(ticket.missedAt).toLocaleTimeString()}</TableCell>
+              <TableCell>{ticket.floor}</TableCell>
+              <TableCell>{ticket.status}</TableCell>
+              <TableCell><WorkTickets ticket={ticket} /></TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+  );
 }
