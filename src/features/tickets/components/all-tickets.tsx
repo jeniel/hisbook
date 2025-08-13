@@ -12,7 +12,11 @@ import { FIND_ALL_MISSED_LOGOUT_TICKETS } from '@/graphql/operation/query/ticket
 import { Query } from "@/graphql/codegen/graphql";
 
 export default function AllTickets() {
-  const { loading, error, data } = useQuery<Query>(FIND_ALL_MISSED_LOGOUT_TICKETS);
+  const { loading, error, data, refetch } = useQuery<Query>(FIND_ALL_MISSED_LOGOUT_TICKETS, {
+    variables: {  page: 1, perPage: 10 },
+    fetchPolicy: "cache-and-network",
+  });
+
 
   if (loading) return <p>Loading tickets...</p>;
   if (error) return <p>Error loading tickets: {error.message}</p>;
@@ -43,7 +47,9 @@ export default function AllTickets() {
               <TableCell>{new Date(ticket.missedAt).toLocaleTimeString()}</TableCell>
               <TableCell>{ticket.floor}</TableCell>
               <TableCell>{ticket.status}</TableCell>
-              <TableCell><WorkTickets ticket={ticket} /></TableCell>
+              <TableCell>
+                <WorkTickets ticket={ticket} onUpdated={() => refetch()} />
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

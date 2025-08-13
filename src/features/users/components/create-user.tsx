@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -19,15 +21,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { useMutation, useQuery } from "@apollo/client"
+import { CREATE_USER } from "@/graphql/operation/mutation/user"
+import { Mutation } from "@/graphql/codegen/graphql"
+import { FIND_ALL_DEPARTMENTS } from "@/graphql/operation/query/department"
 
-// Schema with confirm password + role
+// Input Validation
 const FormSchema = z.object({
   username: z.string().min(1, { message: "Username is required" }),
+  email: z.string().email({ message: "Invalid email" }),
   password: z.string().min(6, { message: "Password must be at least 6 characters" }),
   confirmPassword: z.string().min(6, { message: "Confirm Password is required" }),
-  firstName: z.string().min(1, { message: "First name is required" }),
-  middleName: z.string().optional(),
-  lastName: z.string().min(1, { message: "Last name is required" }),
   department: z.string().min(1, { message: "Department is required" }),
   role: z.string().min(1, { message: "Role is required" }),
 }).refine((data) => data.password === data.confirmPassword, {
@@ -35,32 +39,45 @@ const FormSchema = z.object({
   path: ["confirmPassword"],
 })
 
-const departments = ["MIS", "HR", "HDU"]
-const roles = ["User", "Admin"]
-
 export default function CreateUser() {
+  const [createUser, { loading }] = useMutation<Mutation>(CREATE_USER)
+  const { data: deptData } = useQuery(FIND_ALL_DEPARTMENTS);
+
+  // Roles and Departments
+  const departments = deptData?.findAllDepartments?.data || [];
+  const roles = ["USER", "ADMIN"];
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       username: "",
+      email: "",
       password: "",
       confirmPassword: "",
-      firstName: "",
-      middleName: "",
-      lastName: "",
       department: "",
       role: "",
     },
   })
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    toast("User Created", {
-      description: (
-        <pre className="mt-2 w-[320px] rounded-md bg-neutral-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    })
+  const onSubmit = async (data: z.infer<typeof FormSchema>) => {
+    try {
+      await createUser({
+        variables: {
+          payload: {
+            email: data.email,
+            username: data.username,
+            password: data.password,
+            role: [data.role],
+            departmentName: data.department,
+          },
+        },
+      })
+
+      toast.success("User Created Successfully!")
+      form.reset()
+    } catch (error) {
+      toast.error("Failed to create user")
+    }
   }
 
   return (
@@ -68,17 +85,14 @@ export default function CreateUser() {
       <p className="font-semibold text-lg">Create User</p>
       <p className="text-sm italic mb-4">Note: IT staff are only allowed Edit and Create Users</p>
 
-      {/* Create User Form */}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="w-full max-w-4xl space-y-6">
           <div className="grid grid-cols-2 gap-4">
             {[
               { name: "username", label: "Username", type: "text", placeholder: "Enter username" },
+              { name: "email", label: "E-mail", type: "text", placeholder: "Enter email" },
               { name: "password", label: "Password", type: "password", placeholder: "Enter password" },
               { name: "confirmPassword", label: "Confirm Password", type: "password", placeholder: "Re-enter password" },
-              { name: "firstName", label: "First Name", type: "text", placeholder: "Juan" },
-              { name: "middleName", label: "Middle Name", type: "text", placeholder: "Santos" },
-              { name: "lastName", label: "Last Name", type: "text", placeholder: "Dela Cruz" },
             ].map(({ name, label, type, placeholder }) => (
               <FormField
                 key={name}
@@ -96,7 +110,7 @@ export default function CreateUser() {
               />
             ))}
 
-            {/* Department Select Dropdown */}
+            {/* Department Select */}
             <FormField
               control={form.control}
               name="department"
@@ -110,9 +124,9 @@ export default function CreateUser() {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {departments.map((dept) => (
-                        <SelectItem key={dept} value={dept}>
-                          {dept}
+                      {departments.map((dept: any) => (
+                        <SelectItem key={dept.name} value={dept.name}>
+                          {dept.name}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -122,7 +136,7 @@ export default function CreateUser() {
               )}
             />
 
-            {/* Role Select Dropdown */}
+            {/* Role Select */}
             <FormField
               control={form.control}
               name="role"
@@ -148,8 +162,8 @@ export default function CreateUser() {
               )}
             />
           </div>
-          <Button type="submit" className="w-full">
-            Submit
+          <Button type="submit" className="w-full" disabled={loading}>
+            {loading ? "Creating..." : "Submit"}
           </Button>
         </form>
       </Form>

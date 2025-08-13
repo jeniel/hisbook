@@ -30,5 +30,3 @@ export default function Departments() {
       </Main>  
     )
 }
-
-// Todo Connect Functionality from backend

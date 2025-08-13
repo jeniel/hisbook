@@ -29,3 +29,27 @@ export const LOGOUT = gql`
     }
   }
 `
+
+export const CREATE_USER = gql`
+  mutation Mutation($payload: CreateUserInput!) {
+    createUser(payload: $payload) {
+      message
+    }
+  }
+`;
+
+export const UPDATE_USER = gql `
+  mutation Mutation($updateUserId: String!, $payload: UpdateUserInput!) {
+    updateUser(id: $updateUserId, payload: $payload) {
+      message
+    }
+  }
+`
+
+export const DELETE_USER = gql `
+  mutation DeleteUser($deleteUserId: String!) {
+    deleteUser(id: $deleteUserId) {
+      message
+    }
+  }
+`

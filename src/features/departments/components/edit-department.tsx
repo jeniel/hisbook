@@ -30,7 +30,7 @@ export default function EditDepartment({ department, onUpdated }: EditDepartment
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await updateDepartment({
+      await updateDepartment({
         variables: {
           updateDepartmentId: department.id,
           payload: {
@@ -40,7 +40,7 @@ export default function EditDepartment({ department, onUpdated }: EditDepartment
         },
       });
 
-      toast.success(res.data?.updateDepartment?.message ?? "Department updated");
+      toast.success("Department updated");
       if (onUpdated) onUpdated();
       setOpen(false);
     } catch (error) {

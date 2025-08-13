@@ -20,7 +20,6 @@ export type Scalars = {
 export type CreateDepartmentInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
-  order: Scalars['Float']['input'];
 };
 
 export type CreateMissedLogoutTicketInput = {
@@ -48,7 +47,7 @@ export type CreateProfileInput = {
 };
 
 export type CreateUserInput = {
-  departmentId?: InputMaybe<Scalars['String']['input']>;
+  departmentName?: InputMaybe<Scalars['String']['input']>;
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
   role?: InputMaybe<Array<Role>>;
@@ -83,8 +82,7 @@ export type Department = {
   description: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
-  order: Scalars['Int']['output'];
-  profiles?: Maybe<Array<Profile>>;
+  profiles?: Maybe<Array<User>>;
 };
 
 export type DepartmentCount = {
@@ -110,8 +108,7 @@ export type DepartmentWhereInput = {
   description?: InputMaybe<StringFilter>;
   id?: InputMaybe<StringFilter>;
   name?: InputMaybe<StringFilter>;
-  order?: InputMaybe<IntFilter>;
-  profiles?: InputMaybe<ProfileListRelationFilter>;
+  profiles?: InputMaybe<UserListRelationFilter>;
 };
 
 export type EnumGenderNullableFilter = {
@@ -172,17 +169,6 @@ export type ImagesWhereInput = {
   url?: InputMaybe<StringFilter>;
 };
 
-export type IntFilter = {
-  equals?: InputMaybe<Scalars['Int']['input']>;
-  gt?: InputMaybe<Scalars['Int']['input']>;
-  gte?: InputMaybe<Scalars['Int']['input']>;
-  in?: InputMaybe<Array<Scalars['Int']['input']>>;
-  lt?: InputMaybe<Scalars['Int']['input']>;
-  lte?: InputMaybe<Scalars['Int']['input']>;
-  not?: InputMaybe<NestedIntFilter>;
-  notIn?: InputMaybe<Array<Scalars['Int']['input']>>;
-};
-
 export type IntNullableFilter = {
   equals?: InputMaybe<Scalars['Int']['input']>;
   gt?: InputMaybe<Scalars['Int']['input']>;
@@ -211,7 +197,6 @@ export type Meta = {
 };
 
 export type MissedLogoutTicket = {
-  message(message: any): unknown;
   __typename?: 'MissedLogoutTicket';
   createdAt: Scalars['DateTime']['output'];
   createdBy?: Maybe<User>;
@@ -254,7 +239,7 @@ export type MissedLogoutTicketWhereInput = {
 export type Mutation = {
   __typename?: 'Mutation';
   createDepartment: GeneralMsg;
-  createMissedLogoutTicket: MissedLogoutTicket;
+  createMissedLogoutTicket: GeneralMsg;
   createProfile: GeneralMsg;
   createUser: GeneralMsg;
   deleteDepartment: GeneralMsg;
@@ -263,6 +248,7 @@ export type Mutation = {
   deleteUser: GeneralMsg;
   logOut: GeneralMsg;
   signin: SignResponse;
+  signup: SignResponse;
   updateDepartment: GeneralMsg;
   updateMissedLogoutTicket: GeneralMsg;
   updateProfile: GeneralMsg;
@@ -311,6 +297,11 @@ export type MutationDeleteUserArgs = {
 
 export type MutationSigninArgs = {
   signInInput: SignInInput;
+};
+
+
+export type MutationSignupArgs = {
+  signUpInput: SignUpInput;
 };
 
 
@@ -365,17 +356,6 @@ export type NestedEnumStatusNullableFilter = {
   in?: InputMaybe<Array<Status>>;
   not?: InputMaybe<NestedEnumStatusNullableFilter>;
   notIn?: InputMaybe<Array<Status>>;
-};
-
-export type NestedIntFilter = {
-  equals?: InputMaybe<Scalars['Int']['input']>;
-  gt?: InputMaybe<Scalars['Int']['input']>;
-  gte?: InputMaybe<Scalars['Int']['input']>;
-  in?: InputMaybe<Array<Scalars['Int']['input']>>;
-  lt?: InputMaybe<Scalars['Int']['input']>;
-  lte?: InputMaybe<Scalars['Int']['input']>;
-  not?: InputMaybe<NestedIntFilter>;
-  notIn?: InputMaybe<Array<Scalars['Int']['input']>>;
 };
 
 export type NestedIntNullableFilter = {
@@ -461,8 +441,6 @@ export type Profile = {
   birthDate?: Maybe<Scalars['DateTime']['output']>;
   contact?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['DateTime']['output'];
-  department?: Maybe<Department>;
-  departmentId?: Maybe<Scalars['String']['output']>;
   employeeID?: Maybe<Scalars['Int']['output']>;
   firstName?: Maybe<Scalars['String']['output']>;
   gender?: Maybe<Gender>;
@@ -481,12 +459,6 @@ export type ProfileList = {
   meta?: Maybe<Meta>;
 };
 
-export type ProfileListRelationFilter = {
-  every?: InputMaybe<ProfileWhereInput>;
-  none?: InputMaybe<ProfileWhereInput>;
-  some?: InputMaybe<ProfileWhereInput>;
-};
-
 export type ProfileNullableScalarRelationFilter = {
   is?: InputMaybe<ProfileWhereInput>;
   isNot?: InputMaybe<ProfileWhereInput>;
@@ -501,8 +473,6 @@ export type ProfileWhereInput = {
   birthDate?: InputMaybe<DateTimeNullableFilter>;
   contact?: InputMaybe<StringNullableFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
-  department?: InputMaybe<DepartmentNullableScalarRelationFilter>;
-  departmentId?: InputMaybe<StringNullableFilter>;
   employeeID?: InputMaybe<IntNullableFilter>;
   firstName?: InputMaybe<StringNullableFilter>;
   gender?: InputMaybe<EnumGenderNullableFilter>;
@@ -591,6 +561,16 @@ export type SignResponse = {
   user: User;
 };
 
+export type SignUpInput = {
+  designation?: InputMaybe<Scalars['String']['input']>;
+  email: Scalars['String']['input'];
+  firstName?: InputMaybe<Scalars['String']['input']>;
+  lastName?: InputMaybe<Scalars['String']['input']>;
+  middleName?: InputMaybe<Scalars['String']['input']>;
+  password: Scalars['String']['input'];
+  username: Scalars['String']['input'];
+};
+
 export enum Status {
   Approved = 'Approved',
   Completed = 'Completed',
@@ -630,7 +610,6 @@ export type StringNullableFilter = {
 export type UpdateDepartmentInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
-  order: Scalars['Float']['input'];
 };
 
 export type UpdateMissedLogoutTicketInput = {
@@ -661,6 +640,8 @@ export type User = {
   __typename?: 'User';
   MissedLogoutTicket?: Maybe<Array<MissedLogoutTicket>>;
   _count: UserCount;
+  department?: Maybe<Department>;
+  departmentId?: Maybe<Scalars['String']['output']>;
   /** @Validator.@IsEmail() */
   email: Scalars['String']['output'];
   hashedRefreshToken?: Maybe<Scalars['String']['output']>;
@@ -679,8 +660,14 @@ export type UserCount = {
 
 export type UserList = {
   __typename?: 'UserList';
-  data: Array<Profile>;
+  data: Array<User>;
   meta?: Maybe<Meta>;
+};
+
+export type UserListRelationFilter = {
+  every?: InputMaybe<UserWhereInput>;
+  none?: InputMaybe<UserWhereInput>;
+  some?: InputMaybe<UserWhereInput>;
 };
 
 export type UserNullableScalarRelationFilter = {
@@ -693,6 +680,8 @@ export type UserWhereInput = {
   MissedLogoutTicket?: InputMaybe<MissedLogoutTicketListRelationFilter>;
   NOT?: InputMaybe<Array<UserWhereInput>>;
   OR?: InputMaybe<Array<UserWhereInput>>;
+  department?: InputMaybe<DepartmentNullableScalarRelationFilter>;
+  departmentId?: InputMaybe<StringNullableFilter>;
   email?: InputMaybe<StringFilter>;
   hashedPassword?: InputMaybe<StringFilter>;
   hashedRefreshToken?: InputMaybe<StringNullableFilter>;

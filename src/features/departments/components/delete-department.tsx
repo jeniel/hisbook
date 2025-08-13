@@ -19,11 +19,11 @@ export default function DeleteDepartment({ department, onDelete }: DeleteDepartm
 
   const handleDelete = async () => {
   try {
-    const res = await deleteDepartment({
+    await deleteDepartment({
       variables: { deleteDepartmentId: department.id },
     });
 
-    toast.success(res.data?.deleteDepartment?.message ?? "Department deleted");
+    toast.error("Department deleted");
     if (onDelete) onDelete();
     setOpen(false);
   } catch (error) {

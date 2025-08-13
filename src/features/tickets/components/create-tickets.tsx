@@ -17,13 +17,14 @@ import { useMutation } from "@apollo/client";
 import { CREATE_TICKET } from "@/graphql/operation/mutation/ticket";
 import { Mutation, Status } from "@/graphql/codegen/graphql";
 
-const TicketSchema = z.object({ // Input Validation
+// Input Validation
+const TicketSchema = z.object({ 
   time: z.string().min(1, { message: "Time is required" }),
   date: z.string().min(1, { message: "Date is required" }),
   floor: z.string().min(1, { message: "Floor is required" }),
 });
 
-export default function CreateTickets({ loggedInUserId, loggedInUsername }: { loggedInUserId: string; loggedInUsername: string }) {
+export default function CreateTickets({ loggedInUsername }: { loggedInUsername: string }) {
   const [createTicket, { loading }] = useMutation<Mutation>(CREATE_TICKET);
   const form = useForm<z.infer<typeof TicketSchema>>({
     resolver: zodResolver(TicketSchema),
@@ -34,23 +35,25 @@ export default function CreateTickets({ loggedInUserId, loggedInUsername }: { lo
     },
   });
 
+  // Change this
+  const userId = 'ccd4c115-866e-4427-9424-b19ae2c6842a'; 
+
   async function onSubmit(data: z.infer<typeof TicketSchema>) {
     try {
       const missedAt = `${data.date}T${data.time}`;
-      const res = await createTicket({
+      await createTicket({
         variables: {
           payload: {
             missedAt,
             floor: data.floor,
             screenshot: null,
             status: Status.Pending,
-            updatedBy: loggedInUsername,
-            createdById: loggedInUserId,
+            createdById: userId,
           },
         },
       });
 
-      toast.success(res.data?.createMissedLogoutTicket?.message ?? "Ticket Created");
+      toast.success("Ticket Created")
       form.reset();
     } catch (error) {
       toast.error("Failed to create ticket");

@@ -10,8 +10,8 @@ import { useMutation } from "@apollo/client"
 import { CREATE_DEPARTMENT } from "@/graphql/operation/mutation/department"
 import { Mutation } from "@/graphql/codegen/graphql"
 
-
-const FormSchema = z.object({ // Input Validation
+// Input Validation
+const FormSchema = z.object({ 
   department: z.string().min(1, { message: "Department is required" }),
   description: z.string().min(1, { message: "Description is required" }),
 })

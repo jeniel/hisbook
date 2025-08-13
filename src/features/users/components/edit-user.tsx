@@ -1,38 +1,104 @@
-import { useState } from "react"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage
+} from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { useMutation, useQuery } from "@apollo/client"
+import { UPDATE_USER } from "@/graphql/operation/mutation/user"
+import { FIND_ALL_DEPARTMENTS } from "@/graphql/operation/query/department"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { useState } from "react"
 
-export default function EditUser({ user }) {
+// Zod Schema
+const EditSchema = z.object({
+  username: z.string().min(1, { message: "Username is required" }),
+  email: z.string().email({ message: "Invalid email" }),
+  password: z.string().min(0, { message: "Password must be at least 6 characters" }),
+  confirmPassword: z.string().min(0, { message: "Confirm Password is required" }),
+  department: z.string().min(1, { message: "Department is required" }),
+  role: z.string().min(1, { message: "Role is required" }),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords do not match",
+  path: ["confirmPassword"],
+});
+
+// Props
+type EditUserProps = {
+  user: {
+    id: any
+    role?: any
+    department?  : any
+    email: string
+    username: string
+};
+  onUpdated?: () => void;
+};
+
+export default function EditUser({ user, onUpdated }: EditUserProps) {
   const [open, setOpen] = useState(false)
-  const [formData, setFormData] = useState({
-    username: user?.username || "",
-    firstName: user?.firstName || "",
-    middleName: user?.middleName || "",
-    lastName: user?.lastName || "",
-    department: user?.department || "",
-    role: user?.role || "",
+  const { data: deptData } = useQuery(FIND_ALL_DEPARTMENTS)
+  const [updateUser, { loading }] = useMutation(UPDATE_USER)
+
+  // Roles and Departments
+  const departments = deptData?.findAllDepartments?.data || []
+  const roles = ["USER", "ADMIN"]
+
+  const form = useForm<z.infer<typeof EditSchema>>({
+    resolver: zodResolver(EditSchema),
+    defaultValues: {
+      username: user?.username || "",
+      email: user?.email || "",
+      password: "",
+      confirmPassword: "",
+      department: user?.department?.id || "",
+      role: user?.role?.[0] || "",
+    },
   })
 
-  const departments = ["MIS", "HR", "HDU"]
-  const roles = ["User", "Admin"]
-
-  const handleChange = (field: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }))
-  }
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // console.log("Updated User Data:", formData)
-    setOpen(false)
-  }
+  const onSubmit = async (data: z.infer<typeof EditSchema>) => {
+    try {
+      await updateUser({
+        variables: {
+          updateUserId: user.id,
+            payload: {
+              username: data.username,
+              email: data.email,
+              password: data.password,
+              role: [data.role],
+              departmentName: departments.find((d: { id: string }) => d.id === data.department)?.name,
+            },
+        },
+      });
+      toast.success("User updated successfully!");
+      if (onUpdated) onUpdated();
+      setOpen(false);
+    } catch (error) {
+      toast.error("Failed to update user");
+    }
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">Edit User</Button>
+        <Button variant="outline">Edit</Button>
       </DialogTrigger>
 
       <DialogContent className="max-w-lg">
@@ -40,81 +106,126 @@ export default function EditUser({ user }) {
           <DialogTitle>Edit User</DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label>Username</Label>
-            <Input
-              value={formData.username}
-              onChange={(e) => handleChange("username", e.target.value)}
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            {/* Username */}
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Username</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter username" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
 
-          <div className="space-y-2">
-            <div className="space-y-2">
-              <Label>First Name</Label>
-              <Input
-                value={formData.firstName}
-                onChange={(e) => handleChange("firstName", e.target.value)}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>Middle Name</Label>
-              <Input
-                value={formData.middleName}
-                onChange={(e) => handleChange("middleName", e.target.value)}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>Last Name</Label>
-              <Input
-                value={formData.lastName}
-                onChange={(e) => handleChange("lastName", e.target.value)}
-              />
-            </div>
-          </div>
+            {/* Email */}
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input type="email" placeholder="Enter email" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <div className="space-y-2">
-            <Label>Department</Label>
-            <Select
-              value={formData.department}
-              onValueChange={(val) => handleChange("department", val)}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select department" />
-              </SelectTrigger>
-              <SelectContent>
-                {departments.map((dept) => (
-                  <SelectItem key={dept} value={dept}>
-                    {dept}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+            {/* Password */}
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input type="password" placeholder="Enter new password" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <div className="space-y-2">
-            <Label>Role</Label>
-            <Select
-              value={formData.role}
-              onValueChange={(val) => handleChange("role", val)}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select role" />
-              </SelectTrigger>
-              <SelectContent>
-                {roles.map((role) => (
-                  <SelectItem key={role} value={role}>
-                    {role}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+            {/* Confirm Password */}
+            <FormField
+              control={form.control}
+              name="confirmPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Confirm Password</FormLabel>
+                  <FormControl>
+                    <Input type="password" placeholder="Confirm new password" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <Button type="submit" className="w-full">
-            Save Changes
-          </Button>
-        </form>
+            {/* Department */}
+            <FormField
+              control={form.control}
+              name="department"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Department</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select department" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {departments.map((dept: any) => (
+                        <SelectItem key={dept.id} value={dept.id}>
+                          {dept.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Role */}
+            <FormField
+              control={form.control}
+              name="role"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Role</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select role" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {roles.map((role) => (
+                        <SelectItem key={role} value={role}>
+                          {role}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? "Saving..." : "Save Changes"}
+            </Button>
+          </form>
+        </Form>
+
       </DialogContent>
     </Dialog>
   )

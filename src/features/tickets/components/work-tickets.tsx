@@ -1,5 +1,8 @@
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useState } from "react";
+import { useMutation } from "@apollo/client";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -8,70 +11,86 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
+import { EDIT_TICKET } from "@/graphql/operation/mutation/ticket";
+import { Mutation } from "@/graphql/codegen/graphql";
 
-export default function WorkTicket({ ticket }) {
-  const [status, setStatus] = useState(ticket.status)
-  const [file, setFile] = useState<File | null>(null)
-  const [preview, setPreview] = useState<string | null>(null)
+type WorkTicketProps = {
+  ticket: any;
+  onUpdated?: () => void;
+};
+
+export default function WorkTicket({ ticket, onUpdated }: WorkTicketProps) {
+  const [open, setOpen] = useState(false);
+  const [status, setStatus] = useState(ticket.status);
+  const [file, setFile] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
+  const [updatedBy, setUpdatedBy] = useState(""); // Added updatedBy state
+
+  const [updateTicket, { loading }] = useMutation<Mutation>(EDIT_TICKET);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      const selectedFile = e.target.files[0]
-      setFile(selectedFile)
-      setPreview(URL.createObjectURL(selectedFile))
+      const selectedFile = e.target.files[0];
+      setFile(selectedFile);
+      setPreview(URL.createObjectURL(selectedFile));
     }
-  }
+  };
 
-  const handleSubmit = () => {
-  }
+  // Generic change handler if you want to extend easily
+  const handleChange = (field: string, value: string) => {
+    if (field === "updatedBy") {
+      setUpdatedBy(value);
+    }
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const screenshot = preview ?? null;
+
+      await updateTicket({
+        variables: {
+          updateMissedLogoutTicketId: ticket.id,
+          payload: {
+            missedAt: ticket.missedAt,
+            floor: ticket.floor,
+            screenshot,
+            status,
+            updatedBy,
+          },
+        },
+      });
+
+      toast.success("Ticket updated successfully");
+      if (onUpdated) onUpdated();
+      setOpen(false);
+    } catch (error: any) {
+      toast.error(error.message || "Failed to update ticket");
+    }
+  };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm">Work on Ticket</Button>
+        <Button variant="outline" size="sm">
+          Work on Ticket
+        </Button>
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Work on Ticket</DialogTitle>
-          <DialogDescription>
-            Review and update this ticket.
-          </DialogDescription>
+          <DialogDescription>Review and update this ticket.</DialogDescription>
         </DialogHeader>
-
-        {/* Ticket Owner */}
-        <div className="space-y-2">
-          <Label>Ticket Owner</Label>
-          <p className="border rounded-md p-2 bg-muted">{ticket.name}</p>
-        </div>
-
-        {/* Date */}
-        <div className="space-y-2">
-          <Label>Date</Label>
-          <p className="border rounded-md p-2 bg-muted">{ticket.date}</p>
-        </div>
-
-        {/* Time */}
-        <div className="space-y-2">
-          <Label>Time</Label>
-          <p className="border rounded-md p-2 bg-muted">{ticket.time}</p>
-        </div>
-
-        {/* Location */}
-        <div className="space-y-2">
-          <Label>Location</Label>
-          <p className="border rounded-md p-2 bg-muted">{ticket.location}</p>
-        </div>
 
         {/* Status Dropdown */}
         <div className="space-y-2">
@@ -93,9 +112,7 @@ export default function WorkTicket({ ticket }) {
           <Label>Attach CCTV Screenshot</Label>
           <Input type="file" accept="image/*" onChange={handleFileChange} />
           {file && (
-            <p className="text-xs text-muted-foreground">
-              Selected: {file.name}
-            </p>
+            <p className="text-xs text-muted-foreground">Selected: {file.name}</p>
           )}
           {preview && (
             <div className="mt-2">
@@ -111,15 +128,19 @@ export default function WorkTicket({ ticket }) {
         {/* Reviewed By */}
         <div className="space-y-2">
           <Label>Reviewed By</Label>
-          <p className="border rounded-md p-2 bg-muted">
-            IT Staff Member Name / Sir Anthony From Biomed
-          </p>
+          <Input
+            value={updatedBy}
+            onChange={(e) => handleChange("updatedBy", e.target.value)}
+            placeholder="Enter your Name"
+          />
         </div>
 
         <DialogFooter>
-          <Button onClick={handleSubmit}>Save</Button>
+          <Button onClick={handleSubmit} disabled={loading}>
+            {loading ? "Saving..." : "Save"}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

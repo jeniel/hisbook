@@ -10,29 +10,19 @@ import {
 import { FIND_ALL_MISSED_LOGOUT_TICKETS_BY_USER } from '@/graphql/operation/query/ticket';
 import { Query } from '@/graphql/codegen/graphql';
 
-interface Ticket {
-  id: string;
-  missedAt: string;
-  floor?: string | null;
-  status?: string | null;
-  createdBy?: {
-    username: string;
-  } | null;
-}
-
 export default function MyTickets() {
-  // You would get userId from auth context or props
-  const userId = 'ccd4c115-866e-4427-9424-b19ae2c6842a'; // Change This
+  // Change this after
+  const userId = 'ccd4c115-866e-4427-9424-b19ae2c6842a';
 
-  // Fetch first page with 10 items per page
   const { loading, error, data } = useQuery<Query>(FIND_ALL_MISSED_LOGOUT_TICKETS_BY_USER, {
     variables: { userId, page: 1, perPage: 10 },
+    fetchPolicy: "cache-and-network",
   });
 
   if (loading) return <p>Loading tickets...</p>;
   if (error) return <p>Error loading tickets: {error.message}</p>;
 
-  const tickets: Ticket[] = data?.findTicketsByUser?.data || [];
+  const tickets = data?.findTicketsByUser?.data || [];
 
   return (
     <div>

@@ -6,9 +6,9 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs"
 
-import AllTickets from './components/all-tickets'
 import CreateTickets from './components/create-tickets'
 import MyTickets from './components/my-tickets'
+import AllTickets from './components/all-tickets'
 
 export default function Tickets() {
   return (
@@ -23,8 +23,7 @@ export default function Tickets() {
             </TabsList>
 
             <TabsContent value="create-ticket">
-              <CreateTickets loggedInUser="ACE" /> 
-              {/* Edit the logged in user here */}
+              <CreateTickets loggedInUsername={''} /> 
             </TabsContent>
 
             <TabsContent value="my-tickets">
@@ -40,5 +39,3 @@ export default function Tickets() {
     </>
   )
 }
-
-// Todo Connect Functionality from backend

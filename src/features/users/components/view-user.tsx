@@ -6,67 +6,62 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { Button } from "@/components/ui/button";
+import { FIND_ALL_USER } from "@/graphql/operation/query/user";
+import { Query } from "@/graphql/codegen/graphql";
+import { useQuery } from "@apollo/client";
+import DeleteUser from "./delete-user";
 import EditUser from "./edit-user";
 
-// Sample Data
-const sampleUsers = [
-  {
-    id: 1,
-    no: 1,
-    name: "IT Support",
-    role: "Admin",
-    department: "MIS"
-  },
-  {
-    id: 2,
-    no: 2,
-    name: "Nurse",
-    role: "User",
-    department: "Lab"
-  },
-  {
-    id: 3,
-    no: 3,
-    name: "Staff",
-    role: "User",
-    department: "HR"
-  },
-];
-
 export default function ViewUsers() {
-    return (
-        <div>
-            <p className="font-semibold text-lg">All Users</p>
-            <p className="text-sm italic mb-4">Note: IT staff are only allowed Edit and Create Users</p>
-        
-            {/* View Users */}
-            <Table>
-                        <TableHeader>
-                            <TableRow>
-                            <TableHead>#</TableHead>
-                            <TableHead>Name</TableHead>
-                            <TableHead>Role</TableHead>
-                            <TableHead>Department</TableHead>
-                            <TableHead>Actions</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {sampleUsers.map((user) => (
-                            <TableRow key={user.id}>
-                                <TableCell>{user.no}</TableCell>
-                                <TableCell>{user.name}</TableCell>
-                                <TableCell>{user.role}</TableCell>
-                                <TableCell>{user.department}</TableCell>
-                                <TableCell className="flex flex-row items-center space-x-2">
-                                        <EditUser user={user}/>
-                                        <p>|</p>
-                                        <Button>Delete</Button>
-                                    </TableCell>
-                            </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-        </div>
-    )
+  const { loading, error, data, refetch } = useQuery<Query>(FIND_ALL_USER, {
+    variables: { page: 1, perPage: 10 },
+    fetchPolicy: "cache-and-network",
+  });
+
+  if (loading) return <p>Loading users...</p>;
+  if (error) return <p>Error loading users: {error.message}</p>;
+
+  const Users = data?.findAllUsers?.data || [];
+
+  return (
+    <div>
+      <p className="font-semibold text-lg">All Users</p>
+      <p className="text-sm italic mb-4">
+        Note: IT staff are only allowed Edit and Create Users
+      </p>
+
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>#</TableHead>
+            <TableHead>Name</TableHead>
+            <TableHead>Username</TableHead>
+            <TableHead>Email</TableHead>
+            <TableHead>Role</TableHead>
+            <TableHead>Department</TableHead>
+            <TableHead>Actions</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {Users.map((user, index: number) => (
+            <TableRow key={user.id}>
+              <TableCell>{index + 1}</TableCell>
+              <TableCell>{user.profile?.firstName}{" "}{user.profile?.lastName}</TableCell>
+              <TableCell>{user.username}</TableCell>
+              <TableCell>{user.email}</TableCell>
+              <TableCell>{user.role}</TableCell>
+              <TableCell>{user.department?.name ?? "—"}</TableCell>
+              <TableCell className="flex flex-row items-center space-x-2">
+                <EditUser user={user} onUpdated={() => refetch()}/>
+                <DeleteUser
+                    user={{ id: user.id, username: user.username }}
+                    onDelete={() => refetch()}
+                />
+                </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+  );
 }
