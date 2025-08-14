@@ -36,14 +36,14 @@ export default function HomeFeed() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto mt-2 space-y-4">
+    <div className="mt-2 space-y-4">
       {sampleFeed.map((post) => {
         const isExpanded = expandedPosts[post.id];
         return (
           <Card key={post.id} className="shadow-sm border rounded-2xl">
             <CardHeader>
               <CardTitle className="flex flex-row items-center gap-4">
-                <img src={post.profile} alt={post.user} className="h-16 w-16 rounded-2xl object-cover" />
+                <img src={post.profile} alt={post.user} className="h-16 w-16 rounded-full object-cover" />
                 <div>
                   <p className="text-2xl font-semibold">{post.user}</p>
                   <p className="text-sm text-gray-500">{post.department}</p>
@@ -69,7 +69,7 @@ export default function HomeFeed() {
                 {isExpanded ? "See less" : "See more"}
               </Button>
 
-              <div className="w-full h-100 relative rounded-xl overflow-hidden">
+              <div className="w-full h:60 md:h-100 relative rounded-xl overflow-hidden">
                 <img
                   src={post.images}
                   alt={`Feed image ${post.id}`}

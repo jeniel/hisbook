@@ -4,9 +4,11 @@ import { cn } from '@/lib/utils'
 import { SidebarProvider } from '@/components/ui/sidebar'
 import { AppSidebar } from '@/components/layout/app-sidebar'
 import SkipToMain from '@/components/skip-to-main'
-import { ProfileDropdown } from '../profile-dropdown'
-import { ThemeSwitch } from '../theme-switch'
-import { Header } from './header'
+// import { ProfileDropdown } from '../profile-dropdown'
+// import { ThemeSwitch } from '../theme-switch'
+// import { Header } from './header'
+
+import Navbar from './navbar'
 
 interface Props {
   children?: React.ReactNode
@@ -18,9 +20,10 @@ export function AuthenticatedLayout({ children }: Props) {
     // <SearchProvider>
 
     <>
+    <Navbar/>
       <SidebarProvider defaultOpen={defaultOpen}>
         <SkipToMain />
-        <AppSidebar />
+        {/* <AppSidebar /> */}
         <div
           id='content'
           className={cn(
@@ -37,13 +40,17 @@ export function AuthenticatedLayout({ children }: Props) {
             children
           ) : (
             <>
-              <Header>
+              {/* <Header>
                 <div className='ml-auto flex items-center space-x-4'>
                   <ThemeSwitch />
                   <ProfileDropdown />
                 </div>
-              </Header>
-              <Outlet />
+              </Header> */}
+              <div className="flex-1">
+                <div className="max-w-6xl mx-auto w-full">
+                  <Outlet />
+                </div>
+              </div>
             </>
           )}
         </div>
