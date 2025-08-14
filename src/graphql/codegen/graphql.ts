@@ -252,6 +252,7 @@ export type Mutation = {
   updateDepartment: GeneralMsg;
   updateMissedLogoutTicket: GeneralMsg;
   updateProfile: GeneralMsg;
+  updateUser: GeneralMsg;
 };
 
 
@@ -320,6 +321,12 @@ export type MutationUpdateMissedLogoutTicketArgs = {
 export type MutationUpdateProfileArgs = {
   id: Scalars['String']['input'];
   payload: UpdateProfileInput;
+};
+
+
+export type MutationUpdateUserArgs = {
+  id: Scalars['String']['input'];
+  payload: UpdateUserInput;
 };
 
 export type NestedDateTimeFilter = {
@@ -634,6 +641,14 @@ export type UpdateProfileInput = {
   middleName?: InputMaybe<Scalars['String']['input']>;
   title?: InputMaybe<Scalars['String']['input']>;
   userId?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdateUserInput = {
+  departmentName?: InputMaybe<Scalars['String']['input']>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  password: Scalars['String']['input'];
+  role?: InputMaybe<Array<Role>>;
+  username: Scalars['String']['input'];
 };
 
 export type User = {

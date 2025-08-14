@@ -42,7 +42,11 @@ export default function AllTickets() {
           {tickets.map((ticket, index: number) => (
             <TableRow key={ticket.id}>
               <TableCell>{index + 1}</TableCell>
-              <TableCell>{ticket.createdBy?.username || 'Unknown'}</TableCell>
+              <TableCell>
+                {ticket.createdBy?.profile
+                  ? `${ticket.createdBy.profile.firstName} ${ticket.createdBy.profile.lastName}`
+                  : "Unknown"}
+              </TableCell>
               <TableCell>{new Date(ticket.missedAt).toLocaleDateString()}</TableCell>
               <TableCell>{new Date(ticket.missedAt).toLocaleTimeString()}</TableCell>
               <TableCell>{ticket.floor}</TableCell>

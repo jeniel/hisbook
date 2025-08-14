@@ -16,7 +16,8 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
       <>
         <NavigationProgress />
         <Outlet />
-        <Toaster duration={50000} />
+        {/* Edit the Toaster duration here */}
+        <Toaster duration={3000} /> 
         {/* {import.meta.env.NODE_ENV === 'dev' && (
           <>
             <ReactQueryDevtools buttonPosition='bottom-left' />

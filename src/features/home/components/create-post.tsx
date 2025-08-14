@@ -34,7 +34,7 @@ export default function CreatePost() {
   }
 
   return (
-    <Card className="max-w-4xl mx-auto w-full">
+    <Card className="max-w-6xl mx-auto w-full">
       <CardHeader>
         <CardTitle className="flex flex-row gap-2 items-center">
           <Pen />

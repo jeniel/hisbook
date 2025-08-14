@@ -36,7 +36,7 @@ export default function HomeFeed() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto mt-2 space-y-4">
+    <div className="max-w-6xl mx-auto mt-2 space-y-4">
       {sampleFeed.map((post) => {
         const isExpanded = expandedPosts[post.id];
         return (
@@ -52,13 +52,6 @@ export default function HomeFeed() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
-              <div className="w-full h-60 relative rounded-xl overflow-hidden">
-                <img
-                  src={post.images}
-                  alt={`Feed image ${post.id}`}
-                  className="object-cover w-full h-full"
-                />
-              </div>
               <p
                 className={`text-sm ${
                   isExpanded ? "" : "line-clamp-3"
@@ -75,6 +68,15 @@ export default function HomeFeed() {
               >
                 {isExpanded ? "See less" : "See more"}
               </Button>
+
+              <div className="w-full h-100 relative rounded-xl overflow-hidden">
+                <img
+                  src={post.images}
+                  alt={`Feed image ${post.id}`}
+                  className="object-cover w-full h-full"
+                />
+              </div>
+              
             </CardContent>
           </Card>
         );

@@ -40,18 +40,33 @@ export const FIND_ALL_USER = gql`
 export const ME_QUERY = gql`
   query MeQuery {
     meQuery {
-      isSignedIn
       user {
         id
-        role
+        departmentId
         email
-        profile {
+        username
+        department {
+          name
           id
-          firstName
-          middleName
-          lastName
+          description
         }
+        profile {
+          address
+          birthDate
+          contact
+          createdAt
+          employeeID
+          firstName
+          gender
+          id
+          lastName
+          middleName
+          title
+          avatar
+        }
+        role
       }
+      isSignedIn
     }
   }
 `

@@ -8,21 +8,30 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { FIND_ALL_MISSED_LOGOUT_TICKETS_BY_USER } from '@/graphql/operation/query/ticket';
+import { ME_QUERY } from '@/graphql/operation/query/user'; // Use this ME Query to get the userId
 import { Query } from '@/graphql/codegen/graphql';
 
 export default function MyTickets() {
-  // Change this after
-  const userId = 'ccd4c115-866e-4427-9424-b19ae2c6842a';
+  const { loading: meLoading, error: meError, data: meData } = useQuery<Query>(ME_QUERY);
+  const userId = meData?.meQuery?.user?.id;
 
-  const { loading, error, data } = useQuery<Query>(FIND_ALL_MISSED_LOGOUT_TICKETS_BY_USER, {
+  const {
+    loading: ticketsLoading,
+    error: ticketsError,
+    data: ticketsData,
+  } = useQuery<Query>(FIND_ALL_MISSED_LOGOUT_TICKETS_BY_USER, {
     variables: { userId, page: 1, perPage: 10 },
-    fetchPolicy: "cache-and-network",
+    skip: !userId,
+    fetchPolicy: 'cache-and-network',
   });
 
-  if (loading) return <p>Loading tickets...</p>;
-  if (error) return <p>Error loading tickets: {error.message}</p>;
+  if (meLoading) return <p>Loading user...</p>;
+  if (meError) return <p>Error loading user: {meError.message}</p>;
 
-  const tickets = data?.findTicketsByUser?.data || [];
+  if (ticketsLoading) return <p>Loading tickets...</p>;
+  if (ticketsError) return <p>Error loading tickets: {ticketsError.message}</p>;
+
+  const tickets = ticketsData?.findTicketsByUser?.data || [];
 
   return (
     <div>
@@ -43,7 +52,11 @@ export default function MyTickets() {
           {tickets.map((ticket, index) => (
             <TableRow key={ticket.id}>
               <TableCell>{index + 1}</TableCell>
-              <TableCell>{ticket.createdBy?.username || 'Unknown'}</TableCell>
+              <TableCell>
+                {ticket.createdBy?.profile
+                  ? `${ticket.createdBy.profile.firstName} ${ticket.createdBy.profile.lastName}`
+                  : "Unknown"}
+              </TableCell>
               <TableCell>{new Date(ticket.missedAt).toLocaleDateString()}</TableCell>
               <TableCell>{new Date(ticket.missedAt).toLocaleTimeString()}</TableCell>
               <TableCell>{ticket.floor || '-'}</TableCell>

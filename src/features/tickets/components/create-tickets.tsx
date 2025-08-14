@@ -13,19 +13,25 @@ import {
   FormMessage
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { CREATE_TICKET } from "@/graphql/operation/mutation/ticket";
+import { ME_QUERY } from "@/graphql/operation/query/user";
 import { Mutation, Status } from "@/graphql/codegen/graphql";
 
 // Input Validation
-const TicketSchema = z.object({ 
+const TicketSchema = z.object({
   time: z.string().min(1, { message: "Time is required" }),
   date: z.string().min(1, { message: "Date is required" }),
   floor: z.string().min(1, { message: "Floor is required" }),
 });
 
-export default function CreateTickets({ loggedInUsername }: { loggedInUsername: string }) {
+export default function CreateTickets() {
   const [createTicket, { loading }] = useMutation<Mutation>(CREATE_TICKET);
+  const { data: meData, loading: meLoading } = useQuery(ME_QUERY);
+
+  const user = meData?.meQuery?.user;
+  const userId = user?.id;
+
   const form = useForm<z.infer<typeof TicketSchema>>({
     resolver: zodResolver(TicketSchema),
     defaultValues: {
@@ -35,10 +41,12 @@ export default function CreateTickets({ loggedInUsername }: { loggedInUsername: 
     },
   });
 
-  // Change this
-  const userId = 'ccd4c115-866e-4427-9424-b19ae2c6842a'; 
-
   async function onSubmit(data: z.infer<typeof TicketSchema>) {
+    if (!userId) {
+      toast.error("User not found. Please log in again.");
+      return;
+    }
+
     try {
       const missedAt = `${data.date}T${data.time}`;
       await createTicket({
@@ -53,28 +61,37 @@ export default function CreateTickets({ loggedInUsername }: { loggedInUsername: 
         },
       });
 
-      toast.success("Ticket Created")
+      toast.success("Ticket Created");
       form.reset();
     } catch (error) {
       toast.error("Failed to create ticket");
     }
   }
 
+  if (meLoading) {
+    return <p>Loading user...</p>;
+  }
+
   return (
     <div>
       <p className="font-semibold text-lg mb-4">Create Ticket</p>
       <p className="text-lg mb-4">
-        <span className="font-medium">Name:</span> {loggedInUsername}
+        <span className="font-medium">Name:</span>{" "}
+        {user?.profile?.firstName} {user?.profile?.lastName}
       </p>
 
+
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-2 gap-4 max-w-3xl">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="grid grid-cols-2 gap-4 max-w-3xl"
+        >
           <FormField
             control={form.control}
             name="time"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Estimated Time From Missed Logout</FormLabel>
+                <FormLabel>Time</FormLabel>
                 <FormControl>
                   <Input type="time" {...field} />
                 </FormControl>
@@ -102,9 +119,9 @@ export default function CreateTickets({ loggedInUsername }: { loggedInUsername: 
             name="floor"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Floor Biometrics</FormLabel>
+                <FormLabel>Location</FormLabel>
                 <FormControl>
-                  <Input placeholder="8th Floor HR" {...field} />
+                  <Input placeholder="ER or B1" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -115,7 +132,10 @@ export default function CreateTickets({ loggedInUsername }: { loggedInUsername: 
             <Button type="submit" className="w-full mb-2" disabled={loading}>
               {loading ? "Submitting..." : "Submit"}
             </Button>
-            <p className="text-sm italic mb-4">Note: Once Ticket is Submitted You Cannot Edit It. Please Double Check.</p>
+            <p className="text-sm italic mb-4">
+              Note: Once Ticket is Submitted You Cannot Edit It. Please Double
+              Check.
+            </p>
           </div>
         </form>
       </Form>

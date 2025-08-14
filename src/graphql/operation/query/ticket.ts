@@ -7,6 +7,11 @@ export const FIND_ALL_MISSED_LOGOUT_TICKETS = gql`
       createdAt
       createdBy {
         username
+        profile {
+          lastName
+          middleName
+          firstName
+        }
       }
       createdById
       floor
@@ -35,6 +40,11 @@ export const FIND_ALL_MISSED_LOGOUT_TICKETS_BY_USER = gql`
         createdAt
         createdBy {
           username
+          profile {
+          lastName
+          middleName
+          firstName
+        }
         }
         floor
         id

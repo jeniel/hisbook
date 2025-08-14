@@ -41,6 +41,11 @@ export const sidebarData: SidebarData = {
           icon: IconHome,
         },
         {
+          title: 'My Profile',
+          url: '/profile',
+          icon: IconUserCog,
+        },
+        {
           title: 'Tickets',
           url: '/tickets',
           icon: IconLayoutDashboard,
@@ -55,27 +60,27 @@ export const sidebarData: SidebarData = {
           url: '/departments',
           icon: IconBriefcase,
         },
-        {
-          title: 'Settings',
-          icon: IconSettings,
-          items: [
-            {
-              title: 'Profile',
-              url: '/settings',
-              icon: IconUserCog,
-            },
-            {
-              title: 'Account',
-              url: '/settings/account',
-              icon: IconTool,
-            },
-            {
-              title: 'Appearance',
-              url: '/settings/appearance',
-              icon: IconPalette,
-            }
-          ]
-        },
+        // {
+        //   title: 'Settings',
+        //   icon: IconSettings,
+        //   items: [
+        //     {
+        //       title: 'Profile',
+        //       url: '/settings',
+        //       icon: IconUserCog,
+        //     },
+        //     {
+        //       title: 'Account',
+        //       url: '/settings/account',
+        //       icon: IconTool,
+        //     },
+        //     {
+        //       title: 'Appearance',
+        //       url: '/settings/appearance',
+        //       icon: IconPalette,
+        //     }
+        //   ]
+        // },
         // {
         //   title: 'Help Center',
         //   url: '/help-center',
