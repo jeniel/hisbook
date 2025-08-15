@@ -36,7 +36,7 @@ export default function HomeFeed() {
   };
 
   return (
-    <div className="mt-2 space-y-4">
+    <div className="mt-4 space-y-4">
       {sampleFeed.map((post) => {
         const isExpanded = expandedPosts[post.id];
         return (

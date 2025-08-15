@@ -86,22 +86,22 @@ export default function Profile() {
         <div className="grid grid-cols-1 md:grid-cols-2 space-y-4 space-x-4 mb-4">
           <div>
             <label className="block mb-1">First Name</label>
-            <Input {...form.register("firstName")} />
+            <Input {...form.register("firstName")} className="border border-black"/>
           </div>
 
           <div>
             <label className="block mb-1">Middle Name</label>
-            <Input {...form.register("middleName")} />
+            <Input {...form.register("middleName")} className="border border-black"/>
           </div>
 
           <div>
             <label className="block mb-1">Last Name</label>
-            <Input {...form.register("lastName")} />
+            <Input {...form.register("lastName")} className="border border-black"/>
           </div>
 
           <div>
             <label className="block mb-1">Job Title</label>
-            <Input {...form.register("title")} />
+            <Input {...form.register("title")} className="border border-black"/>
           </div>
 
           <div>
@@ -114,8 +114,9 @@ export default function Profile() {
                 <Select
                   onValueChange={field.onChange}
                   value={field.value || ""}
+                  
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="border border-black">
                     <SelectValue placeholder="Select gender" />
                   </SelectTrigger>
                   <SelectContent>
@@ -130,13 +131,14 @@ export default function Profile() {
 
           <div>
             <label className="block mb-1">Address</label>
-            <Input {...form.register("address")} />
+            <Input {...form.register("address")} className="border border-black"/>
           </div>
 
           <div>
             <label className="block mb-1">Contact</label>
-            <Input {...form.register("contact")} />
+            <Input {...form.register("contact")} className="border border-black"/>
           </div>
+
         </div>
 
         <Button type="submit" disabled={updating}>

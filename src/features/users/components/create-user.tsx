@@ -87,7 +87,7 @@ export default function CreateUser() {
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="w-full max-w-4xl space-y-6">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {[
               { name: "username", label: "Username", type: "text", placeholder: "Enter username" },
               { name: "email", label: "E-mail", type: "text", placeholder: "Enter email" },

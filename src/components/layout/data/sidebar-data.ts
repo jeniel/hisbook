@@ -2,11 +2,17 @@ import {
   IconLayoutDashboard,
   IconSettings,
   IconTool,
-  IconUserCog
+  IconUserCog,
+} from '@tabler/icons-react'
+import {
+  IconPalette,
+  IconHelp,
+  IconUsers,
+  IconHome,
+  IconBriefcase,
 } from '@tabler/icons-react'
 import { Command, GalleryVerticalEnd, AudioWaveform } from 'lucide-react'
 import { type SidebarData } from '../types'
-import { IconPalette, IconHelp, IconUsers, IconHome, IconBriefcase  } from '@tabler/icons-react'
 
 export const sidebarData: SidebarData = {
   user: {
@@ -86,7 +92,7 @@ export const sidebarData: SidebarData = {
         //   url: '/help-center',
         //   icon: IconHelp,
         // }
-      ]
-    }
-  ]
+      ],
+    },
+  ],
 }

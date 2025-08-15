@@ -1,11 +1,11 @@
-import { NavGroup } from '@/components/layout/nav-group'
-import { TeamSwitcher } from '@/components/layout/team-switcher'
 import {
   Sidebar,
   SidebarContent,
   SidebarHeader,
-  SidebarRail
+  SidebarRail,
 } from '@/components/ui/sidebar'
+import { NavGroup } from '@/components/layout/nav-group'
+import { TeamSwitcher } from '@/components/layout/team-switcher'
 import { sidebarData } from './data/sidebar-data'
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -15,7 +15,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <TeamSwitcher teams={sidebarData.teams} />
       </SidebarHeader> */}
       <div>
-        <img src="./images/acebook-logo.png" alt="Acebook Logo" />
+        <img src='./images/acebook-logo.png' alt='Acebook Logo' />
       </div>
       <SidebarContent>
         {sidebarData.navGroups.map((props) => (

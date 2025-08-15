@@ -20,7 +20,7 @@ export function AuthenticatedLayout({ children }: Props) {
     // <SearchProvider>
 
     <>
-    <Navbar/>
+      <Navbar />
       <SidebarProvider defaultOpen={defaultOpen}>
         <SkipToMain />
         {/* <AppSidebar /> */}
@@ -46,8 +46,8 @@ export function AuthenticatedLayout({ children }: Props) {
                   <ProfileDropdown />
                 </div>
               </Header> */}
-              <div className="flex-1">
-                <div className="max-w-6xl mx-auto w-full">
+              <div className='flex-1'>
+                <div className='mx-auto w-full max-w-6xl'>
                   <Outlet />
                 </div>
               </div>
