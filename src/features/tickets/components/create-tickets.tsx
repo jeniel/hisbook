@@ -83,9 +83,9 @@ export default function CreateTickets() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className='space-y-2 max-w-4xl'
+          className='max-w-4xl space-y-2'
         >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div className='mb-4 grid grid-cols-1 gap-4 md:grid-cols-2'>
             <FormField
               control={form.control}
               name='time'
