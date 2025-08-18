@@ -39,9 +39,9 @@ const errorControl = onError(({ graphQLErrors, networkError }) => {
   }
   if (graphQLErrors) {
     graphQLErrors.forEach(({ message, locations, path }) => {
-      console.log(
-        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
-      )
+      // console.log(
+      //   `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+      // )
       switch (message) {
         case 'Unauthorized':
           // alert("Your sesssion has expired. You will be forced to logout");

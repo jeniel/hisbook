@@ -15,6 +15,7 @@ export const GET_POSTS = gql`
           }
           department {
             name
+            description
           }
           username
         }

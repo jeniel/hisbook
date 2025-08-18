@@ -59,10 +59,10 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       },
       onCompleted: async (data) => {
         console.log('data == >', data)
-        
+
         // Wait a bit for cookies to be set
-        await new Promise(resolve => setTimeout(resolve, 100))
-        
+        await new Promise((resolve) => setTimeout(resolve, 100))
+
         // Refetch authentication state instead of full page reload
         if (typeof window !== 'undefined' && (window as any).refetchAuth) {
           try {
@@ -71,7 +71,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             console.warn('Failed to refetch auth:', error)
           }
         }
-        
+
         // Navigate to dashboard or redirect URL
         const urlParams = new URLSearchParams(window.location.search)
         const redirectUrl = urlParams.get('redirect') || '/'

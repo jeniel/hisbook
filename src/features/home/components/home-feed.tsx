@@ -58,7 +58,11 @@ export default function HomeFeed() {
                     {','} {profile?.firstName}
                   </p>
                   <p className='text-sm text-gray-500'>@{user?.username}</p>
-                  <p className='text-sm text-gray-500'>{department?.name}</p>
+                  <p className='text-sm text-gray-500'>
+                    {department?.name}
+                    {' - '}
+                    {department?.description}
+                  </p>
                   <p className='text-xs text-gray-400'>
                     {new Date(post.datePosted).toLocaleDateString('en-US', {
                       year: 'numeric',

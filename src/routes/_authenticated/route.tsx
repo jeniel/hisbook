@@ -4,8 +4,7 @@ import { AuthenticatedLayout } from '@/components/layout/authenticated-layout'
 export const Route = createFileRoute('/_authenticated')({
   component: AuthenticatedLayout,
   beforeLoad: async ({ context }) => {
-    console.log('beforeLoad authenticated == >', context)
-
+    // console.log('beforeLoad authenticated == >', context)
     // If user data is not available or not signed in, redirect to login
     if (!context.user || !context.user.isSignedIn) {
       // If we have a refetch function available, try to refresh auth state

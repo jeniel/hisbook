@@ -33,7 +33,7 @@ const AuthManager = (props: any) => {
       }
     },
     onError: (error) => {
-      console.warn('fire error on context', error)
+      // console.warn('fire error on context', error)
       userStore.setState((state) => {
         return {
           ...state,
