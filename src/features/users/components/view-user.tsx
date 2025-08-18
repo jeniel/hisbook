@@ -46,7 +46,7 @@ export default function ViewUsers() {
           {Users.map((user, index: number) => (
             <TableRow key={user.id}>
               <TableCell>{index + 1}</TableCell>
-              <TableCell>{user.profile?.firstName}{" "}{user.profile?.lastName}</TableCell>
+              <TableCell>{user.profile?.lastName},{" "}{user.profile?.firstName}</TableCell>
               <TableCell>{user.username}</TableCell>
               <TableCell>{user.email}</TableCell>
               <TableCell>{user.role}</TableCell>

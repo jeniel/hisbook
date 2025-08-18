@@ -23,6 +23,8 @@ const TicketSchema = z.object({
   time: z.string().min(1, { message: 'Time is required' }),
   date: z.string().min(1, { message: 'Date is required' }),
   floor: z.string().min(1, { message: 'Floor is required' }),
+  subject: z.string().optional(),
+  remarks: z.string().optional(),
 })
 
 export default function CreateTickets() {
@@ -35,9 +37,11 @@ export default function CreateTickets() {
   const form = useForm<z.infer<typeof TicketSchema>>({
     resolver: zodResolver(TicketSchema),
     defaultValues: {
+      subject: '',
       time: '',
       date: '',
       floor: '',
+      remarks: '',
     },
   })
 
@@ -53,10 +57,12 @@ export default function CreateTickets() {
         variables: {
           payload: {
             missedAt,
+            subject: data.subject,
             floor: data.floor,
             screenshot: null,
             status: Status.Pending,
             createdById: userId,
+            remarks: data.remarks,
           },
         },
       })
@@ -86,6 +92,20 @@ export default function CreateTickets() {
           className='max-w-4xl space-y-2'
         >
           <div className='mb-4 grid grid-cols-1 gap-4 md:grid-cols-2'>
+            <FormField
+              control={form.control}
+              name='subject'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Subject</FormLabel>
+                  <FormControl>
+                    <Input placeholder='e.g. CCTV Review, Confidential' {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <FormField
               control={form.control}
               name='time'
@@ -121,7 +141,7 @@ export default function CreateTickets() {
                 <FormItem>
                   <FormLabel>Location</FormLabel>
                   <FormControl>
-                    <Input placeholder='ER or B1' {...field} />
+                    <Input placeholder='e.g. 8th, ER or B1' {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -130,6 +150,20 @@ export default function CreateTickets() {
           </div>
 
           <div>
+            <FormField
+              control={form.control}
+              name='remarks'
+              render={({ field }) => (
+                <FormItem className="mb-4">
+                  <FormLabel>Remarks</FormLabel>
+                  <FormControl>
+                    <Input placeholder='Additional details or context' {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            
             <Button type='submit' className='mb-2 w-40' disabled={loading}>
               {loading ? 'Submitting...' : 'Submit'}
             </Button>

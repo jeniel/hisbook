@@ -26,9 +26,16 @@ export type CreateMissedLogoutTicketInput = {
   createdById?: InputMaybe<Scalars['String']['input']>;
   floor?: InputMaybe<Scalars['String']['input']>;
   missedAt: Scalars['DateTime']['input'];
+  remarks?: InputMaybe<Scalars['String']['input']>;
   screenshot?: InputMaybe<Scalars['String']['input']>;
   status?: InputMaybe<Status>;
+  subject?: InputMaybe<Scalars['String']['input']>;
   updatedBy?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type CreatePostInput = {
+  content: Scalars['String']['input'];
+  images?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type CreateProfileInput = {
@@ -204,8 +211,10 @@ export type MissedLogoutTicket = {
   floor?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   missedAt?: Maybe<Scalars['DateTime']['output']>;
+  remarks?: Maybe<Scalars['String']['output']>;
   screenshot?: Maybe<Scalars['String']['output']>;
   status?: Maybe<Status>;
+  subject?: Maybe<Scalars['String']['output']>;
   updatedBy?: Maybe<Scalars['String']['output']>;
 };
 
@@ -231,8 +240,10 @@ export type MissedLogoutTicketWhereInput = {
   floor?: InputMaybe<StringNullableFilter>;
   id?: InputMaybe<StringFilter>;
   missedAt?: InputMaybe<DateTimeNullableFilter>;
+  remarks?: InputMaybe<StringNullableFilter>;
   screenshot?: InputMaybe<StringNullableFilter>;
   status?: InputMaybe<EnumStatusNullableFilter>;
+  subject?: InputMaybe<StringNullableFilter>;
   updatedBy?: InputMaybe<StringNullableFilter>;
 };
 
@@ -240,10 +251,12 @@ export type Mutation = {
   __typename?: 'Mutation';
   createDepartment: GeneralMsg;
   createMissedLogoutTicket: GeneralMsg;
+  createPost: GeneralMsg;
   createProfile: GeneralMsg;
   createUser: GeneralMsg;
   deleteDepartment: GeneralMsg;
   deleteMissedLogoutTicket: GeneralMsg;
+  deletePost: GeneralMsg;
   deleteProfile: GeneralMsg;
   deleteUser: GeneralMsg;
   logOut: GeneralMsg;
@@ -251,6 +264,7 @@ export type Mutation = {
   signup: SignResponse;
   updateDepartment: GeneralMsg;
   updateMissedLogoutTicket: GeneralMsg;
+  updatePost: GeneralMsg;
   updateProfile: GeneralMsg;
   updateUser: GeneralMsg;
 };
@@ -263,6 +277,11 @@ export type MutationCreateDepartmentArgs = {
 
 export type MutationCreateMissedLogoutTicketArgs = {
   payload: CreateMissedLogoutTicketInput;
+};
+
+
+export type MutationCreatePostArgs = {
+  payload: CreatePostInput;
 };
 
 
@@ -282,6 +301,11 @@ export type MutationDeleteDepartmentArgs = {
 
 
 export type MutationDeleteMissedLogoutTicketArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type MutationDeletePostArgs = {
   id: Scalars['String']['input'];
 };
 
@@ -315,6 +339,12 @@ export type MutationUpdateDepartmentArgs = {
 export type MutationUpdateMissedLogoutTicketArgs = {
   id: Scalars['String']['input'];
   payload: UpdateMissedLogoutTicketInput;
+};
+
+
+export type MutationUpdatePostArgs = {
+  id: Scalars['String']['input'];
+  payload: UpdatePostInput;
 };
 
 
@@ -408,6 +438,7 @@ export type Posts = {
   __typename?: 'Posts';
   _count: PostsCount;
   content: Scalars['String']['output'];
+  datePosted: Scalars['DateTime']['output'];
   id: Scalars['ID']['output'];
   images?: Maybe<Array<Images>>;
   user?: Maybe<User>;
@@ -417,6 +448,12 @@ export type Posts = {
 export type PostsCount = {
   __typename?: 'PostsCount';
   images: Scalars['Int']['output'];
+};
+
+export type PostsList = {
+  __typename?: 'PostsList';
+  data: Array<Posts>;
+  meta?: Maybe<Meta>;
 };
 
 export type PostsListRelationFilter = {
@@ -435,6 +472,7 @@ export type PostsWhereInput = {
   NOT?: InputMaybe<Array<PostsWhereInput>>;
   OR?: InputMaybe<Array<PostsWhereInput>>;
   content?: InputMaybe<StringFilter>;
+  datePosted?: InputMaybe<DateTimeFilter>;
   id?: InputMaybe<StringFilter>;
   images?: InputMaybe<ImagesListRelationFilter>;
   user?: InputMaybe<UserNullableScalarRelationFilter>;
@@ -496,6 +534,7 @@ export type Query = {
   __typename?: 'Query';
   findAllDepartments: DepartmentList;
   findAllMissedLogoutTickets: MissedLogoutTicketList;
+  findAllPosts: PostsList;
   findAllProfiles: ProfileList;
   findAllUsers: UserList;
   findProfile: Profile;
@@ -515,6 +554,13 @@ export type QueryFindAllMissedLogoutTicketsArgs = {
   page?: InputMaybe<Scalars['Int']['input']>;
   perPage?: InputMaybe<Scalars['Int']['input']>;
   where?: InputMaybe<MissedLogoutTicketWhereInput>;
+};
+
+
+export type QueryFindAllPostsArgs = {
+  page?: InputMaybe<Scalars['Int']['input']>;
+  perPage?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<PostsWhereInput>;
 };
 
 
@@ -623,9 +669,17 @@ export type UpdateMissedLogoutTicketInput = {
   createdById?: InputMaybe<Scalars['String']['input']>;
   floor?: InputMaybe<Scalars['String']['input']>;
   missedAt: Scalars['DateTime']['input'];
+  remarks?: InputMaybe<Scalars['String']['input']>;
   screenshot?: InputMaybe<Scalars['String']['input']>;
   status?: InputMaybe<Status>;
+  subject?: InputMaybe<Scalars['String']['input']>;
   updatedBy?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdatePostInput = {
+  content?: InputMaybe<Scalars['String']['input']>;
+  datePosted?: InputMaybe<Scalars['DateTime']['input']>;
+  images?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type UpdateProfileInput = {
