@@ -42,6 +42,7 @@ export default function MyTickets() {
           <TableRow>
             <TableHead>#</TableHead>
             <TableHead>Name</TableHead>
+            <TableHead>Subject</TableHead>
             <TableHead>Date</TableHead>
             <TableHead>Time</TableHead>
             <TableHead>Location</TableHead>
@@ -57,6 +58,7 @@ export default function MyTickets() {
                   ? `${ticket.createdBy.profile.firstName} ${ticket.createdBy.profile.lastName}`
                   : "Unknown"}
               </TableCell>
+              <TableCell>{ticket.subject || '-'}</TableCell>
               <TableCell>{new Date(ticket.missedAt).toLocaleDateString()}</TableCell>
               <TableCell>{new Date(ticket.missedAt).toLocaleTimeString()}</TableCell>
               <TableCell>{ticket.floor || '-'}</TableCell>

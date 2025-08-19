@@ -15,6 +15,8 @@ export const FIND_ALL_MISSED_LOGOUT_TICKETS = gql`
       }
       createdById
       floor
+      subject
+      remarks
       id
       missedAt
       screenshot
@@ -48,6 +50,8 @@ export const FIND_ALL_MISSED_LOGOUT_TICKETS_BY_USER = gql`
         }
         floor
         id
+        subject
+        remarks
         missedAt
         screenshot
         status
