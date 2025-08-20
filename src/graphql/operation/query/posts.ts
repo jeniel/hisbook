@@ -7,6 +7,10 @@ export const GET_POSTS = gql`
         datePosted
         content
         id
+        images {
+          id
+          url
+        }
         user {
           id
           profile {

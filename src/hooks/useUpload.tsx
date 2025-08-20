@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react'
 
@@ -13,6 +12,7 @@ export const useUpload = () => {
   const [error, setError] = useState<string | null>(null)
   const API_URL = import.meta.env.VITE_API_EXPRESS
 
+  // Upload a single file
   const uploadFile = async (
     file: File,
     folder: string
@@ -51,6 +51,42 @@ export const useUpload = () => {
     }
   }
 
+  // Upload multiple files at once
+  const uploadFiles = async (
+    files: File[],
+    folder: string
+  ): Promise<string[]> => {
+    if (!files.length) return []
+
+    setLoading(true)
+    setError(null)
+
+    try {
+      const formData = new FormData()
+      files.forEach((file) => formData.append('files', file)) // must match backend upload.array("files")
+
+      const res = await fetch(`${API_URL}/upload-multiple/${folder}`, {
+        method: 'POST',
+        body: formData,
+      })
+
+      if (!res.ok) {
+        const errData = await res.json().catch(() => null)
+        throw new Error(errData?.message || 'Multiple upload failed')
+      }
+
+      const data = await res.json()
+      // Expect backend to return { files: [{ url: "..." }, ...] }
+      return data.files.map((f: { url: string }) => f.url)
+    } catch (err: any) {
+      setError(err.message || 'Unknown error')
+      return []
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Get file from backend (download)
   const getFile = async (
     bucket: string,
     object: string,
@@ -64,11 +100,10 @@ export const useUpload = () => {
       if (!res.ok) throw new Error(`Failed to fetch file: ${res.statusText}`)
       const blob = await res.blob()
       return URL.createObjectURL(blob)
-    } catch (err: any) {
-      // console.error('getFile error:', err)
+    } catch {
       return null
     }
   }
 
-  return { uploadFile, getFile, loading, error }
+  return { uploadFile, uploadFiles, getFile, loading, error }
 }

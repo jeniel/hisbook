@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import DeletePost from './delete-post'
 import EditPost from './edit-post'
+import ImagePost from './images-post'
 
 export default function HomeFeed() {
   const [expandedPosts, setExpandedPosts] = useState<Record<string, boolean>>(
@@ -159,6 +160,7 @@ export default function HomeFeed() {
                   {isExpanded ? 'See less' : 'See more'}
                 </button>
               )}
+              <ImagePost images={post.images ?? undefined} />
             </CardContent>
           </Card>
         )
