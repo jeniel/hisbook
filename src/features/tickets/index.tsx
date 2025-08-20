@@ -20,7 +20,7 @@ export default function Tickets() {
       <Main>
         <h1 className='mb-4 text-2xl font-bold'>Ticket Missed Log</h1>
         <Tabs defaultValue='create-ticket'>
-          <TabsList>
+          <TabsList className="w-full">
             <TabsTrigger value='create-ticket'>Create A Ticket</TabsTrigger>
             <TabsTrigger value='my-tickets'>My Tickets</TabsTrigger>
 

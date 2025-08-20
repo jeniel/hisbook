@@ -96,9 +96,9 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           name='email'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Username</FormLabel>
+              <FormLabel>E-mail</FormLabel>
               <FormControl>
-                <Input placeholder='Username' {...field} />
+                <Input placeholder='E-mail' {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

@@ -64,7 +64,7 @@ export default function Navbar() {
         </div>
 
         {/* Center - Navigation */}
-        <nav className='mr-12 hidden items-center space-x-4 lg:block'>
+        <nav className='mr-24 hidden items-center space-x-4 lg:block'>
           {visibleLinks.map(({ to, icon, label }) => {
             const isActive = location.pathname === to
             return (

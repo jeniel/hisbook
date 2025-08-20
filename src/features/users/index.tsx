@@ -14,7 +14,7 @@ export default function Users() {
         <Main>
             <h1 className='text-2xl font-bold mb-4'>Users</h1>
             <Tabs defaultValue="create-user">
-                <TabsList>
+                <TabsList className="w-full">
                     <TabsTrigger value="create-user">Create A User</TabsTrigger>
                     <TabsTrigger value="view-users">User Lists</TabsTrigger> 
                 </TabsList>
