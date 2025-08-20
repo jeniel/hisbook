@@ -141,7 +141,6 @@ export default function WorkTicket({ ticket, onUpdated }: WorkTicketProps) {
         {/* File Upload with Preview */}
         <div className='space-y-2'>
           <Label>Attach CCTV Screenshot</Label>
-          <p className="text-xs text-muted-foreground">Format Screenshot: Last Name + Date</p>
           <Input type='file' accept='image/*' onChange={handleFileChange} />
           {file && (
             <p className='text-muted-foreground text-xs'>

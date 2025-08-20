@@ -1,9 +1,19 @@
-import { useState } from 'react'
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState, useEffect } from 'react'
 import { Query } from '@/graphql/codegen/graphql'
 import { GET_POSTS } from '@/graphql/operation/query/posts'
+import { ME_QUERY } from '@/graphql/operation/query/user'
 import { useQuery } from '@apollo/client'
+import { MoreHorizontal } from 'lucide-react'
+import { useUpload } from '@/hooks/useUpload'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from '@/components/ui/dropdown-menu'
 import DeletePost from './delete-post'
 import EditPost from './edit-post'
 
@@ -17,12 +27,44 @@ export default function HomeFeed() {
   } | null>(null)
   const [deletePost, setDeletePost] = useState<string | null>(null)
 
+  const { getFile } = useUpload()
+  const [avatarUrls, setAvatarUrls] = useState<Record<string, string>>({})
+
   const variables = { page: 1, perPage: 10 }
   const { data, loading, error } = useQuery<Query>(GET_POSTS, {
     variables,
     fetchPolicy: 'cache-first',
     nextFetchPolicy: 'cache-and-network',
   })
+
+  // ✅ load avatars for each user
+  useEffect(() => {
+    const fetchAvatars = async () => {
+      if (!data?.findAllPosts?.data) return
+
+      const promises = data.findAllPosts.data.map(async (post) => {
+        const profile = post.user?.profile
+        if (profile?.avatar) {
+          const filename = profile.avatar.split('/').pop()!
+          const url = await getFile('acebook', 'avatar', filename)
+          if (url) {
+            setAvatarUrls((prev) => {
+              if (!post.user) return prev
+              if (prev[post.user.id] === url) return prev
+              return { ...prev, [post.user.id]: url }
+            })
+          }
+        }
+      })
+
+      await Promise.all(promises)
+    }
+
+    fetchAvatars()
+  }, [data])
+
+  const { data: meData } = useQuery(ME_QUERY)
+  const currentUserId = meData?.meQuery?.user?.id
 
   const toggleExpand = (postId: string) => {
     setExpandedPosts((prev) => ({
@@ -56,9 +98,9 @@ export default function HomeFeed() {
             <CardHeader>
               <CardTitle className='flex flex-row items-center gap-4'>
                 <img
-                  src='./images/ace.png'
+                  src={avatarUrls[user?.id] || './images/ace.png'}
                   alt='User Avatar'
-                  className='h-16 w-16 rounded-full object-cover'
+                  className='h-20 w-20 rounded-full object-cover'
                 />
                 <div className='flex-1'>
                   <p className='text-lg font-semibold'>
@@ -69,6 +111,7 @@ export default function HomeFeed() {
                     {department?.name} - {department?.description}
                   </p>
                   <p className='text-xs text-gray-400'>
+                    Posted on{' '}
                     {new Date(post.datePosted).toLocaleDateString('en-US', {
                       year: 'numeric',
                       month: 'short',
@@ -77,24 +120,31 @@ export default function HomeFeed() {
                   </p>
                 </div>
 
-                {/* Action buttons */}
-                <div className='flex gap-2'>
-                  <Button
-                    size='sm'
-                    variant='outline'
-                    onClick={() =>
-                      setEditPost({ id: post.id, content: post.content })
-                    }
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    size='sm'
-                    onClick={() => setDeletePost(post.id)}
-                  >
-                    Delete
-                  </Button>
-                </div>
+                {/* Show actions only if user is the owner */}
+                {user?.id === currentUserId && (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant='outline' size='icon'>
+                        <MoreHorizontal className='h-5 w-5' />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align='end' className='w-32'>
+                      <DropdownMenuItem
+                        onClick={() =>
+                          setEditPost({ id: post.id, content: post.content })
+                        }
+                      >
+                        Edit
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => setDeletePost(post.id)}
+                        className='text-red-600'
+                      >
+                        Delete
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                )}
               </CardTitle>
             </CardHeader>
             <CardContent className='space-y-2'>
