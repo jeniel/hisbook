@@ -2,7 +2,8 @@
 import { useState, useEffect } from 'react'
 import { Mutation } from '@/graphql/codegen/graphql'
 import { EDIT_TICKET } from '@/graphql/operation/mutation/ticket'
-import { useMutation } from '@apollo/client'
+import { ME_QUERY } from '@/graphql/operation/query/user'
+import { useMutation, useQuery } from '@apollo/client'
 import { toast } from 'sonner'
 import { useUpload } from '@/hooks/useUpload'
 import { Button } from '@/components/ui/button'
@@ -35,7 +36,10 @@ export default function WorkTicket({ ticket, onUpdated }: WorkTicketProps) {
   const [status, setStatus] = useState(ticket.status)
   const [file, setFile] = useState<File | null>(null)
   const [preview, setPreview] = useState<string | null>(null)
-  const [updatedBy, setUpdatedBy] = useState(ticket.updatedBy || '')
+
+  const { data: meData } = useQuery(ME_QUERY)
+  const currentUser = meData?.meQuery?.user
+  const updatedBy = `${currentUser?.profile?.firstName || ''} ${currentUser?.profile?.lastName || ''} - ${currentUser?.profile?.title || ''}`
 
   const [updateTicket, { loading }] = useMutation<Mutation>(EDIT_TICKET)
   const { uploadFile, getFile } = useUpload()
@@ -63,10 +67,6 @@ export default function WorkTicket({ ticket, onUpdated }: WorkTicketProps) {
     }
   }
 
-  const handleChange = (field: string, value: string) => {
-    if (field === 'updatedBy') setUpdatedBy(value)
-  }
-
   const handleSubmit = async () => {
     try {
       let screenshotUrl = preview // fallback if no new file
@@ -85,7 +85,7 @@ export default function WorkTicket({ ticket, onUpdated }: WorkTicketProps) {
             floor: ticket.floor,
             screenshot: screenshotUrl,
             status,
-            updatedBy,
+            updatedBy, // automatically set
           },
         },
       })
@@ -112,25 +112,26 @@ export default function WorkTicket({ ticket, onUpdated }: WorkTicketProps) {
           <DialogDescription>Review and update this ticket.</DialogDescription>
         </DialogHeader>
 
-        {/* Status Dropdown */}
-        <div className='space-y-2'>
-          <div className='text-sm'>
-            <p>
-              <span className='mr-8 font-semibold'>Name:</span>{' '}
-              {ticket.createdBy?.profile
-                ? `${ticket.createdBy.profile.firstName} ${ticket.createdBy.profile.lastName}`
-                : 'Unknown'}
-            </p>
-            <p>
-              <span className='mr-5 font-semibold'>Subject:</span>{' '}
-              {ticket.subject || '-'}
-            </p>
-            <p>
-              <span className='mr-3 font-semibold'>Remarks:</span>{' '}
-              {ticket.remarks || '-'}
-            </p>
-          </div>
+        {/* Ticket Info */}
+        <div className='space-y-2 text-sm'>
+          <p>
+            <span className='mr-2 font-semibold'>Name:</span>{' '}
+            {ticket.createdBy?.profile
+              ? `${ticket.createdBy.profile.firstName} ${ticket.createdBy.profile.lastName}`
+              : 'Unknown'}
+          </p>
+          <p>
+            <span className='mr-2 font-semibold'>Subject:</span>{' '}
+            {ticket.subject || '-'}
+          </p>
+          <p>
+            <span className='mr-2 font-semibold'>Remarks:</span>{' '}
+            {ticket.remarks || '-'}
+          </p>
+        </div>
 
+        {/* Status Dropdown */}
+        <div className='mt-4 space-y-2'>
           <Label>Status</Label>
           <Select value={status} onValueChange={setStatus}>
             <SelectTrigger className='w-full'>
@@ -144,8 +145,8 @@ export default function WorkTicket({ ticket, onUpdated }: WorkTicketProps) {
           </Select>
         </div>
 
-        {/* File Upload with Preview */}
-        <div className='space-y-2'>
+        {/* File Upload */}
+        <div className='mt-4 space-y-2'>
           <Label>Attach CCTV Screenshot</Label>
           <Input type='file' accept='image/*' onChange={handleFileChange} />
           {file && (
@@ -164,19 +165,10 @@ export default function WorkTicket({ ticket, onUpdated }: WorkTicketProps) {
           )}
         </div>
 
-        {/* Reviewed By */}
-        <div className='space-y-2'>
+        {/* Reviewed By Auto Add*/}
+        <div className='mt-4 space-y-2'>
           <Label>Reviewed By</Label>
-          <Input
-            value={updatedBy}
-            onChange={(e) => handleChange('updatedBy', e.target.value)}
-            placeholder='Name and Position'
-          />
-          {updatedBy && (
-            <p className='text-muted-foreground text-xs'>
-              Recent Reviewer: {updatedBy}
-            </p>
-          )}
+          <Input value={updatedBy} readOnly placeholder='Name' />
         </div>
 
         <DialogFooter>

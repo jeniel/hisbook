@@ -87,7 +87,7 @@ export const useUpload = () => {
     }
   }
 
-  // Get file from backend
+  // Get a singe file by its filename avatar and ticket screenshot
   const getFile = async (
     bucket: string,
     object: string,
@@ -106,6 +106,7 @@ export const useUpload = () => {
     }
   }
 
+  // Get multiple files by their filenames for home posts
   const getFiles = async (
     bucket: string,
     folder: string,

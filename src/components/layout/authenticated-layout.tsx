@@ -47,7 +47,7 @@ export function AuthenticatedLayout({ children }: Props) {
                 </div>
               </Header> */}
               <div className='flex-1'>
-                <div className='mx-auto w-full max-w-4xl'>
+                <div className='mx-auto w-full max-w-4xl mt-20'>
                   <Outlet />
                 </div>
               </div>

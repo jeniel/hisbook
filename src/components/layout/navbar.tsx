@@ -50,7 +50,7 @@ export default function Navbar() {
       link.roles.some((allowedRole) => roles.includes(allowedRole))
   )
   return (
-    <header className='border-border sticky top-0 z-50 border-b bg-white shadow-sm dark:bg-neutral-900'>
+    <header className='border-border fixed w-full z-50 border-b bg-white shadow-sm dark:bg-neutral-900'>
       <div className='mx-auto flex items-center justify-between px-4 py-2'>
         {/* Left - Logo */}
         <div className='flex items-center'>
