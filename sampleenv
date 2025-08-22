@@ -1,0 +1,4 @@
+MODE="production"
+VITE_API_URL="http://localhost:3001/graphql"
+VITE_NODE_ENV="dev"
+VITE_API_EXPRESS="http://localhost:3000"

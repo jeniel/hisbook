@@ -1,21 +1,21 @@
-import { gql } from '@apollo/client';
+import { gql } from '@apollo/client'
 
 export const FIND_ALL_DEPARTMENTS = gql`
-  query FindAllDepartments($page: Int, $perPage: Int) {
-  findAllDepartments(page: $page, perPage: $perPage) {
-    data {
-      description
-      id
-      name
-    }
-    meta {
-      currentPage
-      lastPage
-      next
-      perPage
-      prev
-      total
+  query Query($page: Int, $perPage: Int) {
+    findAllDepartments(page: $page, perPage: $perPage) {
+      data {
+        description
+        id
+        name
+      }
+      meta {
+        currentPage
+        lastPage
+        next
+        perPage
+        prev
+        total
+      }
     }
   }
-}
-`;
+`
