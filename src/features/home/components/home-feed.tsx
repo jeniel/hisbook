@@ -1,11 +1,9 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react'
 import { Query } from '@/graphql/codegen/graphql'
 import { GET_POSTS } from '@/graphql/operation/query/posts'
 import { ME_QUERY } from '@/graphql/operation/query/user'
 import { useQuery } from '@apollo/client'
 import { MoreHorizontal } from 'lucide-react'
-import { useUpload } from '@/hooks/useUpload'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import {
@@ -14,11 +12,16 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu'
+import Spinner from '@/components/spinner'
+import Avatar from './avatar'
 import DeletePost from './delete-post'
 import EditPost from './edit-post'
-import ImagePost from './images-post'
+import PostImages from './images-post'
 
 export default function HomeFeed() {
+  const perPage = 10 // Change this to adjust how many posts to fetch per page
+  const [allPosts, setAllPosts] = useState<PostType[]>([])
+  const [page, setPage] = useState(1)
   const [expandedPosts, setExpandedPosts] = useState<Record<string, boolean>>(
     {}
   )
@@ -28,67 +31,61 @@ export default function HomeFeed() {
   } | null>(null)
   const [deletePost, setDeletePost] = useState<string | null>(null)
 
-  const { getFile } = useUpload()
-  const [avatarUrls, setAvatarUrls] = useState<Record<string, string>>({})
-
-  const variables = { page: 1, perPage: 10 }
-  const { data, loading, error } = useQuery<Query>(GET_POSTS, {
-    variables,
-    fetchPolicy: 'cache-first',
-    nextFetchPolicy: 'cache-and-network',
+  const { data, loading, error, fetchMore } = useQuery<Query>(GET_POSTS, {
+    variables: { page: 1, perPage },
+    fetchPolicy: 'network-only', // ensures we always fetch fresh data
   })
 
-  // ✅ load avatars for each user
-  useEffect(() => {
-    const fetchAvatars = async () => {
-      if (!data?.findAllPosts?.data) return
-
-      const promises = data.findAllPosts.data.map(async (post) => {
-        const profile = post.user?.profile
-        if (profile?.avatar) {
-          const filename = profile.avatar.split('/').pop()!
-          const url = await getFile('acebook', 'avatar', filename)
-          if (url) {
-            setAvatarUrls((prev) => {
-              if (!post.user) return prev
-              if (prev[post.user.id] === url) return prev
-              return { ...prev, [post.user.id]: url }
-            })
-          }
-        }
-      })
-
-      await Promise.all(promises)
-    }
-
-    fetchAvatars()
-  }, [data])
-
-  const { data: meData } = useQuery(ME_QUERY)
+  const { data: meData } = useQuery<Query>(ME_QUERY)
   const currentUserId = meData?.meQuery?.user?.id
 
+  // Append new posts when data changes
+  useEffect(() => {
+    if (data?.findAllPosts?.data) {
+      const uniquePosts = Array.from(
+        new Map(
+          [...allPosts, ...data.findAllPosts.data].map((p) => [p.id, p])
+        ).values()
+      )
+      setAllPosts(uniquePosts)
+    }
+  }, [data])
+
   const toggleExpand = (postId: string) => {
-    setExpandedPosts((prev) => ({
-      ...prev,
-      [postId]: !prev[postId],
-    }))
+    setExpandedPosts((prev) => ({ ...prev, [postId]: !prev[postId] }))
   }
 
-  if (loading) return <p>Loading posts...</p>
+  // Load more posts when the user scrolls to the bottom
+  const loadMore = async () => {
+    if (!data?.findAllPosts?.meta?.next) return // no more pages
+    const nextPage = page + 1
+    setPage(nextPage)
+
+    await fetchMore({
+      variables: { page: nextPage, perPage },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev
+        return {
+          findAllPosts: {
+            ...fetchMoreResult.findAllPosts,
+            data: [
+              ...prev.findAllPosts.data,
+              ...fetchMoreResult.findAllPosts.data,
+            ],
+          },
+        }
+      },
+    })
+  }
+
+  if (loading && page === 1) return <Spinner />
   if (error) return <p>Error: {error.message}</p>
-
-  const posts = [...(data?.findAllPosts?.data || [])].sort(
-    (a, b) =>
-      new Date(b.datePosted).getTime() - new Date(a.datePosted).getTime()
-  )
-
-  if (posts.length === 0) {
+  if (allPosts.length === 0)
     return <p className='text-center'>No posts available</p>
-  }
 
   return (
     <div className='mt-4 space-y-4'>
-      {posts.map((post) => {
+      {allPosts.map((post) => {
         const isExpanded = expandedPosts[post.id]
         const user = post.user
         const profile = user?.profile
@@ -98,11 +95,7 @@ export default function HomeFeed() {
           <Card key={post.id} className='rounded-2xl border shadow-sm'>
             <CardHeader>
               <CardTitle className='flex flex-row items-center gap-4'>
-                <img
-                  src={avatarUrls[user?.id] || './images/ace.png'}
-                  alt='User Avatar'
-                  className='h-20 w-20 rounded-full object-cover'
-                />
+                <Avatar avatarUrl={profile?.avatar ?? undefined} size={80} />
                 <div className='flex-1'>
                   <p className='text-lg font-semibold'>
                     {profile?.lastName}, {profile?.firstName}
@@ -121,7 +114,6 @@ export default function HomeFeed() {
                   </p>
                 </div>
 
-                {/* Show actions only if user is the owner */}
                 {user?.id === currentUserId && (
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -148,6 +140,7 @@ export default function HomeFeed() {
                 )}
               </CardTitle>
             </CardHeader>
+
             <CardContent className='space-y-2'>
               <p className={`text-sm ${isExpanded ? '' : 'line-clamp-3'}`}>
                 {post.content}
@@ -160,13 +153,26 @@ export default function HomeFeed() {
                   {isExpanded ? 'See less' : 'See more'}
                 </button>
               )}
-              <ImagePost images={post.images ?? undefined} />
+              <PostImages images={post.images ?? []} />
             </CardContent>
           </Card>
         )
       })}
 
-      {/* Modals */}
+      {loading && page > 1 && (
+        <div className='my-4 flex justify-center'>
+          <Spinner />
+        </div>
+      )}
+
+      {data?.findAllPosts?.meta?.next && (
+        <div className='mt-4 flex justify-center'>
+          <Button onClick={loadMore} disabled={loading}>
+            {loading ? 'Loading...' : 'Load More'}
+          </Button>
+        </div>
+      )}
+
       {editPost && (
         <EditPost
           postId={editPost.id}

@@ -114,15 +114,21 @@ export default function WorkTicket({ ticket, onUpdated }: WorkTicketProps) {
 
         {/* Status Dropdown */}
         <div className='space-y-2'>
-          <div className="text-sm">
+          <div className='text-sm'>
             <p>
-              <span className="font-semibold mr-8">Name:</span>{' '}
+              <span className='mr-8 font-semibold'>Name:</span>{' '}
               {ticket.createdBy?.profile
                 ? `${ticket.createdBy.profile.firstName} ${ticket.createdBy.profile.lastName}`
                 : 'Unknown'}
             </p>
-            <p><span className="font-semibold mr-5">Subject:</span> {ticket.subject || '-'}</p>
-            <p><span className="font-semibold mr-3">Remarks:</span> {ticket.remarks || '-'}</p>
+            <p>
+              <span className='mr-5 font-semibold'>Subject:</span>{' '}
+              {ticket.subject || '-'}
+            </p>
+            <p>
+              <span className='mr-3 font-semibold'>Remarks:</span>{' '}
+              {ticket.remarks || '-'}
+            </p>
           </div>
 
           <Label>Status</Label>
@@ -148,11 +154,11 @@ export default function WorkTicket({ ticket, onUpdated }: WorkTicketProps) {
             </p>
           )}
           {preview && (
-            <div className="mt-2">
+            <div className='mt-2'>
               <img
                 src={preview}
-                alt="CCTV Screenshot Preview"
-                className="max-h-full rounded border w-full object-cover"
+                alt='CCTV Screenshot Preview'
+                className='max-h-full w-full rounded border object-cover'
               />
             </div>
           )}

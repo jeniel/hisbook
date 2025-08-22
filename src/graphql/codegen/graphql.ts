@@ -36,6 +36,7 @@ export type CreateMissedLogoutTicketInput = {
 export type CreatePostInput = {
   content: Scalars['String']['input'];
   images?: InputMaybe<Array<Scalars['String']['input']>>;
+  userId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CreateProfileInput = {
@@ -150,30 +151,6 @@ export type GeneralMsg = {
   __typename?: 'GeneralMsg';
   message: Scalars['String']['output'];
   success?: Maybe<Scalars['Boolean']['output']>;
-};
-
-export type Images = {
-  __typename?: 'Images';
-  id: Scalars['ID']['output'];
-  post: Posts;
-  postId: Scalars['String']['output'];
-  url: Scalars['String']['output'];
-};
-
-export type ImagesListRelationFilter = {
-  every?: InputMaybe<ImagesWhereInput>;
-  none?: InputMaybe<ImagesWhereInput>;
-  some?: InputMaybe<ImagesWhereInput>;
-};
-
-export type ImagesWhereInput = {
-  AND?: InputMaybe<Array<ImagesWhereInput>>;
-  NOT?: InputMaybe<Array<ImagesWhereInput>>;
-  OR?: InputMaybe<Array<ImagesWhereInput>>;
-  id?: InputMaybe<StringFilter>;
-  post?: InputMaybe<PostsScalarRelationFilter>;
-  postId?: InputMaybe<StringFilter>;
-  url?: InputMaybe<StringFilter>;
 };
 
 export type IntNullableFilter = {
@@ -306,7 +283,7 @@ export type MutationDeleteMissedLogoutTicketArgs = {
 
 
 export type MutationDeletePostArgs = {
-  id: Scalars['String']['input'];
+  postId: Scalars['String']['input'];
 };
 
 
@@ -343,8 +320,8 @@ export type MutationUpdateMissedLogoutTicketArgs = {
 
 
 export type MutationUpdatePostArgs = {
-  id: Scalars['String']['input'];
-  payload: UpdatePostInput;
+  data: UpdatePostInput;
+  postId: Scalars['String']['input'];
 };
 
 
@@ -436,18 +413,12 @@ export type NestedStringNullableFilter = {
 
 export type Posts = {
   __typename?: 'Posts';
-  _count: PostsCount;
   content: Scalars['String']['output'];
   datePosted: Scalars['DateTime']['output'];
   id: Scalars['ID']['output'];
-  images?: Maybe<Array<Images>>;
+  images?: Maybe<Array<Scalars['String']['output']>>;
   user?: Maybe<User>;
   userId?: Maybe<Scalars['String']['output']>;
-};
-
-export type PostsCount = {
-  __typename?: 'PostsCount';
-  images: Scalars['Int']['output'];
 };
 
 export type PostsList = {
@@ -462,11 +433,6 @@ export type PostsListRelationFilter = {
   some?: InputMaybe<PostsWhereInput>;
 };
 
-export type PostsScalarRelationFilter = {
-  is?: InputMaybe<PostsWhereInput>;
-  isNot?: InputMaybe<PostsWhereInput>;
-};
-
 export type PostsWhereInput = {
   AND?: InputMaybe<Array<PostsWhereInput>>;
   NOT?: InputMaybe<Array<PostsWhereInput>>;
@@ -474,7 +440,7 @@ export type PostsWhereInput = {
   content?: InputMaybe<StringFilter>;
   datePosted?: InputMaybe<DateTimeFilter>;
   id?: InputMaybe<StringFilter>;
-  images?: InputMaybe<ImagesListRelationFilter>;
+  images?: InputMaybe<StringNullableListFilter>;
   user?: InputMaybe<UserNullableScalarRelationFilter>;
   userId?: InputMaybe<StringNullableFilter>;
 };
@@ -660,6 +626,14 @@ export type StringNullableFilter = {
   startsWith?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type StringNullableListFilter = {
+  equals?: InputMaybe<Array<Scalars['String']['input']>>;
+  has?: InputMaybe<Scalars['String']['input']>;
+  hasEvery?: InputMaybe<Array<Scalars['String']['input']>>;
+  hasSome?: InputMaybe<Array<Scalars['String']['input']>>;
+  isEmpty?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
 export type UpdateDepartmentInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
@@ -678,8 +652,8 @@ export type UpdateMissedLogoutTicketInput = {
 
 export type UpdatePostInput = {
   content?: InputMaybe<Scalars['String']['input']>;
-  datePosted?: InputMaybe<Scalars['DateTime']['input']>;
   images?: InputMaybe<Array<Scalars['String']['input']>>;
+  userId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateProfileInput = {

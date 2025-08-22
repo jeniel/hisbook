@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react'
 
@@ -86,7 +87,7 @@ export const useUpload = () => {
     }
   }
 
-  // Get file from backend (download)
+  // Get file from backend
   const getFile = async (
     bucket: string,
     object: string,
@@ -105,5 +106,30 @@ export const useUpload = () => {
     }
   }
 
-  return { uploadFile, uploadFiles, getFile, loading, error }
+  const getFiles = async (
+    bucket: string,
+    folder: string,
+    filenames: string[]
+  ): Promise<string[]> => {
+    setLoading(true)
+    setError(null)
+    try {
+      const urls = await Promise.all(
+        filenames.map(async (filename) => {
+          const blobUrl = await getFile(bucket, folder, filename)
+          return blobUrl || ''
+        })
+      )
+      // console.log('All fetched URLs:', urls)
+      return urls.filter((u) => u) 
+    } catch (err: any) {
+      console.error('getFiles error:', err)
+      setError(err.message)
+      return []
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return { uploadFile, uploadFiles, getFile, getFiles, loading, error }
 }

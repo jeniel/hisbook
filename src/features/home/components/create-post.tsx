@@ -10,7 +10,7 @@ import { Pen } from 'lucide-react'
 import { toast } from 'sonner'
 import { useUpload } from '@/hooks/useUpload'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -64,13 +64,6 @@ export default function CreatePost() {
 
   return (
     <Card className='mt-4 max-w-6xl'>
-      <CardHeader>
-        <CardTitle className='flex flex-row items-center gap-2'>
-          <Pen />
-          Create Post
-        </CardTitle>
-      </CardHeader>
-
       <CardContent className='space-y-2'>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
@@ -88,10 +81,14 @@ export default function CreatePost() {
             <div className='flex items-center justify-between'>
               {/* File input */}
               <div>
-                <p className='text-muted-foreground mb-2 text-sm'>
-                  Add Images/Videos
-                </p>
-                <p className="text-xs text-muted-foreground mb-2">Maximum of 15 Images Only</p>
+                <div className="flex flex-row items-stretch  space-x-4 mb-2">
+                  <p className='text-muted-foreground text-sm'>
+                    Add Images/Videos
+                  </p>
+                  <p className='text-muted-foreground text-xs italic self-end'>
+                    Maximum of 15 Images Only
+                  </p>
+                </div>
                 <Input
                   type='file'
                   accept='image/*'
@@ -110,7 +107,10 @@ export default function CreatePost() {
                 )}
               </div>
 
-              <Button type='submit'>Post</Button>
+              <Button type='submit' className='flex flex-row space-x-2'>
+                <Pen />
+                Post
+              </Button>
             </div>
           </form>
         </Form>

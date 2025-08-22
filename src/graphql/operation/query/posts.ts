@@ -1,16 +1,13 @@
 import { gql } from '@apollo/client'
 
 export const GET_POSTS = gql`
-  query FindAllPosts {
-    findAllPosts {
+  query FindAllPosts($page: Int, $perPage: Int) {
+    findAllPosts(page: $page, perPage: $perPage) {
       data {
         datePosted
         content
         id
-        images {
-          id
-          url
-        }
+        images
         user {
           id
           profile {
