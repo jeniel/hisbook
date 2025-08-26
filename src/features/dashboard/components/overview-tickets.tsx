@@ -18,7 +18,14 @@ export default function TicketsOverview() {
   if (loading) return <Spinner />
   if (error) return <p>Error: {error.message}</p>
 
-  const tickets = data?.getCensusSummary.ticketsByStatus
+  const tickets = data?.getCensusSummary.ticketsByStatus ?? []
+
+  // Sort tickets so that Pending comes first
+  const sortedTickets = [...tickets].sort((a, b) => {
+    if (a.status === 'Pending') return -1
+    if (b.status === 'Pending') return 1
+    return 0 // keep other statuses in original order
+  })
 
   return (
     <Card>
@@ -30,7 +37,7 @@ export default function TicketsOverview() {
       </CardHeader>
       <CardContent>
         <div className='grid grid-cols-1 gap-4 md:grid-cols-3'>
-          {tickets?.map((ticket) => (
+          {sortedTickets?.map((ticket) => (
             <Card key={ticket.status}>
               <CardContent className='font-semibold'>
                 {ticket.status}

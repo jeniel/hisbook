@@ -2,7 +2,14 @@ import { useState } from 'react'
 import { Query } from '@/graphql/codegen/graphql'
 import { FIND_ALL_TICKETS } from '@/graphql/operation/query/ticket'
 import { useQuery } from '@apollo/client'
+import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogTitle,
+} from '@/components/ui/dialog'
 import {
   Table,
   TableBody,
@@ -13,13 +20,14 @@ import {
 } from '@/components/ui/table'
 import Pagination from '@/components/pagination'
 import Spinner from '@/components/spinner'
+import AuditLogsContent from './audit-logs'
 import WorkTickets from './work-tickets'
 
 export default function AllTickets() {
   const [page, setPage] = useState(1)
   const perPage = 10
+  const [selectedTicketId, setSelectedTicketId] = useState<string | null>(null)
 
-  // Find All Tickets
   const { loading, error, data, refetch } = useQuery<Query>(FIND_ALL_TICKETS, {
     variables: { page, perPage },
     fetchPolicy: 'cache-and-network',
@@ -54,7 +62,7 @@ export default function AllTickets() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {tickets.map((ticket, index: number) => (
+            {tickets.map((ticket, index) => (
               <TableRow key={ticket.id}>
                 <TableCell>{index + 1 + (page - 1) * perPage}</TableCell>
                 <TableCell>
@@ -70,8 +78,26 @@ export default function AllTickets() {
                 </TableCell>
                 <TableCell>{ticket.floor}</TableCell>
                 <TableCell>{ticket.status}</TableCell>
-                <TableCell>
+                <TableCell className='flex gap-2'>
                   <WorkTickets ticket={ticket} onUpdated={() => refetch()} />
+
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button
+                        variant='outline'
+                        onClick={() => setSelectedTicketId(ticket.id)}
+                      >
+                        📔 View Logs
+                      </Button>
+                    </DialogTrigger>
+
+                    <DialogContent>
+                      <DialogTitle>📔 Audit Logs</DialogTitle>
+                      {selectedTicketId && (
+                        <AuditLogsContent ticketId={selectedTicketId} />
+                      )}
+                    </DialogContent>
+                  </Dialog>
                 </TableCell>
               </TableRow>
             ))}

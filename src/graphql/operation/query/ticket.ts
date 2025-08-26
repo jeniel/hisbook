@@ -73,3 +73,16 @@ export const FIND_ALL_TICKETS_BY_USER = gql`
     }
   }
 `
+export const FIND_TICKET_AUDIT_LOGS = gql`
+  query Query($findTicketbyIdId: String!) {
+    findTicketbyID(id: $findTicketbyIdId) {
+      auditLogs {
+        action
+        ticketId
+        timestamp
+        updatedBy
+        id
+      }
+    }
+  }
+`

@@ -4,8 +4,8 @@ import { useQuery } from '@apollo/client'
 import Spinner from '@/components/spinner'
 
 const statusColors: Record<string, string> = {
-  Approved: 'text-yellow-400',
   Pending: 'text-blue-400',
+  Approved: 'text-yellow-400',
   Completed: 'text-green-400',
 }
 
@@ -15,12 +15,20 @@ export default function AllTicketsOverview() {
   if (loading) return <Spinner />
   if (error) return <p>Error: {error.message}</p>
 
-  const tickets = data?.getCensusSummary.ticketsByStatus
+  const tickets = data?.getCensusSummary.ticketsByStatus ?? []
+
+  // Sort tickets so that Pending is first
+  const sortedTickets = [...tickets].sort((a, b) => {
+    if (a.status === 'Pending') return -1
+    if (b.status === 'Pending') return 1
+    return 0 // keep other statuses in original order
+  })
+
   const totalTickets = data?.getCensusSummary.totalTickets ?? 0
 
   return (
     <div className='mb-2 grid grid-cols-2 gap-2 md:mb-0 md:grid-cols-4'>
-      {tickets?.map((ticket) => (
+      {sortedTickets?.map((ticket) => (
         <div
           key={ticket.status}
           className='rounded-2xl border p-2 text-sm shadow-sm dark:border-neutral-700 dark:bg-zinc-900'

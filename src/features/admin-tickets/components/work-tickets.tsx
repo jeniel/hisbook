@@ -80,13 +80,13 @@ export default function WorkTicket({ ticket, onUpdated }: WorkTicketProps) {
 
       await updateTicket({
         variables: {
-          updateMissedLogoutTicketId: ticket.id,
+          updateTicketId: ticket.id, // match the mutation variable
           payload: {
             missedAt: ticket.missedAt,
             floor: ticket.floor,
             screenshot: screenshotUrl,
             status,
-            updatedBy, // automatically set
+            updatedBy,
           },
         },
       })
@@ -102,14 +102,12 @@ export default function WorkTicket({ ticket, onUpdated }: WorkTicketProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button size='sm'>
-          Work on Ticket
-        </Button>
+        <Button>📝 Work on Ticket</Button>
       </DialogTrigger>
 
       <DialogContent className='max-w-5xl'>
         <DialogHeader>
-          <DialogTitle>Work on Ticket</DialogTitle>
+          <DialogTitle>📝 Work on Ticket</DialogTitle>
           <DialogDescription>Review and update this ticket.</DialogDescription>
         </DialogHeader>
 
