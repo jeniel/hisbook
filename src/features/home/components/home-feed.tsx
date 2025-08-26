@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from 'react'
 import { Query } from '@/graphql/codegen/graphql'
@@ -34,7 +35,7 @@ export default function HomeFeed() {
 
   const { data, loading, error, fetchMore } = useQuery<Query>(GET_POSTS, {
     variables: { page: 1, perPage },
-    fetchPolicy: 'network-only', // ensures we always fetch fresh data
+    fetchPolicy: 'network-only',
   })
 
   const { data: meData } = useQuery<Query>(ME_QUERY)

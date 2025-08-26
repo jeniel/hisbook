@@ -6,8 +6,8 @@ export default function Tickets() {
   return (
     <>
       <div className='flex flex-row items-center justify-between mb-4'>
-        <div className='space-y-2'>
-          <h1 className='text-3xl font-semibold'>🎟️ Tickets</h1>
+        <div>
+          <h1 className='text-3xl font-semibold mb-2'>🎟️ Tickets</h1>
           <p className='text-md text-muted-foreground'>
             Create and View Your Tickets
           </p>

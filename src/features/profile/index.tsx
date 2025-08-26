@@ -7,8 +7,8 @@ export default function Profile() {
   return (
     <>
       <div className='flex flex-row items-center justify-between mb-4'>
-        <div className='space-y-2'>
-          <h1 className='text-3xl font-semibold'>👤 Profile</h1>
+        <div>
+          <h1 className='text-3xl font-semibold mb-2'>👤 Profile</h1>
           <p className='text-md text-muted-foreground'>See Your Posts</p>
         </div>
 

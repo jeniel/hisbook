@@ -6,7 +6,7 @@ export default function AdminTickets() {
     <>
       <div className='mb-4 flex-row flex justify-between'>
         <div>
-          <h1 className='text-3xl font-semibold'>🎟️ Admin Tickets</h1>
+          <h1 className='text-3xl font-semibold mb-2'>🎟️ Admin Tickets</h1>
           <p className='text-md text-muted-foreground'>
             Update Tickets of the Users
           </p>

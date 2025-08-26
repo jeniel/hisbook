@@ -63,7 +63,7 @@ export default function CreatePost() {
   }
 
   return (
-    <Card className='mt-4'>
+    <Card>
       <CardContent className='space-y-2'>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
@@ -81,7 +81,7 @@ export default function CreatePost() {
             <div className='flex items-center justify-between'>
               {/* File input */}
               <div>
-                <div className="flex flex-row items-stretch  space-x-4 mb-2">
+                <div className="flex flex-row items-stretch space-x-4 mb-2">
                   <p className='text-muted-foreground text-sm'>
                     Add Images/Videos
                   </p>
