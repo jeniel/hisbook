@@ -4,11 +4,12 @@ import { CENSUS_DATA } from '@/graphql/operation/query/census'
 import { useQuery } from '@apollo/client'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+import Spinner from '@/components/spinner'
 
 export default function DepartmentOverview() {
   const { data, loading, error } = useQuery<Query>(CENSUS_DATA)
 
-  if (loading) return <p>Loading...</p>
+  if (loading) return <Spinner />
   if (error) return <p>Error: {error.message}</p>
 
   const departments = data?.getCensusSummary.departmentsWithUserCount

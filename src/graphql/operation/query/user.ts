@@ -8,6 +8,7 @@ export const FIND_ALL_USER = gql`
         id
         role
         username
+        createdAt
         department {
           name
           id
@@ -45,6 +46,7 @@ export const ME_QUERY = gql`
         departmentId
         email
         username
+        createdAt
         department {
           name
           id

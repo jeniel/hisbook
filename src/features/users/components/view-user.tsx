@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Query } from '@/graphql/codegen/graphql'
 import { FIND_ALL_USER } from '@/graphql/operation/query/user'
 import { useQuery } from '@apollo/client'
+import { Card, CardContent } from '@/components/ui/card'
 import {
   Table,
   TableBody,
@@ -10,9 +11,9 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import Pagination from '@/components/pagination'
 import DeleteUser from './delete-user'
 import EditUser from './edit-user'
-import Pagination from '@/components/pagination'
 
 export default function ViewUsers() {
   const [page, setPage] = useState(1)
@@ -35,54 +36,53 @@ export default function ViewUsers() {
   }
 
   return (
-    <div>
-      <p className='text-lg font-semibold'>All Users</p>
-      <p className='mb-4 text-sm italic'>
-        Note: IT staff are only allowed Edit and Create Users
-      </p>
+    <Card>
+      <CardContent>
+        <p className='text-lg font-semibold'>🧑🏽 All Users</p>
 
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>#</TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead>Username</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead>Role</TableHead>
-            <TableHead>Department</TableHead>
-            <TableHead>Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {Users.map((user, index: number) => (
-            <TableRow key={user.id}>
-              <TableCell>{index + 1 + (page - 1) * perPage}</TableCell>
-              <TableCell>
-                {user.profile?.lastName}, {user.profile?.firstName}
-              </TableCell>
-              <TableCell>{user.username}</TableCell>
-              <TableCell>{user.email}</TableCell>
-              <TableCell>{user.role}</TableCell>
-              <TableCell>{user.department?.name ?? '—'}</TableCell>
-              <TableCell className='flex flex-row items-center space-x-2'>
-                <EditUser user={user} onUpdated={() => refetch()} />
-                <DeleteUser
-                  user={{ id: user.id, username: user.username }}
-                  onDelete={() => refetch()}
-                />
-              </TableCell>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>#</TableHead>
+              <TableHead>Name</TableHead>
+              <TableHead>Username</TableHead>
+              <TableHead>Email</TableHead>
+              <TableHead>Role</TableHead>
+              <TableHead>Department</TableHead>
+              <TableHead>Actions</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {Users.map((user, index: number) => (
+              <TableRow key={user.id}>
+                <TableCell>{index + 1 + (page - 1) * perPage}</TableCell>
+                <TableCell>
+                  {user.profile?.lastName}, {user.profile?.firstName}
+                </TableCell>
+                <TableCell>{user.username}</TableCell>
+                <TableCell>{user.email}</TableCell>
+                <TableCell>{user.role}</TableCell>
+                <TableCell>{user.department?.name ?? '—'}</TableCell>
+                <TableCell className='flex flex-row items-center space-x-2'>
+                  <EditUser user={user} onUpdated={() => refetch()} />
+                  <DeleteUser
+                    user={{ id: user.id, username: user.username }}
+                    onDelete={() => refetch()}
+                  />
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
 
-      {meta && (
-        <Pagination
-          currentPage={meta.currentPage}
-          lastPage={meta.lastPage}
-          onPageChange={handlePageChange}
-        />
-      )}
-    </div>
+        {meta && (
+          <Pagination
+            currentPage={meta.currentPage}
+            lastPage={meta.lastPage}
+            onPageChange={handlePageChange}
+          />
+        )}
+      </CardContent>
+    </Card>
   )
 }

@@ -4,6 +4,7 @@ import { CENSUS_DATA } from '@/graphql/operation/query/census'
 import { useQuery } from '@apollo/client'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+import Spinner from '@/components/spinner'
 
 const statusColors = {
   Approved: 'text-yellow-400',
@@ -14,7 +15,7 @@ const statusColors = {
 export default function TicketsOverview() {
   const { data, loading, error } = useQuery<Query>(CENSUS_DATA)
 
-  if (loading) return <p>Loading...</p>
+  if (loading) return <Spinner />
   if (error) return <p>Error: {error.message}</p>
 
   const tickets = data?.getCensusSummary.ticketsByStatus

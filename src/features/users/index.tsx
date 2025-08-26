@@ -1,35 +1,18 @@
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs"
-
-import { Main } from "@/components/layout/main"
-import ViewUsers from "./components/view-user"
-import CreateUser from "./components/create-user"
+import CreateUser from './components/create-user'
+import ViewUsers from './components/view-user'
 
 export default function Users() {
-    return (
-        <Main>
-            <h1 className='text-2xl font-bold mb-4'>Users</h1>
-            <Tabs defaultValue="create-user">
-                <TabsList className="w-full">
-                    <TabsTrigger value="create-user">Create A User</TabsTrigger>
-                    <TabsTrigger value="view-users">User Lists</TabsTrigger> 
-                </TabsList>
+  return (
+    <>
+      <h1 className='mb-2 text-3xl font-semibold'>🧑🏽 Users</h1>
+      <p className='text-md text-muted-foreground mb-4'>
+        Add, Update and Delete Users
+      </p>
 
-                <TabsContent value="create-user">
-                    <CreateUser />
-                </TabsContent>
-
-                <TabsContent value="view-users">
-                    <ViewUsers />
-                </TabsContent>
-                
-            </Tabs>
-        </Main>
-    )
+      <div className='space-y-4'>
+        <CreateUser />
+        <ViewUsers />
+      </div>
+    </>
+  )
 }
-
-// Todo Connect Functionality from backend

@@ -7,6 +7,7 @@ export const FIND_ALL_DEPARTMENTS = gql`
         description
         id
         name
+        createdAt
       }
       meta {
         currentPage

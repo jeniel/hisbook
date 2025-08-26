@@ -2,11 +2,12 @@ import { Query } from '@/graphql/codegen/graphql'
 import { CENSUS_DATA } from '@/graphql/operation/query/census'
 import { useQuery } from '@apollo/client'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+import Spinner from '@/components/spinner'
 
 export default function Summary() {
   const { data, loading, error } = useQuery<Query>(CENSUS_DATA)
 
-  if (loading) return <p>Loading...</p>
+  if (loading) return <Spinner />
   if (error) return <p>Error: {error.message}</p>
 
   const summary = data?.getCensusSummary
