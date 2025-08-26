@@ -52,27 +52,18 @@ export type AuditLogWhereInput = {
 export type CensusSummary = {
   __typename?: 'CensusSummary';
   departmentsWithUserCount: Array<DepartmentUserCount>;
+  ticketByUserId?: Maybe<Array<TicketStatusCount>>;
   ticketsByStatus: Array<TicketStatusCount>;
   totalDepartments: Scalars['Int']['output'];
   totalPosts: Scalars['Int']['output'];
   totalTickets: Scalars['Int']['output'];
+  totalTicketsByUserId?: Maybe<Scalars['Int']['output']>;
   totalUsers: Scalars['Int']['output'];
 };
 
 export type CreateDepartmentInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
-};
-
-export type CreateMissedLogoutTicketInput = {
-  createdById?: InputMaybe<Scalars['String']['input']>;
-  floor?: InputMaybe<Scalars['String']['input']>;
-  missedAt: Scalars['DateTime']['input'];
-  remarks?: InputMaybe<Scalars['String']['input']>;
-  screenshot?: InputMaybe<Scalars['String']['input']>;
-  status?: InputMaybe<Status>;
-  subject?: InputMaybe<Scalars['String']['input']>;
-  updatedBy?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CreatePostInput = {
@@ -94,6 +85,17 @@ export type CreateProfileInput = {
   middleName?: InputMaybe<Scalars['String']['input']>;
   title?: InputMaybe<Scalars['String']['input']>;
   userId?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type CreateTicketInput = {
+  createdById?: InputMaybe<Scalars['String']['input']>;
+  floor?: InputMaybe<Scalars['String']['input']>;
+  missedAt: Scalars['DateTime']['input'];
+  remarks?: InputMaybe<Scalars['String']['input']>;
+  screenshot?: InputMaybe<Scalars['String']['input']>;
+  status?: InputMaybe<Status>;
+  subject?: InputMaybe<Scalars['String']['input']>;
+  updatedBy?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CreateUserInput = {
@@ -129,6 +131,7 @@ export type DateTimeNullableFilter = {
 export type Department = {
   __typename?: 'Department';
   _count: DepartmentCount;
+  createdAt: Scalars['DateTime']['output'];
   description: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
@@ -163,6 +166,7 @@ export type DepartmentWhereInput = {
   AND?: InputMaybe<Array<DepartmentWhereInput>>;
   NOT?: InputMaybe<Array<DepartmentWhereInput>>;
   OR?: InputMaybe<Array<DepartmentWhereInput>>;
+  createdAt?: InputMaybe<DateTimeFilter>;
   description?: InputMaybe<StringFilter>;
   id?: InputMaybe<StringFilter>;
   name?: InputMaybe<StringFilter>;
@@ -326,7 +330,7 @@ export type MutationCreateProfileArgs = {
 
 
 export type MutationCreateTicketArgs = {
-  payload: CreateMissedLogoutTicketInput;
+  payload: CreateTicketInput;
 };
 
 
@@ -390,7 +394,7 @@ export type MutationUpdateProfileArgs = {
 
 export type MutationUpdateTicketArgs = {
   id: Scalars['String']['input'];
-  payload: UpdateMissedLogoutTicketInput;
+  payload: UpdateTicketInput;
 };
 
 
@@ -563,6 +567,7 @@ export type Query = {
   __typename?: 'Query';
   findAllDepartments: DepartmentList;
   findAllPosts: PostsList;
+  findAllPostsCreatedByUser: PostsList;
   findAllProfiles: ProfileList;
   findAllTickets: MissedLogoutTicketList;
   findAllUsers: UserList;
@@ -585,6 +590,15 @@ export type QueryFindAllDepartmentsArgs = {
 export type QueryFindAllPostsArgs = {
   page?: InputMaybe<Scalars['Int']['input']>;
   perPage?: InputMaybe<Scalars['Int']['input']>;
+  userId?: InputMaybe<Scalars['String']['input']>;
+  where?: InputMaybe<PostsWhereInput>;
+};
+
+
+export type QueryFindAllPostsCreatedByUserArgs = {
+  page?: InputMaybe<Scalars['Float']['input']>;
+  perPage?: InputMaybe<Scalars['Float']['input']>;
+  userId: Scalars['String']['input'];
   where?: InputMaybe<PostsWhereInput>;
 };
 
@@ -625,6 +639,11 @@ export type QueryFindTicketsByUserArgs = {
   perPage?: InputMaybe<Scalars['Int']['input']>;
   userId: Scalars['String']['input'];
   where?: InputMaybe<MissedLogoutTicketWhereInput>;
+};
+
+
+export type QueryGetCensusSummaryArgs = {
+  userId?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -724,17 +743,6 @@ export type UpdateDepartmentInput = {
   name: Scalars['String']['input'];
 };
 
-export type UpdateMissedLogoutTicketInput = {
-  createdById?: InputMaybe<Scalars['String']['input']>;
-  floor?: InputMaybe<Scalars['String']['input']>;
-  missedAt: Scalars['DateTime']['input'];
-  remarks?: InputMaybe<Scalars['String']['input']>;
-  screenshot?: InputMaybe<Scalars['String']['input']>;
-  status?: InputMaybe<Status>;
-  subject?: InputMaybe<Scalars['String']['input']>;
-  updatedBy?: InputMaybe<Scalars['String']['input']>;
-};
-
 export type UpdatePostInput = {
   content?: InputMaybe<Scalars['String']['input']>;
   images?: InputMaybe<Array<Scalars['String']['input']>>;
@@ -756,6 +764,17 @@ export type UpdateProfileInput = {
   userId?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type UpdateTicketInput = {
+  createdById?: InputMaybe<Scalars['String']['input']>;
+  floor?: InputMaybe<Scalars['String']['input']>;
+  missedAt: Scalars['DateTime']['input'];
+  remarks?: InputMaybe<Scalars['String']['input']>;
+  screenshot?: InputMaybe<Scalars['String']['input']>;
+  status?: InputMaybe<Status>;
+  subject?: InputMaybe<Scalars['String']['input']>;
+  updatedBy?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type UpdateUserInput = {
   departmentName?: InputMaybe<Scalars['String']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
@@ -769,6 +788,7 @@ export type User = {
   MissedLogoutTicket?: Maybe<Array<MissedLogoutTicket>>;
   _count: UserCount;
   auditLogs?: Maybe<Array<AuditLog>>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
   department?: Maybe<Department>;
   departmentId?: Maybe<Scalars['String']['output']>;
   /** @Validator.@IsEmail() */
@@ -811,6 +831,7 @@ export type UserWhereInput = {
   NOT?: InputMaybe<Array<UserWhereInput>>;
   OR?: InputMaybe<Array<UserWhereInput>>;
   auditLogs?: InputMaybe<AuditLogListRelationFilter>;
+  createdAt?: InputMaybe<DateTimeNullableFilter>;
   department?: InputMaybe<DepartmentNullableScalarRelationFilter>;
   departmentId?: InputMaybe<StringNullableFilter>;
   email?: InputMaybe<StringFilter>;

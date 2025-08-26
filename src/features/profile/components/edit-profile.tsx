@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Link } from '@tanstack/react-router'
 import { Mutation, Query } from '@/graphql/codegen/graphql'
 import { UPDATE_PROFILE } from '@/graphql/operation/mutation/profile'
 import { ME_QUERY } from '@/graphql/operation/query/user'
@@ -10,6 +10,7 @@ import { useQuery, useMutation } from '@apollo/client'
 import { toast } from 'sonner'
 import { useUpload } from '@/hooks/useUpload'
 import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import {
   Select,
@@ -18,7 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Main } from '@/components/layout/main'
+import Spinner from '@/components/spinner'
 import { ProfileFormData, ProfileSchema } from './types'
 
 export default function EditProfile() {
@@ -103,132 +104,144 @@ export default function EditProfile() {
         refetchQueries: [{ query: ME_QUERY }],
       })
       toast.success('Profile updated successfully')
-    } catch (err: any) {
-      toast.error(err.message)
+    } catch (_error) {
+      toast.error('Failed to update Profile')
     }
   }
 
-  if (loading) return <p>Loading profile...</p>
+  if (loading) return <Spinner />
   if (error) return <p>Error loading profile: {error.message}</p>
 
   return (
-    <Main>
-      <h1 className='mb-4 text-2xl font-bold'>My Profile</h1>
-
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className='max-w-4xl space-y-6'
-      >
-        {/* Profile Picture */}
-        <div className='space-y-2'>
-          <label className='block font-medium'>
-            Upload Your Profile Picture
-          </label>
-          <Input
-            type='file'
-            accept='image/*'
-            onChange={handleFileChange}
-            className='max-w-80'
-          />
-
-          {/* Show local preview if uploading new file, otherwise show fetched avatar */}
-          {file ? (
-            <img
-              src={URL.createObjectURL(file)}
-              alt='Preview'
-              className='mb-2 h-32 w-32 rounded-full border object-cover'
-            />
-          ) : preview ? (
-            <img
-              src={preview}
-              alt='Profile'
-              className='mb-2 h-32 w-32 rounded-full border object-cover'
-            />
-          ) : (
-            <div className='mb-2 flex h-32 w-32 items-center justify-center rounded-full border text-gray-400'>
-              No Avatar
-            </div>
-          )}
+    <>
+      <div className='mb-4 flex flex-row items-center justify-between'>
+        <div className="space-y-2">
+          <h1 className='text-3xl font-semibold'>👤 Profile</h1>
+          <p className='text-md text-muted-foreground'>
+            Update Your Profile
+          </p>
         </div>
 
-        {/* Form Fields */}
-        <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
-          <div>
-            <label className='mb-1 block'>First Name</label>
-            <Input
-              {...form.register('firstName')}
-              className='border border-black'
-            />
-          </div>
+        <Link to='/profile'>
+          <Button>⬅️ Back</Button>
+        </Link>
+      </div>
 
-          <div>
-            <label className='mb-1 block'>Middle Name</label>
-            <Input
-              {...form.register('middleName')}
-              className='border border-black'
-            />
-          </div>
+      <Card>
+        <CardContent>
+          <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
+            {/* Profile Picture */}
+            <div className='space-y-2'>
+              <label className='block font-semibold'>
+                Profile Picture
+              </label>
+              <Input
+                type='file'
+                accept='image/*'
+                onChange={handleFileChange}
+                className='max-w-80'
+              />
 
-          <div>
-            <label className='mb-1 block'>Last Name</label>
-            <Input
-              {...form.register('lastName')}
-              className='border border-black'
-            />
-          </div>
-
-          <div>
-            <label className='mb-1 block'>Job Title</label>
-            <Input
-              {...form.register('title')}
-              className='border border-black'
-            />
-          </div>
-
-          <div>
-            <label className='mb-1 block'>Gender</label>
-            <Controller
-              name='gender'
-              control={form.control}
-              render={({ field }) => (
-                <Select
-                  onValueChange={field.onChange}
-                  value={field.value || ''}
-                >
-                  <SelectTrigger className='border border-black'>
-                    <SelectValue placeholder='Select gender' />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value='Male'>Male</SelectItem>
-                    <SelectItem value='Female'>Female</SelectItem>
-                    <SelectItem value='Others'>Others</SelectItem>
-                  </SelectContent>
-                </Select>
+              {/* Show local preview if uploading new file, otherwise show fetched avatar */}
+              {file ? (
+                <img
+                  src={URL.createObjectURL(file)}
+                  alt='Preview'
+                  className='mb-2 h-32 w-32 border object-cover'
+                />
+              ) : preview ? (
+                <img
+                  src={preview}
+                  alt='Profile'
+                  className='mb-2 h-32 w-32 border object-cover'
+                />
+              ) : (
+                <div className='mb-2 flex h-32 w-32 items-center justify-center border text-gray-400'>
+                  No Avatar
+                </div>
               )}
-            />
-          </div>
+            </div>
 
-          <div>
-            <label className='mb-1 block'>Address</label>
-            <Input
-              {...form.register('address')}
-              className='border border-black'
-            />
-          </div>
+            {/* Form Fields */}
+            <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+              <div>
+                <label className='mb-1 block'>First Name</label>
+                <Input
+                  {...form.register('firstName')}
+                  className='border border-black'
+                />
+              </div>
 
-          <div>
-            <label className='mb-1 block'>Contact</label>
-            <Input
-              {...form.register('contact')}
-              className='border border-black'
-            />
-          </div>
-        </div>
+              <div>
+                <label className='mb-1 block'>Middle Name</label>
+                <Input
+                  {...form.register('middleName')}
+                  className='border border-black'
+                />
+              </div>
 
-        <Button type='submit' disabled={updating}>
-          {updating ? 'Updating...' : 'Update Profile'}
-        </Button>
-      </form>
-    </Main>
+              <div>
+                <label className='mb-1 block'>Last Name</label>
+                <Input
+                  {...form.register('lastName')}
+                  className='border border-black'
+                />
+              </div>
+
+              <div>
+                <label className='mb-1 block'>Job Title</label>
+                <Input
+                  {...form.register('title')}
+                  className='border border-black'
+                />
+              </div>
+
+              <div>
+                <label className='mb-1 block'>Gender</label>
+                <Controller
+                  name='gender'
+                  control={form.control}
+                  render={({ field }) => (
+                    <Select
+                      onValueChange={field.onChange}
+                      value={field.value || ''}
+                    >
+                      <SelectTrigger className='border border-black'>
+                        <SelectValue placeholder='Select gender' />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value='Male'>Male</SelectItem>
+                        <SelectItem value='Female'>Female</SelectItem>
+                        <SelectItem value='Others'>Others</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+              </div>
+
+              <div>
+                <label className='mb-1 block'>Address</label>
+                <Input
+                  {...form.register('address')}
+                  className='border border-black'
+                />
+              </div>
+
+              <div>
+                <label className='mb-1 block'>Contact</label>
+                <Input
+                  {...form.register('contact')}
+                  className='border border-black'
+                />
+              </div>
+            </div>
+
+            <Button type='submit' variant={'outline'} disabled={updating}>
+              {updating ? 'Updating...' : '✅ Update Profile'}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+    </>
   )
 }

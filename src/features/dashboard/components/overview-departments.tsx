@@ -18,10 +18,18 @@ export default function DepartmentOverview() {
     <Card>
       <CardHeader className='flex flex-row items-center justify-between'>
         <CardTitle>🏢 Department Overview Number of Users</CardTitle>
-        <Link to='/departments'>
-          <Button variant={'outline'}>🏢 Go To Departments</Button>
-        </Link>
+
+        <div className="space-x-2">
+          <Link to='/departments'>
+            <Button variant={'outline'}>🏢 Go To Departments</Button>
+          </Link>
+          <Link to='/users'>
+            <Button variant={'outline'}>🧑🏽 Go To Users</Button>
+          </Link>
+        </div>
+
       </CardHeader>
+
       <CardContent>
         <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-5'>
           {departments?.map((dept) => (

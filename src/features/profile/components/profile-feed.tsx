@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from 'react'
-import { Query } from '@/graphql/codegen/graphql'
-import { GET_POSTS } from '@/graphql/operation/query/posts'
+import { GET_POST_BY_USER } from '@/graphql/operation/query/posts'
 import { ME_QUERY } from '@/graphql/operation/query/user'
 import { useQuery } from '@apollo/client'
 import { MoreHorizontal } from 'lucide-react'
@@ -14,64 +13,60 @@ import {
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu'
 import Spinner from '@/components/spinner'
-import Avatar from './avatar'
-import DeletePost from './delete-post'
-import EditPost from './edit-post'
-import PostImages from './images-post'
+import Avatar from '@/features/home/components/avatar'
+import DeletePost from '@/features/home/components/delete-post'
+import EditPost from '@/features/home/components/edit-post'
+import PostImages from '@/features/home/components/images-post'
 
-export default function HomeFeed() {
-  const perPage = 10 // Change this to adjust how many posts to fetch per page
-  const [allPosts, setAllPosts] = useState<any[]>([])
+export default function ProfileFeed() {
+  const perPage = 10
+  const [userPosts, setUserPosts] = useState<any[]>([])
   const [page, setPage] = useState(1)
-  const [expandedPosts, setExpandedPosts] = useState<Record<string, boolean>>(
-    {}
-  )
-  const [editPost, setEditPost] = useState<{
-    id: string
-    content: string
-  } | null>(null)
+  const [expandedPosts, setExpandedPosts] = useState<Record<string, boolean>>({})
+  const [editPost, setEditPost] = useState<{ id: string; content: string } | null>(null)
   const [deletePost, setDeletePost] = useState<string | null>(null)
 
-  const { data, loading, error, fetchMore } = useQuery<Query>(GET_POSTS, {
-    variables: { page: 1, perPage },
-    fetchPolicy: 'network-only', // ensures we always fetch fresh data
-  })
-
-  const { data: meData } = useQuery<Query>(ME_QUERY)
+  // Get current user
+  const { data: meData, loading: meLoading } = useQuery(ME_QUERY)
   const currentUserId = meData?.meQuery?.user?.id
 
-  // Append new posts when data changes
+  // Fetch posts created by current user
+  const { data, loading, error, fetchMore } = useQuery(GET_POST_BY_USER, {
+    variables: { userId: currentUserId ?? '', page: 1, perPage },
+    skip: !currentUserId,
+    fetchPolicy: 'network-only',
+  })
+
+  // Append posts safely
   useEffect(() => {
-    if (data?.findAllPosts?.data) {
-      const uniquePosts = Array.from(
-        new Map(
-          [...allPosts, ...data.findAllPosts.data].map((p) => [p.id, p])
-        ).values()
-      )
-      setAllPosts(uniquePosts)
-    }
+    if (!data?.findAllPostsCreatedByUser?.data?.length) return
+
+    setUserPosts((prev) => {
+      const combined = [...prev, ...data.findAllPostsCreatedByUser.data]
+      const unique = Array.from(new Map(combined.map((p) => [p.id, p])).values())
+      return unique
+    })
   }, [data])
 
   const toggleExpand = (postId: string) => {
     setExpandedPosts((prev) => ({ ...prev, [postId]: !prev[postId] }))
   }
 
-  // Load more posts when the user scrolls to the bottom
   const loadMore = async () => {
-    if (!data?.findAllPosts?.meta?.next) return // no more pages
+    if (!data?.findAllPostsCreatedByUser?.meta?.next) return
     const nextPage = page + 1
     setPage(nextPage)
 
     await fetchMore({
-      variables: { page: nextPage, perPage },
+      variables: { userId: currentUserId, page: nextPage, perPage },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev
         return {
-          findAllPosts: {
-            ...fetchMoreResult.findAllPosts,
+          findAllPostsCreatedByUser: {
+            ...fetchMoreResult.findAllPostsCreatedByUser,
             data: [
-              ...prev.findAllPosts.data,
-              ...fetchMoreResult.findAllPosts.data,
+              ...prev.findAllPostsCreatedByUser.data,
+              ...fetchMoreResult.findAllPostsCreatedByUser.data,
             ],
           },
         }
@@ -79,18 +74,17 @@ export default function HomeFeed() {
     })
   }
 
-  if (loading && page === 1) return <Spinner />
+  if (loading || meLoading) return <Spinner />
   if (error) return <p>Error: {error.message}</p>
-  if (allPosts.length === 0)
-    return <p className='text-center'>No posts available</p>
+  if (!userPosts.length) return <p className='text-center'>You have no posts yet.</p>
 
   return (
     <div className='mt-4 space-y-4'>
-      {allPosts.map((post) => {
-        const isExpanded = expandedPosts[post.id]
+      {userPosts.map((post) => {
         const user = post.user
         const profile = user?.profile
         const department = user?.department
+        const isExpanded = expandedPosts[post.id]
 
         return (
           <Card key={post.id} className='rounded-2xl border shadow-sm'>
@@ -160,13 +154,7 @@ export default function HomeFeed() {
         )
       })}
 
-      {loading && page > 1 && (
-        <div className='my-4 flex justify-center'>
-          <Spinner />
-        </div>
-      )}
-
-      {data?.findAllPosts?.meta?.next && (
+      {data?.findAllPostsCreatedByUser?.meta?.next && (
         <div className='mt-4 flex justify-center'>
           <Button onClick={loadMore} disabled={loading}>
             {loading ? 'Loading...' : 'Load More'}

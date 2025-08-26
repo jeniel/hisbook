@@ -1,17 +1,20 @@
-import { gql } from '@apollo/client';
+import { gql } from '@apollo/client'
 
 export const CREATE_TICKET = gql`
-  mutation CreateMissedLogoutTicket($payload: CreateMissedLogoutTicketInput!) {
-    createMissedLogoutTicket(payload: $payload) {
+  mutation Mutation($payload: CreateTicketInput!) {
+    createTicket(payload: $payload) {
       message
     }
   }
-`;
+`
 
 export const EDIT_TICKET = gql`
-  mutation UpdateMissedLogoutTicket($updateMissedLogoutTicketId: String!, $payload: UpdateMissedLogoutTicketInput!) {
-    updateMissedLogoutTicket(id: $updateMissedLogoutTicketId, payload: $payload) {
+  mutation UpdateTicket(
+    $updateTicketId: String!
+    $payload: UpdateTicketInput!
+  ) {
+    updateTicket(id: $updateTicketId, payload: $payload) {
       message
     }
   }
-`;
+`

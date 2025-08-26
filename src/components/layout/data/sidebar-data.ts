@@ -15,13 +15,14 @@ export const sidebarData: SidebarData = {
       items: [
         { title: 'Home', url: '/', icon: IconHome },
         { title: 'My Profile', url: '/profile', icon: IconUserCog },
-        { title: 'Tickets', url: '/tickets', icon: IconLayoutDashboard },
+        { title: 'Tickets', url: '/tickets', icon: IconLayoutBoard },
       ],
     },
     {
       title: 'Admin',
       items: [
-        { title: 'Dashboard', url: '/dashboard', icon: IconLayoutBoard },
+        { title: 'Dashboard', url: '/dashboard', icon: IconLayoutDashboard },
+        { title: 'Admin Tickets', url: '/admin-tickets', icon: IconLayoutBoard },
         { title: 'Departments', url: '/departments', icon: IconBriefcase },
         { title: 'Users', url: '/users', icon: IconUsers },
       ],

@@ -16,6 +16,13 @@ import {
   FormLabel,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible'
+import { useState } from 'react'
+import { ChevronDown, ChevronRight } from 'lucide-react'
 
 // Input Validation
 const FormSchema = z.object({
@@ -24,6 +31,8 @@ const FormSchema = z.object({
 })
 
 export default function CreateDepartment() {
+  const [open, setOpen] = useState(false)
+
   const [createDepartment] = useMutation<Mutation>(CREATE_DEPARTMENT, {
     refetchQueries: [FIND_ALL_DEPARTMENTS], // After Submiting Refetch
     awaitRefetchQueries: true,
@@ -51,63 +60,72 @@ export default function CreateDepartment() {
 
       toast.success(res.data?.createDepartment?.message ?? 'Department created')
       form.reset()
+      setOpen(false) // auto-close after success
     } catch (_error) {
       toast.error('Failed to Create Department')
     }
   }
 
   return (
-    <>
-      <Card>
-        <CardContent>
-          <p className='mb-4 text-lg font-semibold'>
-            ➕ Create A New Department
-          </p>
-
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className='grid grid-cols-1 gap-6 md:grid-cols-2'
+    <Card>
+      <CardContent>
+        <Collapsible open={open} onOpenChange={setOpen}>
+          <CollapsibleTrigger asChild>
+            <Button
+              variant="ghost"
+              className="flex w-full items-center justify-between text-lg font-semibold"
             >
-              <FormField
-                control={form.control}
-                name='department'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Department</FormLabel>
-                    <FormControl>
-                      <Input placeholder='MIS' {...field} />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
+              <span>➕ Create A New Department</span>
+              {open ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+            </Button>
+          </CollapsibleTrigger>
 
-              <FormField
-                control={form.control}
-                name='description'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Description</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder='Management Information System'
-                        {...field}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
+          <CollapsibleContent className="mt-4">
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="grid grid-cols-1 gap-6 md:grid-cols-2"
+              >
+                <FormField
+                  control={form.control}
+                  name="department"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Department</FormLabel>
+                      <FormControl>
+                        <Input placeholder="MIS" {...field} />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
 
-              {/* Submit button spans full width */}
-              <div className='md:col-span-2'>
-                <Button variant='outline' type='submit'>
-                  ✅ Submit
-                </Button>
-              </div>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
-    </>
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Description</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Management Information System"
+                          {...field}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+
+                {/* Submit button spans full width */}
+                <div className="md:col-span-2">
+                  <Button variant="outline" type="submit">
+                    ✅ Submit
+                  </Button>
+                </div>
+              </form>
+            </Form>
+          </CollapsibleContent>
+        </Collapsible>
+      </CardContent>
+    </Card>
   )
 }

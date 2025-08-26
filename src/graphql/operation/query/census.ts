@@ -14,10 +14,21 @@ export const CENSUS_DATA = gql`
         status
       }
       totalDepartments
-    
       totalTickets
       totalUsers
       totalPosts
+    }
+  }
+`
+
+export const CENSUS_TICKET_DATA = gql`
+  query GetCensusSummary($userId: String!) {
+    getCensusSummary(userId: $userId) {
+      ticketByUserId {
+        status
+        count
+      }
+      totalTicketsByUserId
     }
   }
 `

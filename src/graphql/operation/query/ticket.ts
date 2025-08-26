@@ -1,8 +1,12 @@
 import { gql } from '@apollo/client'
 
-export const FIND_ALL_MISSED_LOGOUT_TICKETS = gql`
-  query Query($page: Int, $perPage: Int) {
-    findAllMissedLogoutTickets(page: $page, perPage: $perPage) {
+export const FIND_ALL_TICKETS = gql`
+  query FindAllTickets(
+    $where: MissedLogoutTicketWhereInput
+    $page: Int
+    $perPage: Int
+  ) {
+    findAllTickets(where: $where, page: $page, perPage: $perPage) {
       data {
         createdAt
         createdBy {
@@ -35,7 +39,7 @@ export const FIND_ALL_MISSED_LOGOUT_TICKETS = gql`
   }
 `
 
-export const FIND_ALL_MISSED_LOGOUT_TICKETS_BY_USER = gql`
+export const FIND_ALL_TICKETS_BY_USER = gql`
   query FindTicketsByUser($userId: String!, $perPage: Int, $page: Int) {
     findTicketsByUser(userId: $userId, perPage: $perPage, page: $page) {
       data {

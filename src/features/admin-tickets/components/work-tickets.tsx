@@ -26,6 +26,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 
+// Props
 type WorkTicketProps = {
   ticket: any
   onUpdated?: () => void
@@ -93,15 +94,15 @@ export default function WorkTicket({ ticket, onUpdated }: WorkTicketProps) {
       toast.success('Ticket updated successfully')
       if (onUpdated) onUpdated()
       setOpen(false)
-    } catch (err: any) {
-      toast.error(err.message || 'Failed to update ticket')
+    } catch (_error) {
+      toast.error('Failed to update ticket')
     }
   }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant='outline' size='sm'>
+        <Button size='sm'>
           Work on Ticket
         </Button>
       </DialogTrigger>

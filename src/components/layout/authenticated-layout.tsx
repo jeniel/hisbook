@@ -44,7 +44,7 @@ export function AuthenticatedLayout({ children }: Props) {
                   <ProfileDropdown />
                 </div>
               </Header>
-              <div className='mt-6 px-2 md:px-6'>
+              <div className='mt-4 px-2 md:px-6'>
                 <Outlet />
               </div>
             </>
