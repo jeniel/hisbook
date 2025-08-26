@@ -2,13 +2,13 @@ import Cookies from 'js-cookie'
 import { Outlet } from '@tanstack/react-router'
 import { cn } from '@/lib/utils'
 import { SidebarProvider } from '@/components/ui/sidebar'
-// import { AppSidebar } from '@/components/layout/app-sidebar'
+import { AppSidebar } from '@/components/layout/app-sidebar'
 import SkipToMain from '@/components/skip-to-main'
-// import { ProfileDropdown } from '../profile-dropdown'
-// import { ThemeSwitch } from '../theme-switch'
-// import { Header } from './header'
+import { ProfileDropdown } from '../profile-dropdown'
+import { ThemeSwitch } from '../theme-switch'
+import { Header } from './header'
 
-import Navbar from './navbar'
+// import Navbar from './navbar'
 
 interface Props {
   children?: React.ReactNode
@@ -17,13 +17,11 @@ interface Props {
 export function AuthenticatedLayout({ children }: Props) {
   const defaultOpen = Cookies.get('sidebar_state') !== 'false'
   return (
-    // <SearchProvider>
-
     <>
-      <Navbar />
+      {/* <Navbar /> */}
       <SidebarProvider defaultOpen={defaultOpen}>
         <SkipToMain />
-        {/* <AppSidebar /> */}
+        <AppSidebar />
         <div
           id='content'
           className={cn(
@@ -40,14 +38,14 @@ export function AuthenticatedLayout({ children }: Props) {
             children
           ) : (
             <>
-              {/* <Header>
+              <Header>
                 <div className='ml-auto flex items-center space-x-4'>
                   <ThemeSwitch />
                   <ProfileDropdown />
                 </div>
-              </Header> */}
+              </Header>
               <div className='flex-1'>
-                <div className='mx-auto w-full max-w-4xl mt-20'>
+                <div className='px-2 md:px-6 mt-6'>
                   <Outlet />
                 </div>
               </div>
@@ -56,6 +54,5 @@ export function AuthenticatedLayout({ children }: Props) {
         </div>
       </SidebarProvider>
     </>
-    // </SearchProvider>
   )
 }

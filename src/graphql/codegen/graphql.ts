@@ -17,6 +17,48 @@ export type Scalars = {
   DateTime: { input: any; output: any; }
 };
 
+export type AuditLog = {
+  __typename?: 'AuditLog';
+  action?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  ticket?: Maybe<MissedLogoutTicket>;
+  ticketId?: Maybe<Scalars['String']['output']>;
+  timestamp: Scalars['DateTime']['output'];
+  updatedBy?: Maybe<Scalars['String']['output']>;
+  user?: Maybe<User>;
+  userId?: Maybe<Scalars['String']['output']>;
+};
+
+export type AuditLogListRelationFilter = {
+  every?: InputMaybe<AuditLogWhereInput>;
+  none?: InputMaybe<AuditLogWhereInput>;
+  some?: InputMaybe<AuditLogWhereInput>;
+};
+
+export type AuditLogWhereInput = {
+  AND?: InputMaybe<Array<AuditLogWhereInput>>;
+  NOT?: InputMaybe<Array<AuditLogWhereInput>>;
+  OR?: InputMaybe<Array<AuditLogWhereInput>>;
+  action?: InputMaybe<StringNullableFilter>;
+  id?: InputMaybe<StringFilter>;
+  ticket?: InputMaybe<MissedLogoutTicketNullableScalarRelationFilter>;
+  ticketId?: InputMaybe<StringNullableFilter>;
+  timestamp?: InputMaybe<DateTimeFilter>;
+  updatedBy?: InputMaybe<StringNullableFilter>;
+  user?: InputMaybe<UserNullableScalarRelationFilter>;
+  userId?: InputMaybe<StringNullableFilter>;
+};
+
+export type CensusSummary = {
+  __typename?: 'CensusSummary';
+  departmentsWithUserCount: Array<DepartmentUserCount>;
+  ticketsByStatus: Array<TicketStatusCount>;
+  totalDepartments: Scalars['Int']['output'];
+  totalPosts: Scalars['Int']['output'];
+  totalTickets: Scalars['Int']['output'];
+  totalUsers: Scalars['Int']['output'];
+};
+
 export type CreateDepartmentInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
@@ -109,6 +151,14 @@ export type DepartmentNullableScalarRelationFilter = {
   isNot?: InputMaybe<DepartmentWhereInput>;
 };
 
+export type DepartmentUserCount = {
+  __typename?: 'DepartmentUserCount';
+  departmentDescription: Scalars['String']['output'];
+  departmentId: Scalars['String']['output'];
+  departmentName: Scalars['String']['output'];
+  userCount: Scalars['Int']['output'];
+};
+
 export type DepartmentWhereInput = {
   AND?: InputMaybe<Array<DepartmentWhereInput>>;
   NOT?: InputMaybe<Array<DepartmentWhereInput>>;
@@ -182,6 +232,8 @@ export type Meta = {
 
 export type MissedLogoutTicket = {
   __typename?: 'MissedLogoutTicket';
+  _count: MissedLogoutTicketCount;
+  auditLogs?: Maybe<Array<AuditLog>>;
   createdAt: Scalars['DateTime']['output'];
   createdBy?: Maybe<User>;
   createdById?: Maybe<Scalars['String']['output']>;
@@ -193,6 +245,11 @@ export type MissedLogoutTicket = {
   status?: Maybe<Status>;
   subject?: Maybe<Scalars['String']['output']>;
   updatedBy?: Maybe<Scalars['String']['output']>;
+};
+
+export type MissedLogoutTicketCount = {
+  __typename?: 'MissedLogoutTicketCount';
+  auditLogs: Scalars['Int']['output'];
 };
 
 export type MissedLogoutTicketList = {
@@ -207,10 +264,16 @@ export type MissedLogoutTicketListRelationFilter = {
   some?: InputMaybe<MissedLogoutTicketWhereInput>;
 };
 
+export type MissedLogoutTicketNullableScalarRelationFilter = {
+  is?: InputMaybe<MissedLogoutTicketWhereInput>;
+  isNot?: InputMaybe<MissedLogoutTicketWhereInput>;
+};
+
 export type MissedLogoutTicketWhereInput = {
   AND?: InputMaybe<Array<MissedLogoutTicketWhereInput>>;
   NOT?: InputMaybe<Array<MissedLogoutTicketWhereInput>>;
   OR?: InputMaybe<Array<MissedLogoutTicketWhereInput>>;
+  auditLogs?: InputMaybe<AuditLogListRelationFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   createdBy?: InputMaybe<UserNullableScalarRelationFilter>;
   createdById?: InputMaybe<StringNullableFilter>;
@@ -227,33 +290,28 @@ export type MissedLogoutTicketWhereInput = {
 export type Mutation = {
   __typename?: 'Mutation';
   createDepartment: GeneralMsg;
-  createMissedLogoutTicket: GeneralMsg;
   createPost: GeneralMsg;
   createProfile: GeneralMsg;
+  createTicket: GeneralMsg;
   createUser: GeneralMsg;
   deleteDepartment: GeneralMsg;
-  deleteMissedLogoutTicket: GeneralMsg;
   deletePost: GeneralMsg;
   deleteProfile: GeneralMsg;
+  deleteTicket: GeneralMsg;
   deleteUser: GeneralMsg;
   logOut: GeneralMsg;
   signin: SignResponse;
   signup: SignResponse;
   updateDepartment: GeneralMsg;
-  updateMissedLogoutTicket: GeneralMsg;
   updatePost: GeneralMsg;
   updateProfile: GeneralMsg;
+  updateTicket: GeneralMsg;
   updateUser: GeneralMsg;
 };
 
 
 export type MutationCreateDepartmentArgs = {
   payload: CreateDepartmentInput;
-};
-
-
-export type MutationCreateMissedLogoutTicketArgs = {
-  payload: CreateMissedLogoutTicketInput;
 };
 
 
@@ -267,6 +325,11 @@ export type MutationCreateProfileArgs = {
 };
 
 
+export type MutationCreateTicketArgs = {
+  payload: CreateMissedLogoutTicketInput;
+};
+
+
 export type MutationCreateUserArgs = {
   payload: CreateUserInput;
 };
@@ -277,17 +340,17 @@ export type MutationDeleteDepartmentArgs = {
 };
 
 
-export type MutationDeleteMissedLogoutTicketArgs = {
-  id: Scalars['String']['input'];
-};
-
-
 export type MutationDeletePostArgs = {
   postId: Scalars['String']['input'];
 };
 
 
 export type MutationDeleteProfileArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type MutationDeleteTicketArgs = {
   id: Scalars['String']['input'];
 };
 
@@ -313,12 +376,6 @@ export type MutationUpdateDepartmentArgs = {
 };
 
 
-export type MutationUpdateMissedLogoutTicketArgs = {
-  id: Scalars['String']['input'];
-  payload: UpdateMissedLogoutTicketInput;
-};
-
-
 export type MutationUpdatePostArgs = {
   data: UpdatePostInput;
   postId: Scalars['String']['input'];
@@ -328,6 +385,12 @@ export type MutationUpdatePostArgs = {
 export type MutationUpdateProfileArgs = {
   id: Scalars['String']['input'];
   payload: UpdateProfileInput;
+};
+
+
+export type MutationUpdateTicketArgs = {
+  id: Scalars['String']['input'];
+  payload: UpdateMissedLogoutTicketInput;
 };
 
 
@@ -499,12 +562,15 @@ export type ProfileWhereInput = {
 export type Query = {
   __typename?: 'Query';
   findAllDepartments: DepartmentList;
-  findAllMissedLogoutTickets: MissedLogoutTicketList;
   findAllPosts: PostsList;
   findAllProfiles: ProfileList;
+  findAllTickets: MissedLogoutTicketList;
   findAllUsers: UserList;
   findProfile: Profile;
+  findTicketbyID?: Maybe<MissedLogoutTicket>;
   findTicketsByUser: MissedLogoutTicketList;
+  getCensusSummary: CensusSummary;
+  getMyWorkedTickets: MissedLogoutTicketList;
   meQuery: MeQuery;
 };
 
@@ -513,13 +579,6 @@ export type QueryFindAllDepartmentsArgs = {
   page?: InputMaybe<Scalars['Int']['input']>;
   perPage?: InputMaybe<Scalars['Int']['input']>;
   where?: InputMaybe<DepartmentWhereInput>;
-};
-
-
-export type QueryFindAllMissedLogoutTicketsArgs = {
-  page?: InputMaybe<Scalars['Int']['input']>;
-  perPage?: InputMaybe<Scalars['Int']['input']>;
-  where?: InputMaybe<MissedLogoutTicketWhereInput>;
 };
 
 
@@ -537,6 +596,13 @@ export type QueryFindAllProfilesArgs = {
 };
 
 
+export type QueryFindAllTicketsArgs = {
+  page?: InputMaybe<Scalars['Int']['input']>;
+  perPage?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<MissedLogoutTicketWhereInput>;
+};
+
+
 export type QueryFindAllUsersArgs = {
   page?: InputMaybe<Scalars['Int']['input']>;
   perPage?: InputMaybe<Scalars['Int']['input']>;
@@ -549,7 +615,20 @@ export type QueryFindProfileArgs = {
 };
 
 
+export type QueryFindTicketbyIdArgs = {
+  id: Scalars['String']['input'];
+};
+
+
 export type QueryFindTicketsByUserArgs = {
+  page?: InputMaybe<Scalars['Int']['input']>;
+  perPage?: InputMaybe<Scalars['Int']['input']>;
+  userId: Scalars['String']['input'];
+  where?: InputMaybe<MissedLogoutTicketWhereInput>;
+};
+
+
+export type QueryGetMyWorkedTicketsArgs = {
   page?: InputMaybe<Scalars['Int']['input']>;
   perPage?: InputMaybe<Scalars['Int']['input']>;
   userId: Scalars['String']['input'];
@@ -634,6 +713,12 @@ export type StringNullableListFilter = {
   isEmpty?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
+export type TicketStatusCount = {
+  __typename?: 'TicketStatusCount';
+  count: Scalars['Int']['output'];
+  status: Status;
+};
+
 export type UpdateDepartmentInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
@@ -683,6 +768,7 @@ export type User = {
   __typename?: 'User';
   MissedLogoutTicket?: Maybe<Array<MissedLogoutTicket>>;
   _count: UserCount;
+  auditLogs?: Maybe<Array<AuditLog>>;
   department?: Maybe<Department>;
   departmentId?: Maybe<Scalars['String']['output']>;
   /** @Validator.@IsEmail() */
@@ -698,6 +784,7 @@ export type User = {
 export type UserCount = {
   __typename?: 'UserCount';
   MissedLogoutTicket: Scalars['Int']['output'];
+  auditLogs: Scalars['Int']['output'];
   posts: Scalars['Int']['output'];
 };
 
@@ -723,6 +810,7 @@ export type UserWhereInput = {
   MissedLogoutTicket?: InputMaybe<MissedLogoutTicketListRelationFilter>;
   NOT?: InputMaybe<Array<UserWhereInput>>;
   OR?: InputMaybe<Array<UserWhereInput>>;
+  auditLogs?: InputMaybe<AuditLogListRelationFilter>;
   department?: InputMaybe<DepartmentNullableScalarRelationFilter>;
   departmentId?: InputMaybe<StringNullableFilter>;
   email?: InputMaybe<StringFilter>;

@@ -63,7 +63,7 @@ export default function CreatePost() {
   }
 
   return (
-    <Card className='mt-4 max-w-6xl'>
+    <Card className='mt-4'>
       <CardContent className='space-y-2'>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
