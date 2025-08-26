@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Query } from '@/graphql/codegen/graphql'
 import { FIND_ALL_DEPARTMENTS } from '@/graphql/operation/query/department'
 import { useQuery } from '@apollo/client'
+import { Card, CardContent } from '@/components/ui/card'
 import {
   Table,
   TableBody,
@@ -38,54 +39,56 @@ export default function ViewDepartments() {
   }
 
   return (
-    <div>
-      <p className='text-lg font-semibold'>All Departments</p>
+    <Card>
+      <CardContent>
+        <p className='text-lg font-semibold'>🏢 All Departments</p>
 
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>#</TableHead>
-            <TableHead>Department</TableHead>
-            <TableHead>Description</TableHead>
-            <TableHead>Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {departments.length === 0 ? (
+        <Table>
+          <TableHeader>
             <TableRow>
-              <TableCell colSpan={4} className='text-center'>
-                No departments found
-              </TableCell>
+              <TableHead>#</TableHead>
+              <TableHead>Department</TableHead>
+              <TableHead>Description</TableHead>
+              <TableHead>Actions</TableHead>
             </TableRow>
-          ) : (
-            departments.map((department, index) => (
-              <TableRow key={department.id}>
-                <TableCell>{index + 1 + (page - 1) * perPage}</TableCell>
-                <TableCell>{department.name}</TableCell>
-                <TableCell>{department.description}</TableCell>
-                <TableCell className='flex flex-row items-center space-x-2'>
-                  <EditDepartment
-                    department={department}
-                    onUpdated={() => refetch()}
-                  />
-                  <DeleteDepartment
-                    department={department}
-                    onDelete={() => refetch()}
-                  />
+          </TableHeader>
+          <TableBody>
+            {departments.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={4} className='text-center'>
+                  No departments found
                 </TableCell>
               </TableRow>
-            ))
-          )}
-        </TableBody>
-      </Table>
+            ) : (
+              departments.map((department, index) => (
+                <TableRow key={department.id}>
+                  <TableCell>{index + 1 + (page - 1) * perPage}</TableCell>
+                  <TableCell>{department.name}</TableCell>
+                  <TableCell>{department.description}</TableCell>
+                  <TableCell className='flex flex-row items-center space-x-2'>
+                    <EditDepartment
+                      department={department}
+                      onUpdated={() => refetch()}
+                    />
+                    <DeleteDepartment
+                      department={department}
+                      onDelete={() => refetch()}
+                    />
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
 
-      {meta && (
-        <Pagination
-          currentPage={meta.currentPage}
-          lastPage={meta.lastPage}
-          onPageChange={handlePageChange}
-        />
-      )}
-    </div>
+        {meta && (
+          <Pagination
+            currentPage={meta.currentPage}
+            lastPage={meta.lastPage}
+            onPageChange={handlePageChange}
+          />
+        )}
+      </CardContent>
+    </Card>
   )
 }

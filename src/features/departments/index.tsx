@@ -1,28 +1,17 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Main } from '@/components/layout/main'
 import CreateDepartment from './components/create-department'
 import ViewDepartments from './components/view-deparments'
 
 export default function Departments() {
   return (
-    <Main>
-      <h1 className='mb-4 text-2xl font-bold'>Departments</h1>
-      <Tabs defaultValue='create-department'>
-        <TabsList className='w-full'>
-          <TabsTrigger value='create-department'>
-            Create A Department
-          </TabsTrigger>
-          <TabsTrigger value='view-departments'>Department Lists</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value='create-department'>
-          <CreateDepartment />
-        </TabsContent>
-
-        <TabsContent value='view-departments'>
-          <ViewDepartments />
-        </TabsContent>
-      </Tabs>
-    </Main>
+    <>
+      <h1 className='mb-2 text-3xl font-semibold'>🏢 Departments</h1>
+      <p className='text-md text-muted-foreground mb-4'>
+        Add, Update and Delete Departments
+      </p>
+      <div className="space-y-4">
+        <CreateDepartment />
+        <ViewDepartments />
+      </div>
+    </>
   )
 }
