@@ -6,7 +6,6 @@ import { Mutation } from '@/graphql/codegen/graphql'
 import { CREATE_POST } from '@/graphql/operation/mutation/post'
 import { ME_QUERY } from '@/graphql/operation/query/user'
 import { useMutation, useQuery } from '@apollo/client'
-import { Pen } from 'lucide-react'
 import { toast } from 'sonner'
 import { useUpload } from '@/hooks/useUpload'
 import { Button } from '@/components/ui/button'
@@ -79,13 +78,14 @@ export default function CreatePost() {
               )}
             />
             <div className='flex items-center justify-between'>
+              
               {/* File input */}
               <div>
-                <div className="flex flex-row items-stretch space-x-4 mb-2">
+                <div className='mb-2'>
                   <p className='text-muted-foreground text-sm'>
                     Add Images/Videos
                   </p>
-                  <p className='text-muted-foreground text-xs italic self-end'>
+                  <p className='text-muted-foreground self-end text-xs italic'>
                     Maximum of 15 Images Only
                   </p>
                 </div>
@@ -107,9 +107,8 @@ export default function CreatePost() {
                 )}
               </div>
 
-              <Button type='submit' className='flex flex-row space-x-2'>
-                <Pen />
-                Post
+              <Button type='submit' variant={'outline'}>
+                🖊️ Post
               </Button>
             </div>
           </form>

@@ -66,6 +66,14 @@ export type CreateDepartmentInput = {
   name: Scalars['String']['input'];
 };
 
+export type CreateEventInput = {
+  detailsUrl?: InputMaybe<Scalars['String']['input']>;
+  endDate?: InputMaybe<Scalars['DateTime']['input']>;
+  location: Scalars['String']['input'];
+  startDate?: InputMaybe<Scalars['DateTime']['input']>;
+  title: Scalars['String']['input'];
+};
+
 export type CreatePostInput = {
   content: Scalars['String']['input'];
   images?: InputMaybe<Array<Scalars['String']['input']>>;
@@ -195,6 +203,36 @@ export type EnumStatusNullableFilter = {
   notIn?: InputMaybe<Array<Status>>;
 };
 
+export type Event = {
+  __typename?: 'Event';
+  createdAt: Scalars['DateTime']['output'];
+  detailsUrl?: Maybe<Scalars['String']['output']>;
+  endDate?: Maybe<Scalars['DateTime']['output']>;
+  id: Scalars['ID']['output'];
+  location: Scalars['String']['output'];
+  startDate?: Maybe<Scalars['DateTime']['output']>;
+  title: Scalars['String']['output'];
+};
+
+export type EventList = {
+  __typename?: 'EventList';
+  data: Array<Event>;
+  meta?: Maybe<Meta>;
+};
+
+export type EventWhereInput = {
+  AND?: InputMaybe<Array<EventWhereInput>>;
+  NOT?: InputMaybe<Array<EventWhereInput>>;
+  OR?: InputMaybe<Array<EventWhereInput>>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  detailsUrl?: InputMaybe<StringNullableFilter>;
+  endDate?: InputMaybe<DateTimeNullableFilter>;
+  id?: InputMaybe<StringFilter>;
+  location?: InputMaybe<StringFilter>;
+  startDate?: InputMaybe<DateTimeNullableFilter>;
+  title?: InputMaybe<StringFilter>;
+};
+
 export enum Gender {
   Female = 'Female',
   Male = 'Male',
@@ -294,11 +332,13 @@ export type MissedLogoutTicketWhereInput = {
 export type Mutation = {
   __typename?: 'Mutation';
   createDepartment: GeneralMsg;
+  createEvent: GeneralMsg;
   createPost: GeneralMsg;
   createProfile: GeneralMsg;
   createTicket: GeneralMsg;
   createUser: GeneralMsg;
   deleteDepartment: GeneralMsg;
+  deleteEvent: GeneralMsg;
   deletePost: GeneralMsg;
   deleteProfile: GeneralMsg;
   deleteTicket: GeneralMsg;
@@ -307,6 +347,7 @@ export type Mutation = {
   signin: SignResponse;
   signup: SignResponse;
   updateDepartment: GeneralMsg;
+  updateEvent: GeneralMsg;
   updatePost: GeneralMsg;
   updateProfile: GeneralMsg;
   updateTicket: GeneralMsg;
@@ -316,6 +357,11 @@ export type Mutation = {
 
 export type MutationCreateDepartmentArgs = {
   payload: CreateDepartmentInput;
+};
+
+
+export type MutationCreateEventArgs = {
+  payload: CreateEventInput;
 };
 
 
@@ -340,6 +386,11 @@ export type MutationCreateUserArgs = {
 
 
 export type MutationDeleteDepartmentArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type MutationDeleteEventArgs = {
   id: Scalars['String']['input'];
 };
 
@@ -377,6 +428,12 @@ export type MutationSignupArgs = {
 export type MutationUpdateDepartmentArgs = {
   id: Scalars['String']['input'];
   payload: UpdateDepartmentInput;
+};
+
+
+export type MutationUpdateEventArgs = {
+  id: Scalars['String']['input'];
+  payload: UpdateEventInput;
 };
 
 
@@ -566,6 +623,7 @@ export type ProfileWhereInput = {
 export type Query = {
   __typename?: 'Query';
   findAllDepartments: DepartmentList;
+  findAllEvents: EventList;
   findAllPosts: PostsList;
   findAllPostsCreatedByUser: PostsList;
   findAllProfiles: ProfileList;
@@ -584,6 +642,13 @@ export type QueryFindAllDepartmentsArgs = {
   page?: InputMaybe<Scalars['Int']['input']>;
   perPage?: InputMaybe<Scalars['Int']['input']>;
   where?: InputMaybe<DepartmentWhereInput>;
+};
+
+
+export type QueryFindAllEventsArgs = {
+  page?: InputMaybe<Scalars['Int']['input']>;
+  perPage?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<EventWhereInput>;
 };
 
 
@@ -741,6 +806,14 @@ export type TicketStatusCount = {
 export type UpdateDepartmentInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
+};
+
+export type UpdateEventInput = {
+  detailsUrl?: InputMaybe<Scalars['String']['input']>;
+  endDate?: InputMaybe<Scalars['DateTime']['input']>;
+  location: Scalars['String']['input'];
+  startDate?: InputMaybe<Scalars['DateTime']['input']>;
+  title: Scalars['String']['input'];
 };
 
 export type UpdatePostInput = {

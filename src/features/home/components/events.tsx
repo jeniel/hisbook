@@ -1,48 +1,93 @@
+import { Query } from '@/graphql/codegen/graphql'
+import { GET_ALL_EVENT } from '@/graphql/operation/query/event'
+import { useQuery } from '@apollo/client'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
-
-const events = [
-  {
-    id: 1,
-    title: 'Community Meetup',
-    date: 'Aug 30, 2025',
-    location: 'Town Hall',
-  },
-  {
-    id: 2,
-    title: 'Hackathon 2025',
-    date: 'Sep 12, 2025',
-    location: 'Tech Park',
-  },
-  {
-    id: 3,
-    title: 'Charity Fun Run',
-    date: 'Oct 5, 2025',
-    location: 'Central Park',
-  },
-]
+import Spinner from '@/components/spinner'
 
 export default function Events() {
+  const { data, loading, error } = useQuery<Query>(GET_ALL_EVENT)
+
+  if (loading) return <Spinner />
+  if (error) return <p className='text-red-500'>Failed to load events</p>
+
+  const events = data?.findAllEvents?.data || []
+
+  const today = new Date().toISOString().split('T')[0] // YYYY-MM-DD
+
+  // Filter upcoming events (including today)
+  const upcomingEvents = events
+    .filter(
+      (event) => event.startDate && event.startDate.split('T')[0] >= today // compare date portion only
+    )
+    .sort(
+      (a, b) =>
+        new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
+    )
+
+  // Separate today's events
+  const todaysEvents = upcomingEvents.filter(
+    (event) => event.startDate?.split('T')[0] === today
+  )
+  const futureEvents = upcomingEvents.filter(
+    (event) => event.startDate?.split('T')[0] !== today
+  )
+
+  // Combine: today first, then other upcoming
+  const sortedEvents = [...todaysEvents, ...futureEvents].slice(0, 5)
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle className='text-lg font-semibold'>Upcoming Events</CardTitle>
+        <CardTitle className='text-lg font-semibold'>
+          📅 Events
+        </CardTitle>
       </CardHeader>
-      <CardContent className='space-y-3'>
-        {events.map((event) => (
-          <div key={event.id} className='border-b pb-2 last:border-none'>
-            <div className='flex flex-row items-center justify-between'>
-              <div>
+      <CardContent className='flex flex-row gap-3 overflow-x-auto lg:flex-col lg:overflow-visible'>
+        {sortedEvents.length === 0 ? (
+          <p className='text-muted-foreground text-sm'>No upcoming events</p>
+        ) : (
+          sortedEvents.map((event) => (
+            <div
+              key={event.id}
+              className={`flex min-w-[160px] flex-col items-center justify-between border-b pb-2 last:border-none lg:min-w-0 lg:flex-row lg:items-center ${
+                event.startDate?.split('T')[0] === today ? 'text-blue-500' : ''
+              }`}
+            >
+              <div className='text-center lg:text-left'>
                 <p className='font-medium'>{event.title}</p>
-                <p className='text-muted-foreground text-sm'>{event.date}</p>
+                <p className='text-muted-foreground text-sm'>
+                  {event.startDate
+                    ? new Date(event.startDate).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                      })
+                    : 'TBD'}
+                </p>
                 <p className='text-muted-foreground text-sm'>
                   {event.location}
                 </p>
               </div>
-              <Button size='sm'>View Event</Button>
+              {event.detailsUrl && (
+                <Button
+                  size='sm'
+                  variant='outline'
+                  asChild
+                  className='mt-2 lg:mt-0'
+                >
+                  <a
+                    href={event.detailsUrl}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                  >
+                    🎉 View
+                  </a>
+                </Button>
+              )}
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </CardContent>
     </Card>
   )

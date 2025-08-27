@@ -1,23 +1,23 @@
-import { Link } from '@tanstack/react-router'
-import { Button } from '@/components/ui/button'
-import CreatePost from '../home/components/create-post'
-// import ProfileFeed from './components/profile-feed'
+import Events from '../home/components/events'
+import WeatherForecast from '../home/components/weather'
+import EditProfile from './components/edit-profile'
 
 export default function Profile() {
   return (
     <>
-      <div className='flex flex-row items-center justify-between mb-4'>
-        <div>
-          <h1 className='text-3xl font-semibold mb-2'>👤 Profile</h1>
-          <p className='text-md text-muted-foreground'>See Your Posts</p>
+      <div className='grid grid-cols-1 gap-4 pb-4 md:grid-cols-4'>
+        
+        {/* Left Column */}
+        <div className='order-2 space-y-4 md:order-1 md:col-span-3'>
+          <EditProfile />
         </div>
 
-        <Link to='/edit-profile'>
-          <Button variant={'outline'}>🖊️ Edit Profile</Button>
-        </Link>
+        {/* Right Column */}
+        <div className='order-1 space-y-4 md:order-2 md:col-span-1'>
+          <WeatherForecast />
+          <Events />
+        </div>
       </div>
-      <CreatePost />
-      {/* <ProfileFeed /> */}
     </>
   )
 }

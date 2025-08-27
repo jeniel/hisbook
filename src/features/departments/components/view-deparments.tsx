@@ -14,6 +14,7 @@ import {
 import Pagination from '@/components/pagination'
 import DeleteDepartment from './delete-department'
 import EditDepartment from './edit-department'
+import Spinner from '@/components/spinner'
 
 export default function ViewDepartments() {
   const [page, setPage] = useState(1)
@@ -27,7 +28,7 @@ export default function ViewDepartments() {
     }
   )
 
-  if (loading) return <p>Loading departments...</p>
+  if (loading) return <Spinner />
   if (error) return <p>Error: {error.message}</p>
 
   const departments = data?.findAllDepartments?.data || []

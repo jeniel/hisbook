@@ -71,7 +71,13 @@ export default function AllTickets() {
                     : 'Unknown'}
                 </TableCell>
                 <TableCell>
-                  {new Date(ticket.missedAt).toLocaleDateString()}
+                  {ticket.missedAt
+                    ? new Date(ticket.missedAt).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                      })
+                    : 'TBD'}
                 </TableCell>
                 <TableCell>
                   {new Date(ticket.missedAt).toLocaleTimeString()}

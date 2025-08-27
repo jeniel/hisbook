@@ -2,7 +2,6 @@
 import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Link } from '@tanstack/react-router'
 import { Mutation, Query } from '@/graphql/codegen/graphql'
 import { UPDATE_PROFILE } from '@/graphql/operation/mutation/profile'
 import { ME_QUERY } from '@/graphql/operation/query/user'
@@ -114,27 +113,14 @@ export default function EditProfile() {
 
   return (
     <>
-      <div className='mb-4 flex flex-row items-center justify-between'>
-        <div className="space-y-2">
-          <h1 className='text-3xl font-semibold'>👤 Profile</h1>
-          <p className='text-md text-muted-foreground'>
-            Update Your Profile
-          </p>
-        </div>
-
-        <Link to='/profile'>
-          <Button>⬅️ Back</Button>
-        </Link>
-      </div>
-
       <Card>
         <CardContent>
+          <h1 className='mb-2 text-3xl font-semibold'>👤 Profile</h1>
+          <p className='text-md text-muted-foreground mb-4'>Update Your Profile</p>
           <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
             {/* Profile Picture */}
             <div className='space-y-2'>
-              <label className='block font-semibold'>
-                Profile Picture
-              </label>
+              <label className='block font-semibold'>Profile Picture</label>
               <Input
                 type='file'
                 accept='image/*'

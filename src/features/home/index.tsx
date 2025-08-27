@@ -1,23 +1,22 @@
-import CreatePost from "./components/create-post";
-import HomeFeed from "./components/home-feed";
-import Events from "./components/events";
-import WeatherForecast from "./components/weather";
+import CreatePost from './components/create-post'
+import Events from './components/events'
+import HomeFeed from './components/home-feed'
+import WeatherForecast from './components/weather'
 
 export default function HomePage() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 pb-4">
-
+    <div className='grid grid-cols-1 gap-4 pb-4 md:grid-cols-4'>
       {/* Left Column */}
-      <div className="md:col-span-3 space-y-4">
+      <div className='order-2 space-y-4 md:order-1 md:col-span-3'>
         <CreatePost />
         <HomeFeed />
       </div>
 
       {/* Right Column */}
-      <div className="md:col-span-1 space-y-4">
-        <Events />
+      <div className='order-1 space-y-4 md:order-2 md:col-span-1'>
         <WeatherForecast />
+        <Events />
       </div>
     </div>
-  );
+  )
 }
