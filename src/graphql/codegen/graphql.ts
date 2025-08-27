@@ -55,6 +55,7 @@ export type CensusSummary = {
   ticketByUserId?: Maybe<Array<TicketStatusCount>>;
   ticketsByStatus: Array<TicketStatusCount>;
   totalDepartments: Scalars['Int']['output'];
+  totalEvents: Scalars['Int']['output'];
   totalPosts: Scalars['Int']['output'];
   totalTickets: Scalars['Int']['output'];
   totalTicketsByUserId?: Maybe<Scalars['Int']['output']>;

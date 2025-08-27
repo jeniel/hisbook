@@ -13,6 +13,7 @@ export const CENSUS_DATA = gql`
         count
         status
       }
+      totalEvents
       totalDepartments
       totalTickets
       totalUsers
