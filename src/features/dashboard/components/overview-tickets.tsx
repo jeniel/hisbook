@@ -31,7 +31,7 @@ export default function TicketsOverview() {
     <Card>
       <CardHeader className='flex flex-row items-center justify-between'>
         <CardTitle>🎟️ Tickets Overview by Status</CardTitle>
-        <Link to='/tickets'>
+        <Link to='/admin-tickets'>
           <Button variant={'outline'}>🎫 Go To Tickets</Button>
         </Link>
       </CardHeader>

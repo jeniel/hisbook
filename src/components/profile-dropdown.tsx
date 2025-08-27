@@ -79,6 +79,9 @@ export function ProfileDropdown() {
 
         <DropdownMenuGroup>
           <DropdownMenuItem asChild>
+            <Link to="/">Home</Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
             <Link to="/profile">Profile</Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
