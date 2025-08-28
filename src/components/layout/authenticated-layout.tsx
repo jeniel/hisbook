@@ -8,8 +8,6 @@ import { ProfileDropdown } from '../profile-dropdown'
 import { ThemeSwitch } from '../theme-switch'
 import { Header } from './header'
 
-// import Navbar from './navbar'
-
 interface Props {
   children?: React.ReactNode
 }
@@ -18,7 +16,6 @@ export function AuthenticatedLayout({ children }: Props) {
   const defaultOpen = Cookies.get('sidebar_state') !== 'false'
   return (
     <>
-      {/* <Navbar /> */}
       <SidebarProvider defaultOpen={defaultOpen}>
         <SkipToMain />
         <AppSidebar />

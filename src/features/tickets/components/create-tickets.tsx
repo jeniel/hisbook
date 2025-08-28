@@ -7,7 +7,7 @@ import { CREATE_TICKET } from '@/graphql/operation/mutation/ticket'
 import { FIND_ALL_TICKETS_BY_USER } from '@/graphql/operation/query/ticket'
 import { ME_QUERY } from '@/graphql/operation/query/user'
 import { useMutation, useQuery } from '@apollo/client'
-import { ChevronDown, ChevronRight } from 'lucide-react'
+import { ChevronDown, ChevronRight, TicketPlus } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -100,7 +100,7 @@ export default function CreateTickets() {
               variant='ghost'
               className='flex w-full items-center justify-between text-lg font-semibold'
             >
-              <span>➕ Create Ticket</span>
+              <span>Create Ticket</span>
               {open ? (
                 <ChevronDown className='h-4 w-4' />
               ) : (

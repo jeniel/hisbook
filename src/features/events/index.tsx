@@ -1,3 +1,4 @@
+import { CalendarDays } from 'lucide-react'
 import CreateEvent from './components/create-event'
 import SummaryEvents from './components/summary-events'
 import ViewEvents from './components/view-events'
@@ -7,8 +8,11 @@ export default function Events() {
     <>
       <div className='mb-4 flex flex-row items-center justify-between'>
         <div>
-          <h1 className='mb-2 text-3xl font-semibold'>📅 Events</h1>
-          <p className='text-md text-muted-foreground mb-4'>
+          <h1 className='mb-2 flex items-center gap-2 text-3xl font-semibold'>
+            <CalendarDays className='text-primary h-7 w-7' />
+            Events
+          </h1>
+          <p className='text-sm text-muted-foreground'>
             Add, Update and Delete Events
           </p>
         </div>

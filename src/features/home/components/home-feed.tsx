@@ -91,20 +91,15 @@ export default function HomeFeed() {
         const isExpanded = expandedPosts[post.id]
         const user = post.user
         const profile = user?.profile
-        const department = user?.department
 
         return (
           <Card key={post.id} className='rounded-2xl border shadow-sm'>
             <CardHeader>
               <CardTitle className='flex flex-row items-center gap-4'>
-                <Avatar avatarUrl={profile?.avatar ?? undefined} size={80} />
+                <Avatar avatarUrl={profile?.avatar ?? undefined} size={60} />
                 <div className='flex-1'>
                   <p className='text-lg font-semibold'>
                     {profile?.lastName}, {profile?.firstName}
-                  </p>
-                  <p className='text-sm text-gray-500'>@{user?.username}</p>
-                  <p className='text-sm text-gray-500'>
-                    {department?.name} - {department?.description}
                   </p>
                   <p className='text-xs text-gray-400'>
                     Posted on{' '}

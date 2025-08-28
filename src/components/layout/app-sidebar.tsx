@@ -1,13 +1,9 @@
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarRail,
-} from '@/components/ui/sidebar'
+import { Query, Role } from '@/graphql/codegen/graphql'
+import { ME_QUERY } from '@/graphql/operation/query/user'
+import { useQuery } from '@apollo/client'
+import { Sidebar, SidebarContent, SidebarRail } from '@/components/ui/sidebar'
 import { NavGroup } from '@/components/layout/nav-group'
 import { sidebarData } from './data/sidebar-data'
-import { ME_QUERY } from '@/graphql/operation/query/user'
-import { Query, Role } from '@/graphql/codegen/graphql'
-import { useQuery } from '@apollo/client'
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { data, loading } = useQuery<Query>(ME_QUERY)
@@ -25,9 +21,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   })
 
   return (
-    <Sidebar collapsible="icon" variant="floating" {...props}>
+    <Sidebar collapsible='icon' variant='floating' {...props}>
       <div>
-        <img src="./images/acebook-logo.png" alt="Acebook Logo" />
+        <img
+          src='/images/acebook-logo.png'
+          alt='Acebook Logo'
+          className='h-16 w-auto object-contain'
+        />
       </div>
       <SidebarContent>
         {visibleNavGroups.map((props) => (

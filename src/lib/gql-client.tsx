@@ -38,7 +38,7 @@ const errorControl = onError(({ graphQLErrors, networkError }) => {
     console.log(`[Network error]: ${networkError}`)
   }
   if (graphQLErrors) {
-    graphQLErrors.forEach(({ message, locations, path }) => {
+    graphQLErrors.forEach(({ message }) => {
       // console.log(
       //   `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
       // )

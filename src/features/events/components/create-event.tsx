@@ -81,7 +81,7 @@ export default function CreateEvent() {
               variant='ghost'
               className='flex w-full items-center justify-between text-lg font-semibold'
             >
-              <span>➕ Create A New Event</span>
+              <span>Create A New Event</span>
               {open ? (
                 <ChevronDown className='h-4 w-4' />
               ) : (

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Query } from '@/graphql/codegen/graphql'
 import { GET_ALL_EVENT } from '@/graphql/operation/query/event'
 import { useQuery } from '@apollo/client'
+import { CalendarDays } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import {
@@ -39,7 +40,10 @@ export default function ViewEvents() {
   return (
     <Card>
       <CardContent>
-        <p className='text-lg font-semibold'>📅 All Events</p>
+        <h1 className='mb-2 flex items-center gap-2 text-xl font-semibold'>
+          <CalendarDays className='text-primary h-6 w-6' />
+          Events
+        </h1>
 
         <Table>
           <TableHeader>

@@ -27,7 +27,6 @@ export interface UseCurrentUserReturn {
   fullName: string
   displayName: string
   hasRole: (role: string) => boolean
-  isActive: boolean
 }
 
 /**
@@ -133,7 +132,6 @@ export const useCurrentUser = (): UseCurrentUserReturn => {
     return currentUser.role.includes(role as any)
   }
 
-  const isActive = currentUser?.isActive || false
   const isAuthenticated = isSignedIn && !!currentUser
 
   return {
@@ -155,7 +153,6 @@ export const useCurrentUser = (): UseCurrentUserReturn => {
     fullName,
     displayName,
     hasRole,
-    isActive,
   }
 }
 

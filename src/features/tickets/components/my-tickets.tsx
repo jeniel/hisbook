@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/table'
 import Pagination from '@/components/pagination'
 import Spinner from '@/components/spinner'
+import { Ticket } from 'lucide-react'
 
 export default function MyTickets() {
   const [page, setPage] = useState(1)
@@ -56,7 +57,10 @@ export default function MyTickets() {
   return (
     <Card className='w-full'>
       <CardContent>
-        <p className='mb-4 text-lg font-semibold'>🎟️ My Submitted Tickets</p>
+        <h1 className='mb-2 flex items-center gap-2 text-xl font-semibold'>
+          <Ticket className='text-green-500 h-6 w-6' />
+          My Tickets
+        </h1>
 
         <Table>
           <TableHeader>
