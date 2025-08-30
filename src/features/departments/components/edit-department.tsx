@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { PencilLine } from 'lucide-react'
 
 // Props
 type EditDepartmentProps = {
@@ -61,7 +62,9 @@ export default function EditDepartment({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>Edit</Button>
+        <Button variant={'outline'} size='sm'>
+          <PencilLine className='text-blue-500' /> Edit
+        </Button>
       </DialogTrigger>
 
       <DialogContent className='max-w-md'>

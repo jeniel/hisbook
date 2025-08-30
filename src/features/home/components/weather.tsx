@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'react'
+import { Sun } from 'lucide-react'
 import {
   Card,
   CardHeader,
@@ -38,7 +39,7 @@ export default function WeatherForecast() {
           const dayName = new Date(date).toLocaleDateString('en-US', {
             weekday: 'long',
           })
-          
+
           // Format Date
           const dateFormatted = new Date(date).toLocaleDateString('en-US', {
             month: 'short',
@@ -69,8 +70,9 @@ export default function WeatherForecast() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className='text-lg font-semibold'>
-          ☀️ Weather Forecast
+        <CardTitle className='flex flex-row items-center gap-2 text-lg font-semibold'>
+          <Sun className='text-yellow-500' />
+          Weather Forecast
         </CardTitle>
       </CardHeader>
       <CardContent className='flex flex-row gap-3 overflow-x-auto lg:flex-col lg:overflow-visible'>

@@ -68,6 +68,7 @@ export default function HomeFeed() {
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev
         return {
+          ...prev,
           findAllPosts: {
             ...fetchMoreResult.findAllPosts,
             data: [

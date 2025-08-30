@@ -7,7 +7,7 @@ import { CREATE_USER } from '@/graphql/operation/mutation/user'
 import { FIND_ALL_DEPARTMENTS } from '@/graphql/operation/query/department'
 import { FIND_ALL_USER } from '@/graphql/operation/query/user'
 import { useMutation, useQuery } from '@apollo/client'
-import { ChevronDown, ChevronRight } from 'lucide-react'
+import { ChevronDown, ChevronRight, SquareCheckBig } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -60,7 +60,7 @@ const FormSchema = z
 export default function CreateUser() {
   const [open, setOpen] = useState(false)
 
-  const [createUser, { loading }] = useMutation<Mutation>(CREATE_USER, {
+  const [createUser] = useMutation<Mutation>(CREATE_USER, {
     refetchQueries: [FIND_ALL_USER],
     awaitRefetchQueries: true,
   })
@@ -112,7 +112,7 @@ export default function CreateUser() {
               variant='ghost'
               className='flex w-full items-center justify-between text-lg font-semibold'
             >
-              <span>➕ Create A New User</span>
+              <span>Create A New User</span>
               {open ? (
                 <ChevronDown className='h-4 w-4' />
               ) : (
@@ -232,12 +232,8 @@ export default function CreateUser() {
                     )}
                   />
                 </div>
-                <Button
-                  type='submit'
-                  variant='outline'
-                  disabled={loading}
-                >
-                  {loading ? 'Creating...' : '✅ Submit'}
+                <Button variant='outline' type='submit' className='shadow-md'>
+                  <SquareCheckBig className='text-green-500' /> Submit
                 </Button>
               </form>
             </Form>

@@ -6,6 +6,7 @@ import { Role } from '@/graphql/codegen/graphql'
 import { UPDATE_USER } from '@/graphql/operation/mutation/user'
 import { FIND_ALL_DEPARTMENTS } from '@/graphql/operation/query/department'
 import { useMutation, useQuery } from '@apollo/client'
+import { PencilLine } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import {
@@ -117,7 +118,9 @@ export default function EditUser({ user, onUpdated }: EditUserProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>Edit</Button>
+        <Button variant={'outline'} size='sm'>
+          <PencilLine className='text-blue-500' /> Edit
+        </Button>
       </DialogTrigger>
 
       <DialogContent className='max-w-lg'>

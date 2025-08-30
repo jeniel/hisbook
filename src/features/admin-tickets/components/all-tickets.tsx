@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Query } from '@/graphql/codegen/graphql'
 import { FIND_ALL_TICKETS } from '@/graphql/operation/query/ticket'
 import { useQuery } from '@apollo/client'
+import { BookCheck, Ticket } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import {
@@ -48,7 +49,11 @@ export default function AllTickets() {
   return (
     <Card>
       <CardContent>
-        <p className='font-semibold'>🎟️ All Submitted Tickets</p>
+        <h1 className='mb-2 flex items-center gap-2 text-xl font-semibold'>
+          <Ticket className='h-6 w-6 text-green-500' />
+          All Tickets
+        </h1>
+        
         <Table>
           <TableHeader>
             <TableRow>
@@ -91,14 +96,18 @@ export default function AllTickets() {
                     <DialogTrigger asChild>
                       <Button
                         variant='outline'
+                        size='sm'
                         onClick={() => setSelectedTicketId(ticket.id)}
                       >
-                        📔 View Logs
+                        <BookCheck className='text-yellow-500' />
+                        View Logs
                       </Button>
                     </DialogTrigger>
 
                     <DialogContent>
-                      <DialogTitle>📔 Audit Logs</DialogTitle>
+                      <DialogTitle className='flex flex-row items-center'>
+                        <BookCheck className='text-yellow-500' /> Audit Logs
+                      </DialogTitle>
                       {selectedTicketId && (
                         <AuditLogsContent ticketId={selectedTicketId} />
                       )}

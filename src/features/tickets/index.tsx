@@ -9,7 +9,7 @@ export default function Tickets() {
       <div className='mb-4 flex flex-row items-center justify-between'>
         <div>
           <h1 className='mb-2 flex items-center gap-2 text-3xl font-semibold'>
-            <Ticket className='text-green-500 h-7 w-7' />
+            <Ticket className='h-10 w-10 text-green-500' />
             Tickets
           </h1>
           <p className='text-muted-foreground text-sm'>

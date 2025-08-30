@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Mutation } from '@/graphql/codegen/graphql'
 import { DELETE_DEPARTMENT } from '@/graphql/operation/mutation/department'
 import { useMutation } from '@apollo/client'
+import { Trash2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import {
@@ -45,7 +46,9 @@ export default function DeleteDepartment({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant={'outline'}>🗑️</Button>
+        <Button variant={'outline'} size='sm'>
+          <Trash2 className='text-red-500' />
+        </Button>
       </DialogTrigger>
 
       <DialogContent className='max-w-sm'>

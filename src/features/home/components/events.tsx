@@ -1,6 +1,7 @@
 import { Query } from '@/graphql/codegen/graphql'
 import { GET_ALL_EVENT } from '@/graphql/operation/query/event'
 import { useQuery } from '@apollo/client'
+import { Calendar } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import Spinner from '@/components/spinner'
@@ -39,8 +40,9 @@ export default function Events() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className='text-lg font-semibold'>
-          📅 Events
+        <CardTitle className='flex flex-row items-center gap-2 text-lg font-semibold'>
+          <Calendar className='text-red-500' />
+          Events
         </CardTitle>
       </CardHeader>
       <CardContent className='flex flex-row gap-3 overflow-x-auto lg:flex-col lg:overflow-visible'>

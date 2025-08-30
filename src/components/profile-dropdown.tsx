@@ -1,13 +1,9 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from 'react'
 import { Link } from '@tanstack/react-router'
 import { Query, Role } from '@/graphql/codegen/graphql'
 import { ME_QUERY } from '@/graphql/operation/query/user'
 import { useQuery } from '@apollo/client'
 import { useLogout } from '@/hooks/useLogout'
-import { useUpload } from '@/hooks/useUpload'
 import useCurrentUser from '@/hooks/useUser'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -18,48 +14,21 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import Avatar from '@/features/home/components/avatar'
 
 export function ProfileDropdown() {
   const { user } = useCurrentUser()
   const { logout } = useLogout()
   const { data } = useQuery<Query>(ME_QUERY)
-  const { getFile } = useUpload()
 
   const roles = data?.meQuery?.user?.role || []
-
   const profile = user?.profile
-  const [preview, setPreview] = useState<string | null>(null)
-
-  // ✅ Preload avatar image (no flicker)
-  useEffect(() => {
-    if (profile?.avatar) {
-      const fetchAvatar = async () => {
-        const filename = profile.avatar.split('/').pop()!
-        const bucket = import.meta.env.VITE_MINIO_BUCKET
-        const url = await getFile('avatar', filename, bucket)
-        if (url) {
-          const img = new Image()
-          img.src = url
-          img.onload = () => setPreview(url) // ✅ only set after loaded
-        }
-      }
-      fetchAvatar()
-    }
-  }, [profile?.avatar])
 
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
-        <Button variant='ghost' className='relative h-8 w-8 rounded-full'>
-          <Avatar className='h-8 w-8'>
-            <AvatarImage
-              src={preview || '/avatars/01.png'} // 👈 fallback to default
-              alt={profile?.firstName || 'User'}
-            />
-            <AvatarFallback>
-              <img src='/images/ace.png' alt='ACE Logo' />
-            </AvatarFallback>
-          </Avatar>
+        <Button variant='ghost' className='relative h-8 w-8 rounded-full p-0'>
+          <Avatar avatarUrl={profile?.avatar ?? undefined} size={32} />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className='w-56' align='end' forceMount>

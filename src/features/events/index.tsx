@@ -9,10 +9,10 @@ export default function Events() {
       <div className='mb-4 flex flex-row items-center justify-between'>
         <div>
           <h1 className='mb-2 flex items-center gap-2 text-3xl font-semibold'>
-            <CalendarDays className='text-primary h-7 w-7' />
+            <CalendarDays className='text-primary h-10 w-10' />
             Events
           </h1>
-          <p className='text-sm text-muted-foreground'>
+          <p className='text-muted-foreground text-sm'>
             Add, Update and Delete Events
           </p>
         </div>

@@ -15,6 +15,7 @@ import Pagination from '@/components/pagination'
 import DeleteDepartment from './delete-department'
 import EditDepartment from './edit-department'
 import Spinner from '@/components/spinner'
+import { Hotel } from 'lucide-react'
 
 export default function ViewDepartments() {
   const [page, setPage] = useState(1)
@@ -42,7 +43,11 @@ export default function ViewDepartments() {
   return (
     <Card>
       <CardContent>
-        <p className='text-lg font-semibold'>🏢 All Departments</p>
+        <h1 className='mb-2 flex items-center gap-2 text-xl font-semibold'>
+          <Hotel className='h-6 w-6 text-purple-500' />
+          All Departments
+        </h1>
+
 
         <Table>
           <TableHeader>

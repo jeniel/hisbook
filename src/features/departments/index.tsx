@@ -1,3 +1,4 @@
+import { Hotel } from 'lucide-react'
 import CreateDepartment from './components/create-department'
 import SummaryDepartments from './components/summary-departments'
 import ViewDepartments from './components/view-deparments'
@@ -7,7 +8,10 @@ export default function Departments() {
     <>
       <div className='mb-4 flex flex-row items-center justify-between'>
         <div>
-          <h1 className='mb-2 text-3xl font-semibold'>🏢 Departments</h1>
+          <h1 className='mb-2 flex items-center gap-2 text-3xl font-semibold'>
+            <Hotel className='h-10 w-10 text-purple-500' />
+            Departments
+          </h1>
           <p className='text-md text-muted-foreground'>
             Add, Update and Delete Departments
           </p>

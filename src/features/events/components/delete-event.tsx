@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Mutation } from '@/graphql/codegen/graphql'
 import { DELETE_EVENT } from '@/graphql/operation/mutation/event'
 import { useMutation } from '@apollo/client'
+import { Trash2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import {
@@ -40,7 +41,9 @@ export default function DeleteEvent({ event, onDelete }: DeleteEventProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant='outline' size='sm'>🗑️</Button>
+        <Button variant={'outline'} size='sm'>
+          <Trash2 className='text-red-500' />
+        </Button>
       </DialogTrigger>
 
       <DialogContent className='max-w-sm'>

@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { PencilLine } from 'lucide-react'
 
 // Props
 type EditEventProps = {
@@ -70,7 +71,9 @@ export default function EditEvent({ event, onUpdated }: EditEventProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant='outline' size='sm'>Edit</Button>
+        <Button variant={'outline'} size='sm'>
+          <PencilLine className='text-blue-500' /> Edit
+        </Button>
       </DialogTrigger>
 
       <DialogContent className='max-w-md'>

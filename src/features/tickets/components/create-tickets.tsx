@@ -7,7 +7,7 @@ import { CREATE_TICKET } from '@/graphql/operation/mutation/ticket'
 import { FIND_ALL_TICKETS_BY_USER } from '@/graphql/operation/query/ticket'
 import { ME_QUERY } from '@/graphql/operation/query/user'
 import { useMutation, useQuery } from '@apollo/client'
-import { ChevronDown, ChevronRight, TicketPlus } from 'lucide-react'
+import { ChevronDown, ChevronRight, SquareCheckBig } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -38,7 +38,7 @@ const TicketSchema = z.object({
 
 export default function CreateTickets() {
   const [open, setOpen] = useState(false)
-  const [createTicket, { loading }] = useMutation<Mutation>(CREATE_TICKET, {
+  const [createTicket] = useMutation<Mutation>(CREATE_TICKET, {
     refetchQueries: [FIND_ALL_TICKETS_BY_USER], // After Submiting Refetch
     awaitRefetchQueries: true,
   })
@@ -198,13 +198,8 @@ export default function CreateTickets() {
                   )}
                 />
 
-                <Button
-                  type='submit'
-                  variant='outline'
-                  className='mb-2 w-40'
-                  disabled={loading}
-                >
-                  {loading ? 'Submitting...' : '🖊️ Submit'}
+                <Button variant='outline' type='submit' className='shadow-md'>
+                  <SquareCheckBig className='text-green-500' /> Submit
                 </Button>
                 <p className='mb-4 text-sm italic'>
                   Note: Once Ticket is Submitted You Cannot Edit It. Please

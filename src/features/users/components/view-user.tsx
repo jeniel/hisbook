@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Query } from '@/graphql/codegen/graphql'
 import { FIND_ALL_USER } from '@/graphql/operation/query/user'
 import { useQuery } from '@apollo/client'
+import { UserPen } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import {
   Table,
@@ -38,7 +39,10 @@ export default function ViewUsers() {
   return (
     <Card>
       <CardContent>
-        <p className='text-lg font-semibold'>🧑🏽 All Users</p>
+        <h1 className='mb-2 flex items-center gap-2 text-xl font-semibold'>
+          <UserPen className='h-6 w-6 text-blue-500' />
+          All Users
+        </h1>
 
         <Table>
           <TableHeader>

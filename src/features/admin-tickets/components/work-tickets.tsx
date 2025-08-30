@@ -5,6 +5,7 @@ import { Mutation } from '@/graphql/codegen/graphql'
 import { EDIT_TICKET } from '@/graphql/operation/mutation/ticket'
 import { ME_QUERY } from '@/graphql/operation/query/user'
 import { useMutation, useQuery } from '@apollo/client'
+import { PencilLine } from 'lucide-react'
 import { toast } from 'sonner'
 import { useUpload } from '@/hooks/useUpload'
 import { Button } from '@/components/ui/button'
@@ -110,7 +111,9 @@ export default function WorkTicket({ ticket, onUpdated }: WorkTicketProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>📝 Work on Ticket</Button>
+        <Button variant={'outline'} size='sm'>
+          <PencilLine className='text-blue-500' /> Update Ticket
+        </Button>
       </DialogTrigger>
 
       <DialogContent className='max-w-5xl'>

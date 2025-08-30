@@ -22,7 +22,7 @@ import {
   CollapsibleTrigger,
 } from '@/components/ui/collapsible'
 import { useState } from 'react'
-import { ChevronDown, ChevronRight } from 'lucide-react'
+import { ChevronDown, ChevronRight, SquareCheckBig } from 'lucide-react'
 
 // Input Validation
 const FormSchema = z.object({
@@ -75,7 +75,7 @@ export default function CreateDepartment() {
               variant="ghost"
               className="flex w-full items-center justify-between text-lg font-semibold"
             >
-              <span>➕ Create A New Department</span>
+              <span>Create A New Department</span>
               {open ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
             </Button>
           </CollapsibleTrigger>
@@ -117,8 +117,8 @@ export default function CreateDepartment() {
 
                 {/* Submit button spans full width */}
                 <div className="md:col-span-2">
-                  <Button variant="outline" type="submit">
-                    ✅ Submit
+                  <Button variant='outline' type='submit' className="shadow-md">
+                    <SquareCheckBig className='text-green-500' /> Submit
                   </Button>
                 </div>
               </form>

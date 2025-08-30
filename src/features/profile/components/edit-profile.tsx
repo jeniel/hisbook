@@ -6,6 +6,7 @@ import { Mutation, Query } from '@/graphql/codegen/graphql'
 import { UPDATE_PROFILE } from '@/graphql/operation/mutation/profile'
 import { ME_QUERY } from '@/graphql/operation/query/user'
 import { useQuery, useMutation } from '@apollo/client'
+import { SquareCheckBig, UserPen } from 'lucide-react'
 import { toast } from 'sonner'
 import { useUpload } from '@/hooks/useUpload'
 import { Button } from '@/components/ui/button'
@@ -23,8 +24,7 @@ import { ProfileFormData, ProfileSchema } from './types'
 
 export default function EditProfile() {
   const { loading, error, data } = useQuery<Query>(ME_QUERY)
-  const [updateProfile, { loading: updating }] =
-    useMutation<Mutation>(UPDATE_PROFILE)
+  const [updateProfile] = useMutation<Mutation>(UPDATE_PROFILE)
 
   const { uploadFile, getFile } = useUpload()
   const [file, setFile] = useState<File | null>(null)
@@ -61,7 +61,7 @@ export default function EditProfile() {
       const fetchAvatar = async () => {
         const filename = profile.avatar ? profile.avatar.split('/').pop()! : ''
         const bucket = import.meta.env.VITE_MINIO_BUCKET
-        const url = await getFile('avatar', filename, bucket )
+        const url = await getFile('avatar', filename, bucket)
         if (url && active) {
           setPreview((prev) => {
             if (prev) URL.revokeObjectURL(prev) // cleanup old blob URL
@@ -116,7 +116,10 @@ export default function EditProfile() {
     <>
       <Card>
         <CardContent>
-          <h1 className='mb-2 text-3xl font-semibold'>👤 Profile</h1>
+          <h1 className='mb-2 flex items-center gap-2 text-3xl font-semibold'>
+            <UserPen className='h-10 w-10 text-blue-500' />
+            Profile
+          </h1>
           <p className='text-md text-muted-foreground mb-4'>
             Update Your Profile
           </p>
@@ -225,8 +228,8 @@ export default function EditProfile() {
               </div>
             </div>
 
-            <Button type='submit' variant={'outline'} disabled={updating}>
-              {updating ? 'Updating...' : '✅ Update Profile'}
+            <Button variant='outline' type='submit' className='shadow-md'>
+              <SquareCheckBig className='text-green-500' /> Edit Profile
             </Button>
           </form>
         </CardContent>

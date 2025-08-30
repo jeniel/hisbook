@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { Query } from '@/graphql/codegen/graphql'
 import { CENSUS_DATA } from '@/graphql/operation/query/census'
 import { useQuery } from '@apollo/client'
+import { Ticket } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import Spinner from '@/components/spinner'
@@ -30,9 +31,12 @@ export default function TicketsOverview() {
   return (
     <Card>
       <CardHeader className='flex flex-row items-center justify-between'>
-        <CardTitle>🎟️ Tickets Overview by Status</CardTitle>
+        <CardTitle className='flex flex-row items-center'>
+          <Ticket className='h-6 w-6 text-green-500 mr-2' /> Tickets Overview by
+          Status
+        </CardTitle>
         <Link to='/admin-tickets'>
-          <Button variant={'outline'}>🎫 Go To Tickets</Button>
+          <Button variant={'outline'}><Ticket className='h-6 w-6 text-green-500' />  Go To Tickets</Button>
         </Link>
       </CardHeader>
       <CardContent>

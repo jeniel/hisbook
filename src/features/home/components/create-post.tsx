@@ -13,6 +13,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
+import { PencilLine } from 'lucide-react'
 
 // ✅ Validation schema
 const FormSchema = z.object({
@@ -78,7 +79,6 @@ export default function CreatePost() {
               )}
             />
             <div className='flex items-center justify-between'>
-              
               {/* File input */}
               <div>
                 <div className='mb-2'>
@@ -107,8 +107,8 @@ export default function CreatePost() {
                 )}
               </div>
 
-              <Button type='submit' variant={'outline'}>
-                🖊️ Post
+              <Button variant={'outline'}>
+                <PencilLine className='text-blue-500' /> Post
               </Button>
             </div>
           </form>

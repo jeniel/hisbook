@@ -6,7 +6,7 @@ import { Mutation } from '@/graphql/codegen/graphql'
 import { CREATE_EVENT } from '@/graphql/operation/mutation/event'
 import { GET_ALL_EVENT } from '@/graphql/operation/query/event'
 import { useMutation } from '@apollo/client'
-import { ChevronDown, ChevronRight } from 'lucide-react'
+import { ChevronDown, ChevronRight, SquareCheckBig } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -171,8 +171,8 @@ export default function CreateEvent() {
 
                 {/* Submit button spans full width */}
                 <div className='md:col-span-2'>
-                  <Button variant='outline' type='submit'>
-                    ✅ Submit
+                  <Button variant='outline' type='submit' className="shadow-md">
+                    <SquareCheckBig className='text-green-500' /> Submit
                   </Button>
                 </div>
               </form>

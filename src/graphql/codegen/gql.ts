@@ -1,9 +1,11 @@
+/* eslint-disable */
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 
-const documents = [];
+// Map of GraphQL strings to their corresponding typed documents
+const documents: Record<string, DocumentNode<any, any>> = {};
+
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- *
  *
  * @example
  * ```ts
@@ -16,7 +18,8 @@ const documents = [];
 export function graphql(source: string): unknown;
 
 export function graphql(source: string) {
-  return (documents as any)[source] ?? {};
+  return documents[source] ?? {};
 }
 
-export type DocumentType<TDocumentNode extends DocumentNode<any, any>> = TDocumentNode extends DocumentNode<  infer TType,  any>  ? TType  : never;
+export type DocumentType<TDocumentNode extends DocumentNode<any, any>> =
+  TDocumentNode extends DocumentNode<infer TType, any> ? TType : never;
