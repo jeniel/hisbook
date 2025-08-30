@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from 'react'
 import { Mutation } from '@/graphql/codegen/graphql'
@@ -48,17 +49,24 @@ export default function WorkTicket({ ticket, onUpdated }: WorkTicketProps) {
   // Fetch existing screenshot when modal opens
   useEffect(() => {
     if (open && ticket.screenshot) {
+      let active = true
       const fetchScreenshot = async () => {
-        const url = await getFile(
-          'acebook',
-          'tickets',
-          ticket.screenshot.split('/').pop()!
-        )
-        if (url) setPreview(url)
+        const filename = ticket.screenshot.split('/').pop()!
+        const bucket = import.meta.env.VITE_MINIO_BUCKET
+        const url = await getFile('tickets', filename, bucket)
+        if (url && active) {
+          setPreview((prev) => {
+            if (prev) URL.revokeObjectURL(prev) // cleanup old blob URL
+            return url
+          })
+        }
       }
       fetchScreenshot()
+      return () => {
+        active = false
+      }
     }
-  }, [open, ticket.screenshot, getFile])
+  }, [open, ticket.screenshot])
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {

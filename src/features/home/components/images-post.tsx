@@ -20,10 +20,11 @@ export default function PostImages({
     if (images.length === 0) return
 
     const loadImages = async () => {
+      const bucket = import.meta.env.VITE_MINIO_BUCKET
       const urls = await getFiles(
-        'acebook',
-        'posts',
-        images.map((img) => img.split('/').pop()!)
+        'posts', // folder
+        images.map((img) => img.split('/').pop()!), // filenames
+        bucket
       )
       setPreviews(urls)
     }

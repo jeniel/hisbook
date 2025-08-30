@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-console */
 import { useEffect, useState } from 'react'
 import { useUpload } from '@/hooks/useUpload'
@@ -9,10 +10,7 @@ interface AvatarProps {
   className?: string
 }
 
-export default function Avatar({
-  avatarUrl,
-  size = 80,
-}: AvatarProps) {
+export default function Avatar({ avatarUrl, size = 80 }: AvatarProps) {
   const [preview, setPreview] = useState<string>('')
   const { getFile } = useUpload()
 
@@ -22,7 +20,8 @@ export default function Avatar({
       if (!avatarUrl) return
       try {
         const filename = avatarUrl.split('/').pop()!
-        const url = await getFile('acebook', 'avatar', filename)
+        const bucket = import.meta.env.VITE_MINIO_BUCKET
+        const url = await getFile('avatar', filename, bucket)
         if (url && active) {
           setPreview(url)
         }

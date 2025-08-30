@@ -12,11 +12,13 @@ export const useUpload = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const API_URL = import.meta.env.VITE_API_EXPRESS
+  const DEFAULT_BUCKET = import.meta.env.VITE_MINIO_BUCKET
 
   // Upload a single file
   const uploadFile = async (
     file: File,
-    folder: string
+    type: string,
+    bucket: string = DEFAULT_BUCKET // use env fallback
   ): Promise<UploadResult> => {
     setLoading(true)
     setError(null)
@@ -25,7 +27,7 @@ export const useUpload = () => {
       const formData = new FormData()
       formData.append('file', file)
 
-      const res = await fetch(`${API_URL}/upload/${folder}`, {
+      const res = await fetch(`${API_URL}/upload/${bucket}/${type}`, {
         method: 'POST',
         body: formData,
       })
@@ -43,19 +45,17 @@ export const useUpload = () => {
       }
     } catch (err: any) {
       setError(err.message || 'Unknown error')
-      return {
-        success: false,
-        message: err.message || 'Unknown error',
-      }
+      return { success: false, message: err.message || 'Unknown error' }
     } finally {
       setLoading(false)
     }
   }
 
-  // Upload multiple files at once
+  // Upload multiple files
   const uploadFiles = async (
     files: File[],
-    folder: string
+    type: string,
+    bucket: string = DEFAULT_BUCKET
   ): Promise<string[]> => {
     if (!files.length) return []
 
@@ -64,9 +64,9 @@ export const useUpload = () => {
 
     try {
       const formData = new FormData()
-      files.forEach((file) => formData.append('files', file)) // must match backend upload.array("files")
+      files.forEach((file) => formData.append('files', file))
 
-      const res = await fetch(`${API_URL}/upload-multiple/${folder}`, {
+      const res = await fetch(`${API_URL}/upload-multiple/${bucket}/${type}`, {
         method: 'POST',
         body: formData,
       })
@@ -87,42 +87,45 @@ export const useUpload = () => {
     }
   }
 
-  // Get a singe file by its filename avatar and ticket screenshot
+  // Get a single file
   const getFile = async (
-    bucket: string,
-    object: string,
-    filename: string
+    folder: string,
+    filename: string,
+    bucket: string = DEFAULT_BUCKET
   ): Promise<string | null> => {
     try {
-      const url = `${API_URL}/files/${bucket}/${object}/${encodeURIComponent(
-        filename
-      )}`
+      const url = `${API_URL}/files/${bucket}/${folder}/${encodeURIComponent(filename)}`
       const res = await fetch(url)
-      if (!res.ok) throw new Error(`Failed to fetch file: ${res.statusText}`)
+
+      if (!res.ok) {
+        throw new Error(`Failed to fetch file: ${res.statusText}`)
+      }
+
       const blob = await res.blob()
       return URL.createObjectURL(blob)
-    } catch {
+    } catch (err: any) {
+      console.error('getFile error:', err.message)
       return null
     }
   }
 
-  // Get multiple files by their filenames for home posts
+  // Get multiple files
   const getFiles = async (
-    bucket: string,
     folder: string,
-    filenames: string[]
+    filenames: string[],
+    bucket: string = DEFAULT_BUCKET
   ): Promise<string[]> => {
     setLoading(true)
     setError(null)
+
     try {
       const urls = await Promise.all(
         filenames.map(async (filename) => {
-          const blobUrl = await getFile(bucket, folder, filename)
+          const blobUrl = await getFile(folder, filename, bucket)
           return blobUrl || ''
         })
       )
-      // console.log('All fetched URLs:', urls)
-      return urls.filter((u) => u) 
+      return urls.filter(Boolean)
     } catch (err: any) {
       console.error('getFiles error:', err)
       setError(err.message)

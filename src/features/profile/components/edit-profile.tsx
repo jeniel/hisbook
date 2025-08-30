@@ -60,7 +60,8 @@ export default function EditProfile() {
       let active = true
       const fetchAvatar = async () => {
         const filename = profile.avatar ? profile.avatar.split('/').pop()! : ''
-        const url = await getFile('acebook', 'avatar', filename)
+        const bucket = import.meta.env.VITE_MINIO_BUCKET
+        const url = await getFile('avatar', filename, bucket )
         if (url && active) {
           setPreview((prev) => {
             if (prev) URL.revokeObjectURL(prev) // cleanup old blob URL
@@ -116,7 +117,9 @@ export default function EditProfile() {
       <Card>
         <CardContent>
           <h1 className='mb-2 text-3xl font-semibold'>👤 Profile</h1>
-          <p className='text-md text-muted-foreground mb-4'>Update Your Profile</p>
+          <p className='text-md text-muted-foreground mb-4'>
+            Update Your Profile
+          </p>
           <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
             {/* Profile Picture */}
             <div className='space-y-2'>
