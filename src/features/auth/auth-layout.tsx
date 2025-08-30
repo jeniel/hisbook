@@ -4,33 +4,31 @@ interface Props {
 
 export default function AuthLayout({ children }: Props) {
   return (
-    <div className="h-screen w-screen flex items-center justify-center">
-      <div className="flex w-full max-w-7xl h-[80vh] rounded-lg overflow-hidden border ">
-
+    <div className='flex h-screen w-screen items-center justify-center'>
+      <div className='flex h-[80vh] w-full max-w-7xl overflow-hidden rounded-lg border'>
         {/* Login */}
-        <div className="flex-1 flex flex-col justify-center items-center p-8">
-          <div className="mb-4 text-center">
+        <div className='flex flex-1 flex-col items-center justify-center p-8'>
+          <div className='mb-4 text-center'>
             <img
-              src="/images/acebook-logo.png"
-              alt="Acebook Logo"
-              className="mx-auto"
+              src='/images/acebook-logo.webp'
+              alt='Acebook Logo'
+              className='mx-auto'
+              loading="lazy"
             />
           </div>
-          <div className="w-full max-w-md space-y-4">
-            {children}
-          </div>
+          <div className='w-full max-w-md space-y-4'>{children}</div>
         </div>
 
         {/* Image */}
-        <div className="flex-1 hidden md:block">
+        <div className='hidden flex-1 md:block'>
           <img
-            src="/images/acebuilding.png"
-            alt="Building Image"
-            className="w-full h-full object-cover"
+            src='/images/acebuilding.webp'
+            alt='Building Image'
+            className='h-full w-full object-cover'
+            loading="lazy"
           />
         </div>
-
       </div>
     </div>
-  );
+  )
 }

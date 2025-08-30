@@ -1,15 +1,25 @@
 {
-    "short_name": "ACE-Book App",
-    "name": "ACE-Book App PWA",
-    "icons": [
-        {
-            "src": "/images/ace.png",
-            "type": "image/png",
-            "sizes": "1024x1024"
-        }
-    ],
-    "start_url": ".",
-    "display": "standalone",
-    "theme_color": "#000000",
-    "background_color": "#ffffff"
+  "short_name": "ACE-Book App",
+  "name": "ACE-Book App PWA",
+  "icons": [
+    {
+      "src": "/images/ace-logo-192px.webp",
+      "type": "image/webp",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/images/ace-logo-512px.webp",
+      "type": "image/webp",
+      "sizes": "512x512"
+    },
+    {
+      "src": "/images/ace-logo.webp",
+      "type": "image/webp",
+      "sizes": "1024x1024"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
 }

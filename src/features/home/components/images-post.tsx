@@ -61,6 +61,7 @@ export default function PostImages({
                 alt={`Post image ${idx + 1}`}
                 className='h-48 w-full cursor-pointer rounded-lg object-cover'
                 onClick={() => setModalOpen(true)}
+                loading='lazy'
               />
               {isLastVisible && (
                 <div

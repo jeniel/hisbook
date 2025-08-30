@@ -39,9 +39,9 @@ export default function Avatar({ avatarUrl, size = 80 }: AvatarProps) {
 
   return (
     <img
-      src={preview || './images/ace.png'}
+      src={preview || './images/ace-logo-512px.webp'}
       alt='User Avatar'
-      loading='lazy' // <-- native lazy-loading
+      loading='lazy'
       className='rounded-full object-cover'
       style={{ width: size, height: size }}
     />

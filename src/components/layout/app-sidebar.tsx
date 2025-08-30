@@ -24,9 +24,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     <Sidebar collapsible='icon' variant='floating' {...props}>
       <div>
         <img
-          src='/images/acebook-logo.png'
+          src='/images/acebook-logo.webp'
           alt='Acebook Logo'
           className='h-16 w-auto object-contain'
+          loading='lazy'
         />
       </div>
       <SidebarContent>

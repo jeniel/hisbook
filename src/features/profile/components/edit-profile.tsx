@@ -140,12 +140,14 @@ export default function EditProfile() {
                   src={URL.createObjectURL(file)}
                   alt='Preview'
                   className='mb-2 h-32 w-32 border object-cover'
+                  loading='lazy'
                 />
               ) : preview ? (
                 <img
                   src={preview}
                   alt='Profile'
                   className='mb-2 h-32 w-32 border object-cover'
+                  loading='lazy'
                 />
               ) : (
                 <div className='mb-2 flex h-32 w-32 items-center justify-center border text-gray-400'>
