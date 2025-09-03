@@ -3,7 +3,7 @@ import { setContext } from '@apollo/client/link/context'
 import { onError } from '@apollo/client/link/error'
 
 const httpLink = createHttpLink({
-  uri: import.meta.env.VITE_API_URL as string,
+  uri: 'http://acebook-backend.172.16.10.70.nip.io/graphql', // hardcoded
   credentials: 'include', // Include cookies in requests
   headers: {
     'Content-Type': 'application/json',
