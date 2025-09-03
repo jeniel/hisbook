@@ -41,13 +41,13 @@ export default defineConfig({
   },
   server: {
     host: true,
-    allowedHosts: ['https://acebookv2.172.16.10.70.nip.io'],
+    allowedHosts: ['http://acebookv2.172.16.10.70.nip.io'],
     port: 4173,
     watch: {
       usePolling: true,
     },
   },
   preview: {
-    allowedHosts: ['https://acebookv2.172.16.10.70.nip.io'],
+    allowedHosts: ['http://acebookv2.172.16.10.70.nip.io'],
   },
 })
