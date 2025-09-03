@@ -2,12 +2,13 @@ import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
 import { onError } from '@apollo/client/link/error'
 
+const uri = import.meta.env.VITE_API_URL as string
+const normalizedUri = uri.startsWith('http') ? uri : `http://${uri}`
+
 const httpLink = createHttpLink({
-  uri: import.meta.env.VITE_API_URL as string,
-  credentials: 'include', // Include cookies in requests
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  uri: normalizedUri,
+  credentials: 'include',
+  headers: { 'Content-Type': 'application/json' },
 })
 
 const authLink = setContext((_, { headers }) => {
