@@ -18,7 +18,7 @@ export const useUpload = () => {
   const uploadFile = async (
     file: File,
     type: string,
-    bucket: string = DEFAULT_BUCKET // use env fallback
+    bucket: string = DEFAULT_BUCKET
   ): Promise<UploadResult> => {
     setLoading(true)
     setError(null)
@@ -27,7 +27,7 @@ export const useUpload = () => {
       const formData = new FormData()
       formData.append('file', file)
 
-      const res = await fetch(`${API_URL}/upload/${bucket}/${type}`, {
+      const res = await fetch(`${API_URL}/files/upload/${bucket}/${type}`, {
         method: 'POST',
         body: formData,
       })
@@ -66,10 +66,13 @@ export const useUpload = () => {
       const formData = new FormData()
       files.forEach((file) => formData.append('files', file))
 
-      const res = await fetch(`${API_URL}/upload-multiple/${bucket}/${type}`, {
-        method: 'POST',
-        body: formData,
-      })
+      const res = await fetch(
+        `${API_URL}/files/upload-multiple/${bucket}/${type}`,
+        {
+          method: 'POST',
+          body: formData,
+        }
+      )
 
       if (!res.ok) {
         const errData = await res.json().catch(() => null)

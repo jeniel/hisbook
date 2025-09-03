@@ -1,12 +1,20 @@
-FROM node:22-alpine
+FROM node:20-alpine
+
+# Set working directory
 WORKDIR /app
-COPY package*.json ./
+
+# Install dependencies
+COPY package*.json yarn.lock ./
+RUN yarn
+
+# Copy all source
 COPY . .
 
-RUN yarn 
-
+# Build the project
 RUN yarn build
 
+# Expose port
 EXPOSE 4173
 
-CMD ["yarn","start"]
+# Start the app
+CMD ["yarn", "preview"]
