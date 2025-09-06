@@ -11,13 +11,12 @@ interface MyRouterContext {
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   component: () => {
-    // console.log(import.meta.env.VITE_NODE_ENV)
     return (
       <>
         <NavigationProgress />
         <Outlet />
         {/* Edit the Toaster duration here */}
-        <Toaster duration={3000} /> 
+        <Toaster duration={3000} />
         {/* {import.meta.env.NODE_ENV === 'dev' && (
           <>
             <ReactQueryDevtools buttonPosition='bottom-left' />
