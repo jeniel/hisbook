@@ -2,7 +2,7 @@ import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
 import { onError } from '@apollo/client/link/error'
 
-const VITE_API_URL = import.meta.env.VITE_API_URL
+// const VITE_API_URL = import.meta.env.VITE_API_URL
 
 const httpLink = createHttpLink({
   uri: 'https://acebook-backend.172.16.10.70.nip.io/graphql',
