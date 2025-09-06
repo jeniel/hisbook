@@ -3,7 +3,6 @@ import { setContext } from '@apollo/client/link/context'
 import { onError } from '@apollo/client/link/error'
 
 const VITE_API_URL = import.meta.env.VITE_API_URL
-console.warn(import.meta.env.VITE_API_URL, '====> VITE API URL GQL CLIENT')
 
 const httpLink = createHttpLink({
   uri: VITE_API_URL,

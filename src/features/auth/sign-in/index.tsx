@@ -10,7 +10,8 @@ import AuthLayout from '../auth-layout'
 import { UserAuthForm } from './components/user-auth-form'
 
 export default function SignIn() {
-  console.warn(import.meta.env.VITE_API_URL, '====> VITE API URL')
+  console.log(import.meta.env.VITE_API_URL)
+  console.log(import.meta.env.VITE_API_EXPRESS)
   return (
     <AuthLayout>
       <section className='gap-4 space-y-4 p-6'>
