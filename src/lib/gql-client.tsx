@@ -37,7 +37,7 @@ const defaultOptions: any = {
 
 const errorControl = onError(({ graphQLErrors, networkError }) => {
   if (networkError) {
-    console.log(`[Network error]: ${networkError}`)
+    // console.log(`[Network error]: ${networkError}`)
   }
   if (graphQLErrors) {
     graphQLErrors.forEach(({ message }) => {

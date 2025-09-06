@@ -27,7 +27,7 @@ export const useUpload = () => {
       const formData = new FormData()
       formData.append('file', file)
 
-      const res = await fetch(`${API_URL}/files/upload/${bucket}/${type}`, {
+      const res = await fetch(`${API_URL}/files/upload${bucket}/${type}`, {
         method: 'POST',
         body: formData,
       })
@@ -67,7 +67,7 @@ export const useUpload = () => {
       files.forEach((file) => formData.append('files', file))
 
       const res = await fetch(
-        `${API_URL}/files/upload-multiple/${bucket}/${type}`,
+        `${API_URL}/files/upload-multiple${bucket}/${type}`,
         {
           method: 'POST',
           body: formData,
@@ -97,7 +97,7 @@ export const useUpload = () => {
     bucket: string = DEFAULT_BUCKET
   ): Promise<string | null> => {
     try {
-      const url = `${API_URL}/files/${bucket}/${folder}/${encodeURIComponent(filename)}`
+      const url = `${API_URL}/files${bucket}/${folder}/${filename}`
       const res = await fetch(url)
 
       if (!res.ok) {
