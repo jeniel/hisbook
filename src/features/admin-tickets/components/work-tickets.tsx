@@ -12,7 +12,6 @@ import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -122,15 +121,14 @@ export default function WorkTicket({ ticket, onUpdated }: WorkTicketProps) {
             <PencilLine className='text-blue-500' />
             Update Ticket
           </DialogTitle>
-          <DialogDescription>Review and update this ticket.</DialogDescription>
         </DialogHeader>
 
         {/* Two-column grid */}
-        <div className='grid grid-cols-1 gap-6 md:grid-cols-2'>
+        <div className='grid grid-cols-1 gap-2 md:grid-cols-2'>
           {/* Left Column */}
           <div className='space-y-4'>
             {/* Ticket Info */}
-            <div className='space-y-2 text-sm'>
+            <div className='text-md space-y-2'>
               <p>
                 <span className='mr-2 font-semibold'>Name:</span>{' '}
                 {ticket.createdBy?.profile
@@ -142,14 +140,23 @@ export default function WorkTicket({ ticket, onUpdated }: WorkTicketProps) {
                 {ticket.subject || '-'}
               </p>
               <p>
-                <span className='mr-2 font-semibold'>Remarks:</span>{' '}
+                <span className='mr-2 font-semibold'>Message:</span>{' '}
                 {ticket.remarks || '-'}
               </p>
+            </div>
+          </div>
+
+          {/* Right Column */}
+          <div className='text-md space-y-4'>
+            {/* Reviewed By */}
+            <div className='space-y-2'>
+              <p>Reviewed By</p>
+              <Input value={updatedBy} readOnly placeholder='Name' />
             </div>
 
             {/* Status Dropdown */}
             <div className='space-y-2'>
-              <Label>Status</Label>
+              <p>Status</p>
               <Select value={status} onValueChange={setStatus}>
                 <SelectTrigger className='w-full'>
                   <SelectValue placeholder='Select status' />
@@ -162,35 +169,26 @@ export default function WorkTicket({ ticket, onUpdated }: WorkTicketProps) {
               </Select>
             </div>
           </div>
+        </div>
 
-          {/* Right Column */}
-          <div className='space-y-4'>
-            {/* File Upload */}
-            <div className='space-y-2'>
-              <Label>Attach CCTV Screenshot</Label>
-              <Input type='file' accept='image/*' onChange={handleFileChange} />
-              {file && (
-                <p className='text-muted-foreground text-xs'>
-                  Selected: {file.name}
-                </p>
-              )}
-              {preview && (
-                <div className='mt-2'>
-                  <img
-                    src={preview}
-                    alt='CCTV Screenshot Preview'
-                    className='max-h-80 w-full rounded border object-cover'
-                  />
-                </div>
-              )}
+        {/* File Upload */}
+        <div className='space-y-2'>
+          <Label>Attach CCTV Screenshot</Label>
+          <Input type='file' accept='image/*' onChange={handleFileChange} />
+          {file && (
+            <p className='text-muted-foreground text-xs'>
+              Selected: {file.name}
+            </p>
+          )}
+          {preview && (
+            <div className='mt-2'>
+              <img
+                src={preview}
+                alt='CCTV Screenshot Preview'
+                className='max-h-80 w-full rounded border object-cover'
+              />
             </div>
-
-            {/* Reviewed By */}
-            <div className='space-y-2'>
-              <Label>Reviewed By</Label>
-              <Input value={updatedBy} readOnly placeholder='Name' />
-            </div>
-          </div>
+          )}
         </div>
 
         <DialogFooter>

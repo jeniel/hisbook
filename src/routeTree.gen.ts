@@ -19,6 +19,7 @@ import { Route as errors401RouteImport } from './routes/(errors)/401'
 import { Route as authSignInRouteImport } from './routes/(auth)/sign-in'
 import { Route as AuthenticatedUsersIndexRouteImport } from './routes/_authenticated/users/index'
 import { Route as AuthenticatedTicketsIndexRouteImport } from './routes/_authenticated/tickets/index'
+import { Route as AuthenticatedReceivedTicketsIndexRouteImport } from './routes/_authenticated/received-tickets/index'
 import { Route as AuthenticatedProfileIndexRouteImport } from './routes/_authenticated/profile/index'
 import { Route as AuthenticatedEventsIndexRouteImport } from './routes/_authenticated/events/index'
 import { Route as AuthenticatedDepartmentsIndexRouteImport } from './routes/_authenticated/departments/index'
@@ -75,6 +76,12 @@ const AuthenticatedTicketsIndexRoute =
     path: '/tickets/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedReceivedTicketsIndexRoute =
+  AuthenticatedReceivedTicketsIndexRouteImport.update({
+    id: '/received-tickets/',
+    path: '/received-tickets/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedProfileIndexRoute =
   AuthenticatedProfileIndexRouteImport.update({
     id: '/profile/',
@@ -119,6 +126,7 @@ export interface FileRoutesByFullPath {
   '/departments': typeof AuthenticatedDepartmentsIndexRoute
   '/events': typeof AuthenticatedEventsIndexRoute
   '/profile': typeof AuthenticatedProfileIndexRoute
+  '/received-tickets': typeof AuthenticatedReceivedTicketsIndexRoute
   '/tickets': typeof AuthenticatedTicketsIndexRoute
   '/users': typeof AuthenticatedUsersIndexRoute
 }
@@ -135,6 +143,7 @@ export interface FileRoutesByTo {
   '/departments': typeof AuthenticatedDepartmentsIndexRoute
   '/events': typeof AuthenticatedEventsIndexRoute
   '/profile': typeof AuthenticatedProfileIndexRoute
+  '/received-tickets': typeof AuthenticatedReceivedTicketsIndexRoute
   '/tickets': typeof AuthenticatedTicketsIndexRoute
   '/users': typeof AuthenticatedUsersIndexRoute
 }
@@ -153,6 +162,7 @@ export interface FileRoutesById {
   '/_authenticated/departments/': typeof AuthenticatedDepartmentsIndexRoute
   '/_authenticated/events/': typeof AuthenticatedEventsIndexRoute
   '/_authenticated/profile/': typeof AuthenticatedProfileIndexRoute
+  '/_authenticated/received-tickets/': typeof AuthenticatedReceivedTicketsIndexRoute
   '/_authenticated/tickets/': typeof AuthenticatedTicketsIndexRoute
   '/_authenticated/users/': typeof AuthenticatedUsersIndexRoute
 }
@@ -171,6 +181,7 @@ export interface FileRouteTypes {
     | '/departments'
     | '/events'
     | '/profile'
+    | '/received-tickets'
     | '/tickets'
     | '/users'
   fileRoutesByTo: FileRoutesByTo
@@ -187,6 +198,7 @@ export interface FileRouteTypes {
     | '/departments'
     | '/events'
     | '/profile'
+    | '/received-tickets'
     | '/tickets'
     | '/users'
   id:
@@ -204,6 +216,7 @@ export interface FileRouteTypes {
     | '/_authenticated/departments/'
     | '/_authenticated/events/'
     | '/_authenticated/profile/'
+    | '/_authenticated/received-tickets/'
     | '/_authenticated/tickets/'
     | '/_authenticated/users/'
   fileRoutesById: FileRoutesById
@@ -290,6 +303,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTicketsIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/received-tickets/': {
+      id: '/_authenticated/received-tickets/'
+      path: '/received-tickets'
+      fullPath: '/received-tickets'
+      preLoaderRoute: typeof AuthenticatedReceivedTicketsIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/profile/': {
       id: '/_authenticated/profile/'
       path: '/profile'
@@ -335,6 +355,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDepartmentsIndexRoute: typeof AuthenticatedDepartmentsIndexRoute
   AuthenticatedEventsIndexRoute: typeof AuthenticatedEventsIndexRoute
   AuthenticatedProfileIndexRoute: typeof AuthenticatedProfileIndexRoute
+  AuthenticatedReceivedTicketsIndexRoute: typeof AuthenticatedReceivedTicketsIndexRoute
   AuthenticatedTicketsIndexRoute: typeof AuthenticatedTicketsIndexRoute
   AuthenticatedUsersIndexRoute: typeof AuthenticatedUsersIndexRoute
 }
@@ -346,6 +367,8 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDepartmentsIndexRoute: AuthenticatedDepartmentsIndexRoute,
   AuthenticatedEventsIndexRoute: AuthenticatedEventsIndexRoute,
   AuthenticatedProfileIndexRoute: AuthenticatedProfileIndexRoute,
+  AuthenticatedReceivedTicketsIndexRoute:
+    AuthenticatedReceivedTicketsIndexRoute,
   AuthenticatedTicketsIndexRoute: AuthenticatedTicketsIndexRoute,
   AuthenticatedUsersIndexRoute: AuthenticatedUsersIndexRoute,
 }

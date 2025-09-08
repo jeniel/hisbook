@@ -86,3 +86,28 @@ export const FIND_TICKET_AUDIT_LOGS = gql`
     }
   }
 `
+
+export const FIND_TICKETS_WORKED_BY_USER = gql`
+  query FindTicketsWorkedByUser($userId: String!) {
+    findTicketsWorkedByUser(userId: $userId) {
+      data {
+        subject
+        status
+        missedAt
+        remarks
+        screenshot
+        updatedBy
+        id
+        floor
+        createdById
+        createdBy {
+          username
+          profile {
+            firstName
+            lastName
+          }
+        }
+      }
+    }
+  }
+`

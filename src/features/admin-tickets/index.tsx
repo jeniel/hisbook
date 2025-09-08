@@ -14,6 +14,7 @@ export default function AdminTickets() {
           <p className='text-md text-muted-foreground'>
             Update Tickets of the Users
           </p>
+          
         </div>
         <AllTicketsOverview />
       </div>

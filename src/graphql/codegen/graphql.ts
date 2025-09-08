@@ -633,8 +633,8 @@ export type Query = {
   findProfile: Profile;
   findTicketbyID?: Maybe<MissedLogoutTicket>;
   findTicketsByUser: MissedLogoutTicketList;
+  findTicketsWorkedByUser: MissedLogoutTicketList;
   getCensusSummary: CensusSummary;
-  getMyWorkedTickets: MissedLogoutTicketList;
   meQuery: MeQuery;
 };
 
@@ -708,16 +708,16 @@ export type QueryFindTicketsByUserArgs = {
 };
 
 
-export type QueryGetCensusSummaryArgs = {
-  userId?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type QueryGetMyWorkedTicketsArgs = {
+export type QueryFindTicketsWorkedByUserArgs = {
   page?: InputMaybe<Scalars['Int']['input']>;
   perPage?: InputMaybe<Scalars['Int']['input']>;
   userId: Scalars['String']['input'];
   where?: InputMaybe<MissedLogoutTicketWhereInput>;
+};
+
+
+export type QueryGetCensusSummaryArgs = {
+  userId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export enum QueryMode {

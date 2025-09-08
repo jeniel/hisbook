@@ -27,8 +27,8 @@ export function ProfileDropdown() {
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
-        <Button variant='ghost' className='relative h-8 w-8 rounded-full p-0'>
-          <Avatar avatarUrl={profile?.avatar ?? undefined} size={32} />
+        <Button variant='ghost' className='relative h-`10` w-`10` rounded-full p-0'>
+          <Avatar avatarUrl={profile?.avatar ?? undefined} size={40} />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className='w-56' align='end' forceMount>
