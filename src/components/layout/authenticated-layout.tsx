@@ -3,7 +3,6 @@ import { Outlet } from '@tanstack/react-router'
 import { cn } from '@/lib/utils'
 import { SidebarProvider } from '@/components/ui/sidebar'
 import { AppSidebar } from '@/components/layout/app-sidebar'
-import SkipToMain from '@/components/skip-to-main'
 import { ProfileDropdown } from '../profile-dropdown'
 import { ThemeSwitch } from '../theme-switch'
 import { Header } from './header'
@@ -17,7 +16,6 @@ export function AuthenticatedLayout({ children }: Props) {
   return (
     <>
       <SidebarProvider defaultOpen={defaultOpen}>
-        <SkipToMain />
         <AppSidebar />
         <div
           id='content'

@@ -1,12 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
 import { onError } from '@apollo/client/link/error'
 
-const VITE_API_URL = import.meta.env.VITE_API_URL
+const VITE_API_URL = import.meta.env.VITE_API_BACKEND
 
 const httpLink = createHttpLink({
   uri: VITE_API_URL,
-  credentials: 'include', // Include cookies in requests
+  credentials: 'include',
   headers: {
     'Content-Type': 'application/json',
   },

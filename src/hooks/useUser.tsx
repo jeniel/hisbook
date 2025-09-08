@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable no-console */
 import { useContext, useEffect } from 'react'
 import { useRouter } from '@tanstack/react-router'
 import { MeQuery, Mutation, Query, User } from '@/graphql/codegen/graphql'

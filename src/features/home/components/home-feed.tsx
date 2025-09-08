@@ -6,6 +6,7 @@ import { GET_POSTS } from '@/graphql/operation/query/posts'
 import { ME_QUERY } from '@/graphql/operation/query/user'
 import { useQuery } from '@apollo/client'
 import { MoreHorizontal } from 'lucide-react'
+import { formatDate } from '@/utils/formatDate'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import {
@@ -17,7 +18,7 @@ import {
 import Spinner from '@/components/spinner'
 import Avatar from './avatar'
 import DeletePost from './delete-post'
-import EditPost from './edit-post'
+// import EditPost from './edit-post'
 import PostImages from './images-post'
 
 export default function HomeFeed() {
@@ -27,10 +28,11 @@ export default function HomeFeed() {
   const [expandedPosts, setExpandedPosts] = useState<Record<string, boolean>>(
     {}
   )
-  const [editPost, setEditPost] = useState<{
-    id: string
-    content: string
-  } | null>(null)
+  // const [editPost, setEditPost] = useState<{
+  //   id: string
+  //   content: string
+  // } | null>(null)
+
   const [deletePost, setDeletePost] = useState<string | null>(null)
 
   const { data, loading, error, fetchMore } = useQuery<Query>(GET_POSTS, {
@@ -40,6 +42,7 @@ export default function HomeFeed() {
 
   const { data: meData } = useQuery<Query>(ME_QUERY)
   const currentUserId = meData?.meQuery?.user?.id
+  const currentUserRole = meData?.meQuery?.user?.role
 
   // Append new posts when data changes
   useEffect(() => {
@@ -103,16 +106,12 @@ export default function HomeFeed() {
                     {profile?.lastName}, {profile?.firstName}
                   </p>
                   <p className='text-xs text-gray-400'>
-                    Posted on{' '}
-                    {new Date(post.datePosted).toLocaleDateString('en-US', {
-                      year: 'numeric',
-                      month: 'short',
-                      day: 'numeric',
-                    })}
+                    Posted on {formatDate(post.datePosted)}
                   </p>
                 </div>
 
-                {user?.id === currentUserId && (
+                {(user?.id === currentUserId ||
+                  currentUserRole?.includes('ADMIN')) && (
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant='outline' size='icon'>
@@ -120,13 +119,15 @@ export default function HomeFeed() {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align='end' className='w-32'>
-                      <DropdownMenuItem
-                        onClick={() =>
-                          setEditPost({ id: post.id, content: post.content })
-                        }
-                      >
-                        Edit
-                      </DropdownMenuItem>
+                      {/* {user?.id === currentUserId && (
+                        <DropdownMenuItem
+                          onClick={() =>
+                            setEditPost({ id: post.id, content: post.content })
+                          }
+                        >
+                          Edit
+                        </DropdownMenuItem>
+                      )} */}
                       <DropdownMenuItem
                         onClick={() => setDeletePost(post.id)}
                         className='text-red-600'
@@ -171,14 +172,14 @@ export default function HomeFeed() {
         </div>
       )}
 
-      {editPost && (
+      {/* {editPost && (
         <EditPost
           postId={editPost.id}
           initialContent={editPost.content}
           open={!!editPost}
           onClose={() => setEditPost(null)}
         />
-      )}
+      )} */}
 
       {deletePost && (
         <DeletePost

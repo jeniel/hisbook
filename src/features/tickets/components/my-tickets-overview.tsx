@@ -7,7 +7,6 @@ import Spinner from '@/components/spinner'
 interface Ticket {
   status: string
   count: number
-  // add other properties if needed
 }
 
 export default function MyTicketsOverview() {

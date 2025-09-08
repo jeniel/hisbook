@@ -37,7 +37,6 @@ import {
 const EditSchema = z
   .object({
     username: z.string().min(1, { message: 'Username is required' }),
-    email: z.string().email({ message: 'Invalid email' }),
     password: z
       .string()
       .min(0, { message: 'Password must be at least 6 characters' }),
@@ -83,7 +82,6 @@ export default function EditUser({ user, onUpdated }: EditUserProps) {
     resolver: zodResolver(EditSchema),
     defaultValues: {
       username: user?.username || '',
-      email: user?.email || '',
       password: '',
       confirmPassword: '',
       department: user?.department?.id || '',
@@ -98,7 +96,6 @@ export default function EditUser({ user, onUpdated }: EditUserProps) {
           updateUserId: user.id,
           payload: {
             username: data.username,
-            email: data.email,
             password: data.password,
             role: [data.role],
             departmentName: departments.find(
@@ -139,21 +136,6 @@ export default function EditUser({ user, onUpdated }: EditUserProps) {
                   <FormLabel>Username</FormLabel>
                   <FormControl>
                     <Input placeholder='Enter username' {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* Email */}
-            <FormField
-              control={form.control}
-              name='email'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input type='email' placeholder='Enter email' {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

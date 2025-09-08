@@ -186,7 +186,7 @@ export default function CreateTickets() {
                   name='remarks'
                   render={({ field }) => (
                     <FormItem className='mb-4'>
-                      <FormLabel>Remarks</FormLabel>
+                      <FormLabel>Message</FormLabel>
                       <FormControl>
                         <Input
                           placeholder='Additional details or context'

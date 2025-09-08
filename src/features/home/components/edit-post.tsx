@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState } from 'react'
 import { UPDATE_POST } from '@/graphql/operation/mutation/post'
 import { GET_POSTS } from '@/graphql/operation/query/posts'
@@ -40,7 +39,7 @@ export default function EditPost({
       })
       toast.success('Post updated successfully')
       onClose()
-    } catch (error) {
+    } catch (_error) {
       toast.error('Failed to update ticket')
     }
   }

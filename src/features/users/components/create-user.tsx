@@ -42,7 +42,6 @@ interface Department {
 const FormSchema = z
   .object({
     username: z.string().min(1, { message: 'Username is required' }),
-    email: z.string().email({ message: 'Invalid email' }),
     password: z
       .string()
       .min(6, { message: 'Password must be at least 6 characters' }),
@@ -73,7 +72,6 @@ export default function CreateUser() {
     resolver: zodResolver(FormSchema),
     defaultValues: {
       username: '',
-      email: '',
       password: '',
       confirmPassword: '',
       department: '',
@@ -86,7 +84,6 @@ export default function CreateUser() {
       await createUser({
         variables: {
           payload: {
-            email: data.email,
             username: data.username,
             password: data.password,
             role: [data.role],
@@ -134,12 +131,6 @@ export default function CreateUser() {
                       label: 'Username',
                       type: 'text',
                       placeholder: 'Enter username',
-                    },
-                    {
-                      name: 'email',
-                      label: 'E-mail',
-                      type: 'text',
-                      placeholder: 'Enter email',
                     },
                     {
                       name: 'password',

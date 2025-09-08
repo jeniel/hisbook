@@ -3,6 +3,7 @@ import { Query } from '@/graphql/codegen/graphql'
 import { FIND_ALL_TICKETS_BY_USER } from '@/graphql/operation/query/ticket'
 import { ME_QUERY } from '@/graphql/operation/query/user'
 import { useQuery } from '@apollo/client'
+import { Ticket } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import {
   Table,
@@ -14,7 +15,7 @@ import {
 } from '@/components/ui/table'
 import Pagination from '@/components/pagination'
 import Spinner from '@/components/spinner'
-import { Ticket } from 'lucide-react'
+import { formatDate } from '@/utils/formatDate'
 
 export default function MyTickets() {
   const [page, setPage] = useState(1)
@@ -58,7 +59,7 @@ export default function MyTickets() {
     <Card className='w-full'>
       <CardContent>
         <h1 className='mb-2 flex items-center gap-2 text-xl font-semibold'>
-          <Ticket className='text-green-500 h-6 w-6' />
+          <Ticket className='h-6 w-6 text-green-500' />
           My Tickets
         </h1>
 
@@ -84,15 +85,7 @@ export default function MyTickets() {
                     : 'Unknown'}
                 </TableCell>
                 <TableCell>{ticket.subject || '-'}</TableCell>
-                <TableCell>
-                  {ticket.missedAt
-                    ? new Date(ticket.missedAt).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                      })
-                    : 'TBD'}
-                </TableCell>
+                <TableCell>{formatDate(ticket.missedAt)}</TableCell>
                 <TableCell>
                   {new Date(ticket.missedAt).toLocaleTimeString()}
                 </TableCell>

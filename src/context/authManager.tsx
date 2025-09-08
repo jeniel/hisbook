@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react'
 import { useQuery } from '@apollo/client'
 import _ from 'lodash'
@@ -7,8 +8,6 @@ import { MeQuery, Query } from '../graphql/codegen/graphql'
 import { ME_QUERY } from '../graphql/operation/query/user'
 import { AccountConsumer, AccountProvider } from './accountContext'
 import Spinner from '@/components/spinner'
-
-// import { ModalProvider } from "react-modal-hook";
 
 const AuthManager = (props: any) => {
   const { loading, error, data, refetch } = useQuery<Query>(ME_QUERY, {

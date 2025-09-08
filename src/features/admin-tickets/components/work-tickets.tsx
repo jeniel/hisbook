@@ -116,69 +116,81 @@ export default function WorkTicket({ ticket, onUpdated }: WorkTicketProps) {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className='max-w-5xl'>
+      <DialogContent className='max-w-6xl'>
         <DialogHeader>
-          <DialogTitle>📝 Work on Ticket</DialogTitle>
+          <DialogTitle className='flex flex-row items-center gap-2'>
+            <PencilLine className='text-blue-500' />
+            Update Ticket
+          </DialogTitle>
           <DialogDescription>Review and update this ticket.</DialogDescription>
         </DialogHeader>
 
-        {/* Ticket Info */}
-        <div className='space-y-2 text-sm'>
-          <p>
-            <span className='mr-2 font-semibold'>Name:</span>{' '}
-            {ticket.createdBy?.profile
-              ? `${ticket.createdBy.profile.firstName} ${ticket.createdBy.profile.lastName}`
-              : 'Unknown'}
-          </p>
-          <p>
-            <span className='mr-2 font-semibold'>Subject:</span>{' '}
-            {ticket.subject || '-'}
-          </p>
-          <p>
-            <span className='mr-2 font-semibold'>Remarks:</span>{' '}
-            {ticket.remarks || '-'}
-          </p>
-        </div>
-
-        {/* Status Dropdown */}
-        <div className='mt-4 space-y-2'>
-          <Label>Status</Label>
-          <Select value={status} onValueChange={setStatus}>
-            <SelectTrigger className='w-full'>
-              <SelectValue placeholder='Select status' />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value='Pending'>Pending</SelectItem>
-              <SelectItem value='Approved'>Approved</SelectItem>
-              <SelectItem value='Completed'>Completed</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        {/* File Upload */}
-        <div className='mt-4 space-y-2'>
-          <Label>Attach CCTV Screenshot</Label>
-          <Input type='file' accept='image/*' onChange={handleFileChange} />
-          {file && (
-            <p className='text-muted-foreground text-xs'>
-              Selected: {file.name}
-            </p>
-          )}
-          {preview && (
-            <div className='mt-2'>
-              <img
-                src={preview}
-                alt='CCTV Screenshot Preview'
-                className='max-h-full w-full rounded border object-cover'
-              />
+        {/* Two-column grid */}
+        <div className='grid grid-cols-1 gap-6 md:grid-cols-2'>
+          {/* Left Column */}
+          <div className='space-y-4'>
+            {/* Ticket Info */}
+            <div className='space-y-2 text-sm'>
+              <p>
+                <span className='mr-2 font-semibold'>Name:</span>{' '}
+                {ticket.createdBy?.profile
+                  ? `${ticket.createdBy.profile.firstName} ${ticket.createdBy.profile.lastName}`
+                  : 'Unknown'}
+              </p>
+              <p>
+                <span className='mr-2 font-semibold'>Subject:</span>{' '}
+                {ticket.subject || '-'}
+              </p>
+              <p>
+                <span className='mr-2 font-semibold'>Remarks:</span>{' '}
+                {ticket.remarks || '-'}
+              </p>
             </div>
-          )}
-        </div>
 
-        {/* Reviewed By Auto Add*/}
-        <div className='mt-4 space-y-2'>
-          <Label>Reviewed By</Label>
-          <Input value={updatedBy} readOnly placeholder='Name' />
+            {/* Status Dropdown */}
+            <div className='space-y-2'>
+              <Label>Status</Label>
+              <Select value={status} onValueChange={setStatus}>
+                <SelectTrigger className='w-full'>
+                  <SelectValue placeholder='Select status' />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value='Pending'>Pending</SelectItem>
+                  <SelectItem value='Approved'>Approved</SelectItem>
+                  <SelectItem value='Completed'>Completed</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          {/* Right Column */}
+          <div className='space-y-4'>
+            {/* File Upload */}
+            <div className='space-y-2'>
+              <Label>Attach CCTV Screenshot</Label>
+              <Input type='file' accept='image/*' onChange={handleFileChange} />
+              {file && (
+                <p className='text-muted-foreground text-xs'>
+                  Selected: {file.name}
+                </p>
+              )}
+              {preview && (
+                <div className='mt-2'>
+                  <img
+                    src={preview}
+                    alt='CCTV Screenshot Preview'
+                    className='max-h-80 w-full rounded border object-cover'
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Reviewed By */}
+            <div className='space-y-2'>
+              <Label>Reviewed By</Label>
+              <Input value={updatedBy} readOnly placeholder='Name' />
+            </div>
+          </div>
         </div>
 
         <DialogFooter>

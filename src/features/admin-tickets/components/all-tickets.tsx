@@ -2,15 +2,8 @@ import { useState } from 'react'
 import { Query } from '@/graphql/codegen/graphql'
 import { FIND_ALL_TICKETS } from '@/graphql/operation/query/ticket'
 import { useQuery } from '@apollo/client'
-import { BookCheck, Ticket } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { Ticket } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogTitle,
-} from '@/components/ui/dialog'
 import {
   Table,
   TableBody,
@@ -23,11 +16,11 @@ import Pagination from '@/components/pagination'
 import Spinner from '@/components/spinner'
 import AuditLogsContent from './audit-logs'
 import WorkTickets from './work-tickets'
+import { formatDate } from '@/utils/formatDate'
 
 export default function AllTickets() {
   const [page, setPage] = useState(1)
   const perPage = 10
-  const [selectedTicketId, setSelectedTicketId] = useState<string | null>(null)
 
   const { loading, error, data, refetch } = useQuery<Query>(FIND_ALL_TICKETS, {
     variables: { page, perPage },
@@ -53,7 +46,7 @@ export default function AllTickets() {
           <Ticket className='h-6 w-6 text-green-500' />
           All Tickets
         </h1>
-        
+
         <Table>
           <TableHeader>
             <TableRow>
@@ -75,15 +68,7 @@ export default function AllTickets() {
                     ? `${ticket.createdBy.profile.firstName} ${ticket.createdBy.profile.lastName}`
                     : 'Unknown'}
                 </TableCell>
-                <TableCell>
-                  {ticket.missedAt
-                    ? new Date(ticket.missedAt).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                      })
-                    : 'TBD'}
-                </TableCell>
+                <TableCell>{formatDate(ticket.missedAt)}</TableCell>
                 <TableCell>
                   {new Date(ticket.missedAt).toLocaleTimeString()}
                 </TableCell>
@@ -91,28 +76,7 @@ export default function AllTickets() {
                 <TableCell>{ticket.status}</TableCell>
                 <TableCell className='flex gap-2'>
                   <WorkTickets ticket={ticket} onUpdated={() => refetch()} />
-
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <Button
-                        variant='outline'
-                        size='sm'
-                        onClick={() => setSelectedTicketId(ticket.id)}
-                      >
-                        <BookCheck className='text-yellow-500' />
-                        View Logs
-                      </Button>
-                    </DialogTrigger>
-
-                    <DialogContent>
-                      <DialogTitle className='flex flex-row items-center'>
-                        <BookCheck className='text-yellow-500' /> Audit Logs
-                      </DialogTitle>
-                      {selectedTicketId && (
-                        <AuditLogsContent ticketId={selectedTicketId} />
-                      )}
-                    </DialogContent>
-                  </Dialog>
+                  <AuditLogsContent ticketId={ticket.id} />
                 </TableCell>
               </TableRow>
             ))}

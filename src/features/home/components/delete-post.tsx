@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { DELETE_POST } from '@/graphql/operation/mutation/post'
 import { GET_POSTS } from '@/graphql/operation/query/posts'
 import { useMutation } from '@apollo/client'
@@ -29,7 +28,7 @@ export default function DeletePost({ postId, open, onClose }: DeletePostProps) {
       await deletePost({ variables: { postId } })
       toast.error('Post deleted')
       onClose()
-    } catch (error) {
+    } catch (_error) {
       toast.error("Failed to delete post");
     }
   }

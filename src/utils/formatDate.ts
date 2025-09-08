@@ -1,0 +1,9 @@
+export function formatDate(dateString?: string | null): string {
+  if (!dateString) return "TBD"
+
+  return new Date(dateString).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  })
+}

@@ -231,7 +231,8 @@ export default function EditProfile() {
             </div>
 
             <Button variant='outline' type='submit' className='shadow-md'>
-              <SquareCheckBig className='text-green-500' /> Edit Profile
+              <SquareCheckBig className='text-green-500' />
+              Update Profile
             </Button>
           </form>
         </CardContent>

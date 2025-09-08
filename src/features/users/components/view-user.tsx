@@ -50,7 +50,6 @@ export default function ViewUsers() {
               <TableHead>#</TableHead>
               <TableHead>Name</TableHead>
               <TableHead>Username</TableHead>
-              <TableHead>Email</TableHead>
               <TableHead>Role</TableHead>
               <TableHead>Department</TableHead>
               <TableHead>Actions</TableHead>
@@ -64,7 +63,6 @@ export default function ViewUsers() {
                   {user.profile?.lastName}, {user.profile?.firstName}
                 </TableCell>
                 <TableCell>{user.username}</TableCell>
-                <TableCell>{user.email}</TableCell>
                 <TableCell>{user.role}</TableCell>
                 <TableCell>{user.department?.name ?? '—'}</TableCell>
                 <TableCell className='flex flex-row items-center space-x-2'>

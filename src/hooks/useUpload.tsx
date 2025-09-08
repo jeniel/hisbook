@@ -11,7 +11,7 @@ interface UploadResult {
 export const useUpload = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const API_URL = import.meta.env.VITE_API_EXPRESS
+  const API_URL = import.meta.env.VITE_API_UPLOADING_SERVICE
   const DEFAULT_BUCKET = import.meta.env.VITE_MINIO_BUCKET
 
   // Upload a single file
@@ -27,7 +27,7 @@ export const useUpload = () => {
       const formData = new FormData()
       formData.append('file', file)
 
-      const res = await fetch(`${API_URL}/files/upload${bucket}/${type}`, {
+      const res = await fetch(`${API_URL}/files/upload/${bucket}/${type}`, {
         method: 'POST',
         body: formData,
       })
@@ -43,9 +43,9 @@ export const useUpload = () => {
         message: data.message,
         url: data.url,
       }
-    } catch (err: any) {
-      setError(err.message || 'Unknown error')
-      return { success: false, message: err.message || 'Unknown error' }
+    } catch (error: any) {
+      setError(error.message || 'Unknown error')
+      return { success: false, message: error.message || 'Unknown error' }
     } finally {
       setLoading(false)
     }
@@ -67,7 +67,7 @@ export const useUpload = () => {
       files.forEach((file) => formData.append('files', file))
 
       const res = await fetch(
-        `${API_URL}/files/upload-multiple${bucket}/${type}`,
+        `${API_URL}/files/upload-multiple/${bucket}/${type}`,
         {
           method: 'POST',
           body: formData,
@@ -97,7 +97,7 @@ export const useUpload = () => {
     bucket: string = DEFAULT_BUCKET
   ): Promise<string | null> => {
     try {
-      const url = `${API_URL}/files${bucket}/${folder}/${filename}`
+      const url = `${API_URL}/files/${bucket}/${folder}/${filename}`
       const res = await fetch(url)
 
       if (!res.ok) {

@@ -3,7 +3,6 @@ import { ApolloProvider } from '@apollo/client'
 import { useStore } from '@tanstack/react-store'
 import { ModalProvider } from 'react-modal-hook'
 import AuthManager from './context/authManager'
-import { FontProvider } from './context/font-context'
 import { ThemeProvider } from './context/theme-context'
 import { client } from './lib/gql-client'
 import { routeTree } from './routeTree.gen'
@@ -29,11 +28,9 @@ const App = () => {
       <ApolloProvider client={client}>
         <AuthManager>
           <ThemeProvider defaultTheme='light' storageKey='vite-ui-theme'>
-            <FontProvider>
               <ModalProvider>
                 <RouterProvider router={router} context={{ user: userState.user }} />
               </ModalProvider>
-            </FontProvider>
           </ThemeProvider>
         </AuthManager>
       </ApolloProvider>
