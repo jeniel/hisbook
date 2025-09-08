@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from 'react'
 import { Query } from '@/graphql/codegen/graphql'
+import { Role } from '@/graphql/codegen/graphql'
 import { GET_POSTS } from '@/graphql/operation/query/posts'
 import { ME_QUERY } from '@/graphql/operation/query/user'
 import { useQuery } from '@apollo/client'
@@ -111,7 +112,7 @@ export default function HomeFeed() {
                 </div>
 
                 {(user?.id === currentUserId ||
-                  currentUserRole?.includes('ADMIN')) && (
+                  currentUserRole?.includes(Role.Admin)) && (
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant='outline' size='icon'>
