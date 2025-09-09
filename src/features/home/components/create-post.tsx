@@ -2,18 +2,13 @@ import { useState } from 'react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Mutation } from '@/graphql/codegen/graphql'
-import { CREATE_POST } from '@/graphql/operation/mutation/post'
-import { ME_QUERY } from '@/graphql/operation/query/user'
-import { useMutation, useQuery } from '@apollo/client'
-import { toast } from 'sonner'
-import { useUpload } from '@/hooks/useUpload'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { PencilLine } from 'lucide-react'
+import { useFeed } from '../hooks/useFeed'
 
 // ✅ Validation schema
 const FormSchema = z.object({
@@ -21,13 +16,8 @@ const FormSchema = z.object({
 })
 
 export default function CreatePost() {
-  const [createPost] = useMutation<Mutation>(CREATE_POST)
-  const { data: meData } = useQuery(ME_QUERY)
   const [files, setFiles] = useState<File[]>([]) // store selected files
-  const { uploadFiles } = useUpload() // custom hook for file uploads
-
-  const user = meData?.meQuery?.user
-  const userId = user?.id
+  const { createPost, createLoading } = useFeed()
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -37,28 +27,14 @@ export default function CreatePost() {
   })
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    try {
-      // 1. Upload files
-      const imageUrls = await uploadFiles(files, 'posts')
+    const success = await createPost({
+      content: data.content,
+      files,
+    })
 
-      // 2. Create post with content + image URLs
-      const res = await createPost({
-        variables: {
-          payload: {
-            content: data.content,
-            userId,
-            images: imageUrls, // array of URLs
-          },
-        },
-      })
-
-      toast.success(
-        res.data?.createPost?.message ?? 'Post created successfully'
-      )
+    if (success) {
       form.reset()
       setFiles([]) // reset file input
-    } catch {
-      toast.error('Failed to create post')
     }
   }
 
@@ -107,8 +83,9 @@ export default function CreatePost() {
                 )}
               </div>
 
-              <Button variant={'outline'}>
-                <PencilLine className='text-blue-500' /> Post
+              <Button variant={'outline'} disabled={createLoading}>
+                <PencilLine className='text-blue-500' />
+                {createLoading ? 'Posting...' : 'Post'}
               </Button>
             </div>
           </form>

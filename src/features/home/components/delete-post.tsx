@@ -1,6 +1,3 @@
-import { DELETE_POST } from '@/graphql/operation/mutation/post'
-import { GET_POSTS } from '@/graphql/operation/query/posts'
-import { useMutation } from '@apollo/client'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -9,28 +6,24 @@ import {
   DialogTitle,
   DialogFooter,
 } from '@/components/ui/dialog'
-import { toast } from 'sonner'
-import { Mutation } from '@/graphql/codegen/graphql'
 
 interface DeletePostProps {
   postId: string
   open: boolean
   onClose: () => void
+  onConfirm: (postId: string) => Promise<void>
+  loading: boolean
 }
 
-export default function DeletePost({ postId, open, onClose }: DeletePostProps) {
-  const [deletePost, { loading }] = useMutation<Mutation>(DELETE_POST, {
-    refetchQueries: [{ query: GET_POSTS }],
-  })
-
+export default function DeletePost({ 
+  postId, 
+  open, 
+  onClose, 
+  onConfirm, 
+  loading 
+}: DeletePostProps) {
   const handleDelete = async () => {
-    try {
-      await deletePost({ variables: { postId } })
-      toast.error('Post deleted')
-      onClose()
-    } catch (_error) {
-      toast.error("Failed to delete post");
-    }
+    await onConfirm(postId)
   }
 
   return (

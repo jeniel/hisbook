@@ -1,8 +1,4 @@
 import { useState } from 'react'
-import { UPDATE_POST } from '@/graphql/operation/mutation/post'
-import { GET_POSTS } from '@/graphql/operation/query/posts'
-import { useMutation } from '@apollo/client'
-import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -12,13 +8,14 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
-import { Mutation } from '@/graphql/codegen/graphql'
 
 interface EditPostProps {
   postId: string
   initialContent: string
   open: boolean
   onClose: () => void
+  onConfirm: (postId: string, content: string) => Promise<void>
+  loading: boolean
 }
 
 export default function EditPost({
@@ -26,22 +23,13 @@ export default function EditPost({
   initialContent,
   open,
   onClose,
+  onConfirm,
+  loading,
 }: EditPostProps) {
   const [content, setContent] = useState(initialContent)
-  const [updatePost, { loading }] = useMutation<Mutation>(UPDATE_POST, {
-    refetchQueries: [{ query: GET_POSTS }],
-  })
 
   const handleUpdate = async () => {
-    try {
-      await updatePost({
-        variables: { postId, data: { content } },
-      })
-      toast.success('Post updated successfully')
-      onClose()
-    } catch (_error) {
-      toast.error('Failed to update ticket')
-    }
+    await onConfirm(postId, content)
   }
 
   return (
