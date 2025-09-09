@@ -6,6 +6,7 @@ import {
   IconUserCog,
   IconLayoutBoard,
   IconCalendarWeek,
+  IconTimeDuration30,
 } from '@tabler/icons-react'
 import { type SidebarData } from '../types'
 
@@ -17,6 +18,7 @@ export const sidebarData: SidebarData = {
         { title: 'Home', url: '/', icon: IconHome },
         { title: 'My Profile', url: '/profile', icon: IconUserCog },
         { title: 'Tickets', url: '/tickets', icon: IconLayoutBoard },
+         { title: 'Attendance', url: '/attendance', icon: IconTimeDuration30 },
       ],
     },
     {
