@@ -41,13 +41,21 @@ export default defineConfig({
   },
   server: {
     host: true,
-    allowedHosts: ['acebookv2.172.16.10.70.nip.io'],
+    allowedHosts: [
+      'acebookv2.172.16.10.70.nip.io',
+      'https://acebookv2.172.16.10.70.nip.io/graphql',
+      'http://acebookv2.172.16.10.70.nip.io/graphql',
+    ],
     port: 4173,
     watch: {
       usePolling: true,
     },
   },
   preview: {
-    allowedHosts: ['acebookv2.172.16.10.70.nip.io'],
+    allowedHosts: [
+      'acebookv2.172.16.10.70.nip.io',
+      'https://acebookv2.172.16.10.70.nip.io/graphql',
+      'http://acebookv2.172.16.10.70.nip.io/graphql',
+    ],
   },
 })
