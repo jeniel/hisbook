@@ -6,12 +6,15 @@ RUN yarn install --frozen-lockfile
 COPY . .
 RUN yarn build
 
-# Production stage
+# Production stage - minimal image
 FROM node:22-alpine
 WORKDIR /app
-COPY package*.json ./
-RUN yarn install --production=false
-COPY --from=builder /app/dist ./dist
-COPY . .
+
+# Install only serve for static file serving
+RUN npm install -g serve
+
+# Copy only the built files
+COPY --from=builder /app/dist ./
+
 EXPOSE 4173
-CMD ["yarn", "start"]
+CMD ["serve", "-s", ".", "-l", "4173"]
