@@ -42,9 +42,8 @@ export default defineConfig({
   server: {
     host: true,
     allowedHosts: [
-      'acebookv2.172.16.10.70.nip.io',
-      'https://acebookv2.172.16.10.70.nip.io/graphql',
-      'http://acebookv2.172.16.10.70.nip.io/graphql',
+      'https://acebook.acemcbohol.ph',
+      'https://acebook-api.acemcbohol.ph/graphql',
     ],
     port: 4173,
     watch: {
@@ -53,9 +52,8 @@ export default defineConfig({
   },
   preview: {
     allowedHosts: [
-      'acebookv2.172.16.10.70.nip.io',
-      'https://acebookv2.172.16.10.70.nip.io/graphql',
-      'http://acebookv2.172.16.10.70.nip.io/graphql',
+      'https://acebook.acemcbohol.ph',
+      'https://acebook-api.acemcbohol.ph/graphql',
     ],
   },
 })
