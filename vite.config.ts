@@ -41,19 +41,13 @@ export default defineConfig({
   },
   server: {
     host: true,
-    allowedHosts: [
-      'https://acebook.acemcbohol.ph',
-      'https://acebook-api.acemcbohol.ph/graphql',
-    ],
+    allowedHosts: true || ['*', ''],
     port: 4173,
     watch: {
       usePolling: true,
     },
   },
   preview: {
-    allowedHosts: [
-      'https://acebook.acemcbohol.ph',
-      'https://acebook-api.acemcbohol.ph/graphql',
-    ],
+    allowedHosts: true || ['*', ''],
   },
 })
