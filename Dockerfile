@@ -19,4 +19,4 @@ COPY --from=builder /app/dist ./dist
 COPY . .
 
 EXPOSE 4173
-CMD ["yarn", "start"]
+CMD ["yarn", "preview"]
