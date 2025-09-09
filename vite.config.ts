@@ -47,7 +47,7 @@ export default defineConfig({
       usePolling: true,
     },
   },
-  preview: {
-    allowedHosts: true || ['*', ''],
-  },
+  // preview: {
+  //   allowedHosts: true || ['*', ''],
+  // },
 })
