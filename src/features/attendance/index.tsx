@@ -59,6 +59,7 @@ const AttendancePage = () => {
         loading={loadingUser}
         user={user}
         error={error}
+        fetchUser={fetchUser}
       />
 
       {/* Cutoff Period Selector */}

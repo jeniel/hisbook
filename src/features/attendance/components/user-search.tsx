@@ -13,22 +13,22 @@ interface UserSearchProps {
   loading: boolean
   user: HisUser | null
   error: string | null
+  fetchUser: (idNumber: string) => void
 }
 
 export function UserSearch({
   onSearch,
+  fetchUser,
   loading,
   user,
   error,
 }: UserSearchProps) {
   const [idNumber, setIdNumber] = useState('') // default empty string
-  const { data } = useQuery<Query>(ME_QUERY)
+  // const { data } = useQuery<Query>(ME_QUERY)
 
   useEffect(() => {
-    if (data?.meQuery?.user?.profile?.employeeID != null) {
-      setIdNumber(String(data.meQuery.user.profile.employeeID))
-    }
-  }, [data])
+    fetchUser("0070")
+  }, [fetchUser])
 
   // console.log(idNumber)
 
