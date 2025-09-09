@@ -82,10 +82,10 @@ const formatDateForAPI = (dateString: string): string => {
   const year = parseInt(parts[0])
   const month = parseInt(parts[1]) - 1 // Month is 0-indexed
   const day = parseInt(parts[2])
-  
+
   // Create date in UTC at midnight
   const date = new Date(Date.UTC(year, month, day, 0, 0, 0, 0))
-  
+
   // Return ISO string (already in UTC)
   return date.toISOString()
 }
@@ -94,28 +94,27 @@ const formatDateRange = (startDate: string, endDate: string): string => {
   const start = new Date(startDate).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'short',
-    day: 'numeric'
+    day: 'numeric',
   })
   const end = new Date(endDate).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'short',
-    day: 'numeric'
+    day: 'numeric',
   })
   return `${start} - ${end}`
 }
 
 // API functions
-export const getHisd3User = async (): Promise<HisUser> => {
-  
-  try { 
+export const getHisd3User = async (idNumber: string): Promise<HisUser> => {
+  try {
     const response = await fetch(
-      `https://srv-hismk2.ace-mc-bohol.com/hrm/getEmployeeByIdNumber?id=${employeeID}`
+      `https://srv-hismk2.ace-mc-bohol.com/hrm/getEmployeeByIdNumber?id=${idNumber}`
     )
-    
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)
     }
-    
+
     return await response.json()
   } catch (error) {
     console.error('Error fetching HIS user:', error)
@@ -135,22 +134,22 @@ export const getAttendanceLogs = async (
 
     const formattedStartDate = formatDateForAPI(startDate)
     const formattedEndDate = formatDateForAPI(endDate)
-    
+
     const response = await fetch(
       `https://srv-hismk2.ace-mc-bohol.com/hrm/getEmployeeAccumulatedLogs?id=${hisUserId}&startDate=${formattedStartDate}&endDate=${formattedEndDate}`
     )
-    
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)
     }
-    
+
     const logs: AttendanceLog[] = await response.json()
-    
+
     // Return the logs wrapped in the AttendanceData format
     return {
       logs: logs,
       totalWorkingHours: logs.reduce((sum, log) => sum + log.worked, 0),
-      totalDays: logs.filter(log => !log.isEmpty && log.worked > 0).length
+      totalDays: logs.filter((log) => !log.isEmpty && log.worked > 0).length,
     }
   } catch (error) {
     console.error('Error fetching attendance logs:', error)
@@ -160,7 +159,9 @@ export const getAttendanceLogs = async (
 
 export function useAttendance() {
   const [user, setUser] = useState<HisUser | null>(null)
-  const [attendanceData, setAttendanceData] = useState<AttendanceData | null>(null)
+  const [attendanceData, setAttendanceData] = useState<AttendanceData | null>(
+    null
+  )
   const [loadingUser, setLoadingUser] = useState(false)
   const [loadingAttendance, setLoadingAttendance] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -176,14 +177,15 @@ export function useAttendance() {
     setError(null)
     // Clear previous attendance data when fetching new user
     setAttendanceData(null)
-    
+
     try {
       const userData = await getHisd3User(idNumber)
       setUser(userData)
       toast.success('User found successfully')
       return userData
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to fetch user'
+      const errorMessage =
+        error instanceof Error ? error.message : 'Failed to fetch user'
       setError(errorMessage)
       toast.error(errorMessage)
       setUser(null)
@@ -194,69 +196,76 @@ export function useAttendance() {
   }, [])
 
   // Fetch attendance logs (requires user to be fetched first)
-  const fetchAttendanceLogs = useCallback(async (
-    startDate: string,
-    endDate: string,
-    hisUserId?: string
-  ) => {
-    const userId = hisUserId || user?.id
-    
-    if (!userId) {
-      toast.error('User must be selected first. Please search for a user using their ID number.')
-      return null
-    }
+  const fetchAttendanceLogs = useCallback(
+    async (startDate: string, endDate: string, hisUserId?: string) => {
+      const userId = hisUserId || user?.id
 
-    if (!startDate || !endDate) {
-      toast.error('Start date and end date are required')
-      return null
-    }
+      if (!userId) {
+        toast.error(
+          'User must be selected first. Please search for a user using their ID number.'
+        )
+        return null
+      }
 
-    setLoadingAttendance(true)
-    setError(null)
-    
-    try {
-      const logs = await getAttendanceLogs(startDate, endDate, userId)
-      setAttendanceData(logs)
-      toast.success('Attendance logs fetched successfully')
-      return logs
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to fetch attendance logs'
-      setError(errorMessage)
-      toast.error(errorMessage)
-      setAttendanceData(null)
-      return null
-    } finally {
-      setLoadingAttendance(false)
-    }
-  }, [user?.id])
+      if (!startDate || !endDate) {
+        toast.error('Start date and end date are required')
+        return null
+      }
+
+      setLoadingAttendance(true)
+      setError(null)
+
+      try {
+        const logs = await getAttendanceLogs(startDate, endDate, userId)
+        setAttendanceData(logs)
+        toast.success('Attendance logs fetched successfully')
+        return logs
+      } catch (error) {
+        const errorMessage =
+          error instanceof Error
+            ? error.message
+            : 'Failed to fetch attendance logs'
+        setError(errorMessage)
+        toast.error(errorMessage)
+        setAttendanceData(null)
+        return null
+      } finally {
+        setLoadingAttendance(false)
+      }
+    },
+    [user?.id]
+  )
 
   // Fetch user and then immediately fetch attendance logs
-  const fetchUserAndAttendance = useCallback(async (
-    idNumber: string,
-    startDate: string,
-    endDate: string
-  ) => {
-    if (!idNumber.trim()) {
-      toast.error('ID Number is required')
-      return null
-    }
+  const fetchUserAndAttendance = useCallback(
+    async (idNumber: string, startDate: string, endDate: string) => {
+      if (!idNumber.trim()) {
+        toast.error('ID Number is required')
+        return null
+      }
 
-    if (!startDate || !endDate) {
-      toast.error('Start date and end date are required')
-      return null
-    }
+      if (!startDate || !endDate) {
+        toast.error('Start date and end date are required')
+        return null
+      }
 
-    // First fetch the user
-    const userData = await fetchUser(idNumber)
-    
-    if (userData?.id) {
-      // Then fetch attendance logs using the user's ID
-      const attendanceLogs = await fetchAttendanceLogs(startDate, endDate, userData.id)
-      return { user: userData, attendanceData: attendanceLogs }
-    }
-    
-    return null
-  }, [fetchUser, fetchAttendanceLogs])
+      // First fetch the user
+      const userData = await fetchUser(idNumber)
+
+      if (userData?.id) {
+        // Then fetch attendance logs using the user's ID
+        const attendanceLogs = await fetchAttendanceLogs(
+          startDate,
+          endDate,
+          userData.id
+        )
+        return { user: userData, attendanceData: attendanceLogs }
+      }
+
+      return null
+    },
+    [fetchUser, fetchAttendanceLogs]
+  )
 
   // Clear all data
   const clearData = useCallback(() => {
@@ -271,60 +280,69 @@ export function useAttendance() {
   }, [])
 
   // Memoized computed values
-  const isLoading = useMemo(() => loadingUser || loadingAttendance, [loadingUser, loadingAttendance])
-  
+  const isLoading = useMemo(
+    () => loadingUser || loadingAttendance,
+    [loadingUser, loadingAttendance]
+  )
+
   const hasUser = useMemo(() => !!user, [user])
-  
+
   const hasAttendanceData = useMemo(() => !!attendanceData, [attendanceData])
 
   // Check if ready to fetch attendance (user is loaded and has ID)
   const canFetchAttendance = useMemo(() => !!user?.id, [user?.id])
 
   // Format date range for display
-  const formatDateRangeDisplay = useCallback((startDate: string, endDate: string) => {
-    return formatDateRange(startDate, endDate)
-  }, [])
+  const formatDateRangeDisplay = useCallback(
+    (startDate: string, endDate: string) => {
+      return formatDateRange(startDate, endDate)
+    },
+    []
+  )
 
-  return useMemo(() => ({
-    // Data
-    user,
-    attendanceData,
-    error,
-    
-    // Loading states
-    loadingUser,
-    loadingAttendance,
-    isLoading,
-    
-    // Computed states
-    hasUser,
-    hasAttendanceData,
-    canFetchAttendance,
-    
-    // Actions
-    fetchUser,
-    fetchAttendanceLogs,
-    fetchUserAndAttendance,
-    clearData,
-    clearError,
-    
-    // Utilities
-    formatDateRange: formatDateRangeDisplay,
-  }), [
-    user,
-    attendanceData,
-    error,
-    loadingUser,
-    loadingAttendance,
-    isLoading,
-    hasUser,
-    hasAttendanceData,
-    canFetchAttendance,
-    fetchUser,
-    fetchAttendanceLogs,
-    fetchUserAndAttendance,
-    clearData,
-    clearError,
-    formatDateRangeDisplay,
-  ])
+  return useMemo(
+    () => ({
+      // Data
+      user,
+      attendanceData,
+      error,
+
+      // Loading states
+      loadingUser,
+      loadingAttendance,
+      isLoading,
+
+      // Computed states
+      hasUser,
+      hasAttendanceData,
+      canFetchAttendance,
+
+      // Actions
+      fetchUser,
+      fetchAttendanceLogs,
+      fetchUserAndAttendance,
+      clearData,
+      clearError,
+
+      // Utilities
+      formatDateRange: formatDateRangeDisplay,
+    }),
+    [
+      user,
+      attendanceData,
+      error,
+      loadingUser,
+      loadingAttendance,
+      isLoading,
+      hasUser,
+      hasAttendanceData,
+      canFetchAttendance,
+      fetchUser,
+      fetchAttendanceLogs,
+      fetchUserAndAttendance,
+      clearData,
+      clearError,
+      formatDateRangeDisplay,
+    ]
+  )
 }
