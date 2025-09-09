@@ -43,6 +43,7 @@ export default function EditProfile() {
       gender: (profile?.gender as 'Male' | 'Female' | 'Others') || undefined,
       address: profile?.address || '',
       contact: profile?.contact || '',
+      employeeID: profile?.employeeID || '',
     },
   })
 
@@ -225,6 +226,14 @@ export default function EditProfile() {
                 <label className='mb-1 block'>Contact</label>
                 <Input
                   {...form.register('contact')}
+                  className='border border-black'
+                />
+              </div>
+
+              <div>
+                <label className='mb-1 block'>Employee ID</label>
+                <Input
+                  {...form.register('employeeID', { valueAsNumber: true })}
                   className='border border-black'
                 />
               </div>

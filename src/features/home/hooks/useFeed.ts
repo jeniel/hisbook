@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable no-console */
 import { useState, useCallback, useMemo } from 'react'
 import { useQuery, useMutation } from '@apollo/client'
 import { toast } from 'sonner'
@@ -99,7 +99,7 @@ export function useFeed() {
           }
         },
       })
-    } catch (error) {
+    } catch (_error) {
       toast.error('Failed to load more posts')
     }
   }, [page, perPage, fetchMore, data?.findAllPosts?.meta?.next])
@@ -132,7 +132,7 @@ export function useFeed() {
       setPage(1)
       
       return true
-    } catch (error) {
+    } catch (_error) {
       toast.error('Failed to create post')
       return false
     }
@@ -145,7 +145,7 @@ export function useFeed() {
       })
       toast.success('Post updated successfully')
       return true
-    } catch (error) {
+    } catch (_error) {
       toast.error('Failed to update post')
       return false
     }
@@ -156,7 +156,7 @@ export function useFeed() {
       await deletePostMutation({ variables: { postId } })
       toast.success('Post deleted successfully')
       return true
-    } catch (error) {
+    } catch (_error) {
       toast.error('Failed to delete post')
       return false
     }

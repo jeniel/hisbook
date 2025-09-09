@@ -105,10 +105,11 @@ const formatDateRange = (startDate: string, endDate: string): string => {
 }
 
 // API functions
-export const getHisd3User = async (idNumber: string): Promise<HisUser> => {
-  try {
+export const getHisd3User = async (): Promise<HisUser> => {
+  
+  try { 
     const response = await fetch(
-      `https://srv-hismk2.ace-mc-bohol.com/hrm/getEmployeeByIdNumber?id=${idNumber}`
+      `https://srv-hismk2.ace-mc-bohol.com/hrm/getEmployeeByIdNumber?id=${employeeID}`
     )
     
     if (!response.ok) {

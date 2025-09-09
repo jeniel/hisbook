@@ -8,6 +8,7 @@ export const ProfileSchema = z.object({
   gender: z.enum(['Male', 'Female', 'Others']).optional(),
   address: z.string().optional(),
   contact: z.string().optional(),
+  employeeID: z.any().optional(),
 })
 
 export type ProfileFormData = z.infer<typeof ProfileSchema>
