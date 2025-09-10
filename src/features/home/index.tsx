@@ -1,7 +1,8 @@
 import CreatePost from './components/create-post'
-import Events from './components/events'
-import HomeFeed from './components/home-feed'
-import WeatherForecast from './components/weather'
+
+// import Events from './components/events'
+// import HomeFeed from './components/home-feed'
+// import WeatherForecast from './components/weather'
 
 export default function HomePage() {
   return (
@@ -9,14 +10,14 @@ export default function HomePage() {
       {/* Left Column */}
       <div className='order-2 space-y-4 lg:order-1 lg:col-span-3'>
         <CreatePost />
-        <HomeFeed />
+        {/* <HomeFeed /> */}
       </div>
 
       {/* Right Column */}
-      <div className='order-1 space-y-4 lg:order-2 lg:col-span-1'>
+      {/* <div className='order-1 space-y-4 lg:order-2 lg:col-span-1'>
         <WeatherForecast />
         <Events />
-      </div>
+      </div> */}
     </div>
   )
 }

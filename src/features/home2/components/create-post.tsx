@@ -28,8 +28,8 @@ export const CreatePost: React.FC<CreatePostProps> = ({
 
   const handlePost = () => {
     // Handle post submission logic here
-    console.log('Post content:', postText)
-    console.log('Images:', selectedImages)
+    // console.log('Post content:', postText)
+    // console.log('Images:', selectedImages)
     setPostText('')
     setSelectedImages([])
   }

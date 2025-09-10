@@ -33,37 +33,3 @@ export const GET_POSTS = gql`
     }
   }
 `
-export const GET_POST_BY_USER = gql`
-  query ($userId: String!, $page: Float, $perPage: Float) {
-    findAllPostsCreatedByUser(userId: $userId, page: $page, perPage: $perPage) {
-      data {
-        content
-        user {
-          profile {
-            firstName
-            lastName
-            avatar
-          }
-          id
-          department {
-            name
-            description
-          }
-          username
-        }
-        datePosted
-        id
-        images
-        userId
-      }
-      meta {
-        currentPage
-        lastPage
-        next
-        perPage
-        prev
-        total
-      }
-    }
-  }
-`

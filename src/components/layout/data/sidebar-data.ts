@@ -15,7 +15,8 @@ export const sidebarData: SidebarData = {
     {
       title: 'General',
       items: [
-        // { title: 'Home', url: '/', icon: IconHome },
+        // { title: 'Home2', url: '/', icon: IconHome },
+        // { title: 'Home', url: '/home1', icon: IconHome },
         { title: 'Attendance', url: '/', icon: IconTimeDuration30 },
         { title: 'Tickets', url: '/tickets', icon: IconLayoutBoard },
         { title: 'Profile', url: '/profile', icon: IconUserCog },
