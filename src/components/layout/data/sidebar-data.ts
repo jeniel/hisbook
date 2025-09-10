@@ -1,7 +1,7 @@
 import {
   IconLayoutDashboard,
   IconUsers,
-  IconHome,
+  // IconHome,
   IconBriefcase,
   IconUserCog,
   IconLayoutBoard,
@@ -15,9 +15,9 @@ export const sidebarData: SidebarData = {
     {
       title: 'General',
       items: [
-        { title: 'Home', url: '/', icon: IconHome },
+        // { title: 'Home', url: '/', icon: IconHome },
+        { title: 'Attendance', url: '/', icon: IconTimeDuration30 },
         { title: 'Tickets', url: '/tickets', icon: IconLayoutBoard },
-        { title: 'Attendance', url: '/attendance', icon: IconTimeDuration30 },
         { title: 'Profile', url: '/profile', icon: IconUserCog },
       ],
     },

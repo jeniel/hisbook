@@ -1,25 +1,21 @@
 import { Link } from '@tanstack/react-router'
-import { Query } from '@/graphql/codegen/graphql'
-import { CENSUS_DATA } from '@/graphql/operation/query/census'
-import { useQuery } from '@apollo/client'
 import { Hotel, UserPen } from 'lucide-react'
+import { useCensus } from '@/hooks/useCensus'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
-import Spinner from '@/components/spinner'
 
-export default function DepartmentOverview() {
-  const { data, loading, error } = useQuery<Query>(CENSUS_DATA)
-
-  if (loading) return <Spinner />
-  if (error) return <p>Error: {error.message}</p>
-
-  const departments = data?.getCensusSummary.departmentsWithUserCount
+export default function DepartmentOverview({
+  summary,
+}: {
+  summary: NonNullable<ReturnType<typeof useCensus>['summary']>
+}) {
+  const departments = summary?.departmentsWithUserCount ?? []
 
   return (
     <Card>
       <CardHeader className='flex flex-row items-center justify-between'>
         <CardTitle className='flex flex-row items-center'>
-          <Hotel className='h-6 w-6 text-purple-500 mr-2' /> Department Overview
+          <Hotel className='mr-2 h-6 w-6 text-purple-500' /> Department Overview
           Number of Users
         </CardTitle>
 
