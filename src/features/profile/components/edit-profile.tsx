@@ -6,7 +6,7 @@ import { Mutation, Query } from '@/graphql/codegen/graphql'
 import { UPDATE_PROFILE } from '@/graphql/operation/mutation/profile'
 import { ME_QUERY } from '@/graphql/operation/query/user'
 import { useQuery, useMutation } from '@apollo/client'
-import { SquareCheckBig, UserPen } from 'lucide-react'
+import { SquareCheckBig } from 'lucide-react'
 import { toast } from 'sonner'
 import { useUpload } from '@/hooks/useUpload'
 import { Button } from '@/components/ui/button'
@@ -117,13 +117,6 @@ export default function EditProfile() {
     <>
       <Card>
         <CardContent>
-          <h1 className='mb-2 flex items-center gap-2 text-3xl font-semibold'>
-            <UserPen className='h-10 w-10 text-blue-500' />
-            Profile
-          </h1>
-          <p className='text-md text-muted-foreground mb-4'>
-            Update Your Profile
-          </p>
           <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
             {/* Profile Picture */}
             <div className='space-y-2'>
@@ -233,8 +226,10 @@ export default function EditProfile() {
               <div>
                 <label className='mb-1 block'>Employee ID</label>
                 <Input
-                  {...form.register('employeeID', { valueAsNumber: true })}
+                  {...form.register('employeeID')}
                   className='border border-black'
+                  inputMode='numeric'
+                  pattern='[0-9]*'
                 />
               </div>
             </div>

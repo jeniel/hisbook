@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { useState, useCallback, useMemo } from 'react'
 import { toast } from 'sonner'
 
@@ -181,7 +182,6 @@ export function useAttendance() {
     try {
       const userData = await getHisd3User(idNumber)
       setUser(userData)
-      toast.success('User found successfully')
       return userData
     } catch (error) {
       const errorMessage =

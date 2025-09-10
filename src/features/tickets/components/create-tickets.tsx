@@ -143,7 +143,7 @@ export default function CreateTickets() {
                     name='time'
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Time</FormLabel>
+                        <FormLabel>Time of Missed Log</FormLabel>
                         <FormControl>
                           <Input type='time' {...field} />
                         </FormControl>
@@ -202,8 +202,8 @@ export default function CreateTickets() {
                   <SquareCheckBig className='text-green-500' /> Submit
                 </Button>
                 <p className='mb-4 text-sm italic'>
-                  Note: Once Ticket is Submitted You Cannot Edit It. Please
-                  Double Check.
+                  Note: Once a ticket is submitted you cannot edit it. Please
+                  double check.
                 </p>
               </form>
             </Form>

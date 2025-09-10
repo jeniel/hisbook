@@ -1,4 +1,3 @@
-export { UserSearch } from './user-search'
 export { CutoffSelector } from './cutoff-selector'
 export { AttendanceCard } from './attendance-card'
 export { LoadingCard } from './loading-card'

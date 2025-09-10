@@ -16,9 +16,9 @@ export const sidebarData: SidebarData = {
       title: 'General',
       items: [
         { title: 'Home', url: '/', icon: IconHome },
-        { title: 'My Profile', url: '/profile', icon: IconUserCog },
         { title: 'Tickets', url: '/tickets', icon: IconLayoutBoard },
-         { title: 'Attendance', url: '/attendance', icon: IconTimeDuration30 },
+        { title: 'Attendance', url: '/attendance', icon: IconTimeDuration30 },
+        { title: 'Profile', url: '/profile', icon: IconUserCog },
       ],
     },
     {
