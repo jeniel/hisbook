@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 import CreatePost from './components/create-post'
 
 // import Events from './components/events'
@@ -11,6 +12,21 @@ export default function HomePage() {
       <div className='order-2 space-y-4 lg:order-1 lg:col-span-3'>
         <CreatePost />
         {/* <HomeFeed /> */}
+=======
+import Events from '@/components/events'
+import Features from './components/feature-cards'
+import Hero from './components/hero'
+import HomeTickets from './components/home-tickets'
+
+export default function HomePage() {
+  return (
+    <div className='min-h-dvh rounded-2xl bg-green-50 dark:bg-zinc-900'>
+      <div className='order-2 space-y-2 p-4 py-10 md:container md:py-16'>
+        <Hero />
+        <Features />
+        <Events />
+        <HomeTickets />
+>>>>>>> Stashed changes
       </div>
 
       {/* Right Column */}
