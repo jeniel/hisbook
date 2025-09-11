@@ -1,6 +1,7 @@
 import React from 'react'
 import { IconTimeDuration30 } from '@tabler/icons-react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import Events from '../../components/events'
 import { AttendanceCard } from './components/attendance-card'
 import { AttendanceSummary } from './components/attendance-summary'
 import { CutoffSelector } from './components/cutoff-selector'
@@ -8,7 +9,6 @@ import { Information } from './components/information'
 import { LoadingCard } from './components/loading-card'
 import { useAttendance } from './hooks'
 import { CutoffPeriod } from './utils/cutoffUtils'
-import Events from '../home/components/events'
 
 const AttendancePage = () => {
   const {

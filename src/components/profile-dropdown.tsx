@@ -1,19 +1,13 @@
-import { useLogout } from '@/hooks/useLogout'
 import useCurrentUser from '@/hooks/useUser'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import Avatar from '@/features/home/components/avatar'
+import Avatar from '@/components/avatar'
 
 export function ProfileDropdown() {
   const { user } = useCurrentUser()
-  const { logout } = useLogout()
 
   const profile = user?.profile
 
@@ -27,20 +21,6 @@ export function ProfileDropdown() {
           <Avatar avatarUrl={profile?.avatar ?? undefined} size={40} />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className='w-56' align='end' forceMount>
-        <DropdownMenuLabel className='font-normal'>
-          <div className='flex flex-col space-y-1'>
-            <p className='text-md leading-none font-medium'>
-              {profile?.firstName && profile?.lastName
-                ? `${profile.firstName} ${profile.lastName}`
-                : 'Guest User'}
-            </p>
-            <p className='text-sm'>@{user?.username || 'Guest User'}</p>
-          </div>
-        </DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={logout}>Log out</DropdownMenuItem>
-      </DropdownMenuContent>
     </DropdownMenu>
   )
 }

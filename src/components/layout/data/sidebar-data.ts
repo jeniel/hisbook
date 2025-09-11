@@ -1,12 +1,12 @@
 import {
   IconLayoutDashboard,
   IconUsers,
-  // IconHome,
   IconBriefcase,
   IconUserCog,
   IconLayoutBoard,
   IconCalendarWeek,
   IconTimeDuration30,
+  IconHome,
 } from '@tabler/icons-react'
 import { type SidebarData } from '../types'
 
@@ -15,9 +15,8 @@ export const sidebarData: SidebarData = {
     {
       title: 'General',
       items: [
-        // { title: 'Home2', url: '/', icon: IconHome },
-        // { title: 'Home', url: '/home', icon: IconHome },
-        { title: 'Attendance', url: '/', icon: IconTimeDuration30 },
+        { title: 'Home', url: '/', icon: IconHome },
+        { title: 'Attendance', url: '/attendance', icon: IconTimeDuration30 },
         { title: 'Tickets / Services', url: '/tickets', icon: IconLayoutBoard },
         { title: 'Profile', url: '/profile', icon: IconUserCog },
       ],

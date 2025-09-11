@@ -1,5 +1,5 @@
 import { UserPen } from 'lucide-react'
-import Events from '../home/components/events'
+import Events from '../../components/events'
 import EditProfile from './components/edit-profile'
 
 export default function Profile() {
@@ -10,12 +10,11 @@ export default function Profile() {
           <UserPen className='h-10 w-10 text-blue-500' />
           Profile
         </h1>
-        <p className='text-sm text-muted-foreground mb-4'>
+        <p className='text-muted-foreground mb-4 text-sm'>
           Update Your Profile
         </p>
       </div>
       <div className='grid grid-cols-1 gap-4 pb-4 md:grid-cols-4'>
-
         {/* Left Column */}
         <div className='order-2 space-y-4 md:order-1 md:col-span-3'>
           <EditProfile />

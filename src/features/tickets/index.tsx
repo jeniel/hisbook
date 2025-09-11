@@ -1,5 +1,5 @@
 import { Ticket } from 'lucide-react'
-import Events from '../home/components/events'
+import Events from '../../components/events'
 import CreateTickets from './components/create-tickets'
 import MyTickets from './components/my-tickets'
 import MyTicketsOverview from './components/my-tickets-overview'

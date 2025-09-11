@@ -27,7 +27,7 @@ export default function MyTicketsOverview() {
     error: ticketsError,
   } = useQuery<Query>(
     CENSUS_TICKET_DATA,
-    { variables: { userId: userId || '' }, skip: !userId } // skip query if no userId
+    { variables: { userId: userId || '' }, skip: !userId }
   )
 
   if (meLoading) return <Spinner />
