@@ -17,10 +17,10 @@ export default function AdminTickets() {
         <div>
           <h1 className="mb-2 flex items-center gap-2 text-3xl font-semibold">
             <Ticket className="h-10 w-10 text-green-500" />
-            Admin Tickets  
+            Requested Tickets / Services
           </h1>
           <p className="text-md text-muted-foreground">
-            Update Tickets of the Users
+            Update the Requested Tickets / Services
           </p>
         </div>
         <AllTicketsOverview summary={summary} />

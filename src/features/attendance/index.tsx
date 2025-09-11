@@ -8,6 +8,7 @@ import { Information } from './components/information'
 import { LoadingCard } from './components/loading-card'
 import { useAttendance } from './hooks'
 import { CutoffPeriod } from './utils/cutoffUtils'
+import Events from '../home/components/events'
 
 const AttendancePage = () => {
   const {
@@ -46,45 +47,55 @@ const AttendancePage = () => {
         </div>
       </div>
 
-      {/* User Search Section */}
-      <Information user={user} fetchUser={fetchUser} />
+      <div className='grid grid-cols-1 gap-4 pb-4 md:grid-cols-4'>
+        {/* Left Column */}
+        <div className='order-2 space-y-4 md:order-1 md:col-span-3'>
+          {/* User Search Section */}
+          <Information user={user} fetchUser={fetchUser} />
 
-      {/* Cutoff Period Selector */}
-      {hasUser && (
-        <CutoffSelector
-          onPeriodSelect={handlePeriodSelect}
-          loading={loadingAttendance}
-          disabled={!canFetchAttendance}
-        />
-      )}
-
-      {/* Loading State */}
-      {loadingAttendance && (
-        <LoadingCard message='Fetching attendance records...' />
-      )}
-
-      {/* Attendance Results */}
-      {hasAttendanceData && attendanceData && selectedPeriod && user && (
-        <Tabs defaultValue='details' className='w-full'>
-          <TabsList className='grid w-full grid-cols-2'>
-            <TabsTrigger value='summary'>Summary</TabsTrigger>
-            <TabsTrigger value='details'>Daily Details</TabsTrigger>
-          </TabsList>
-          <TabsContent value='summary' className='mt-4'>
-            <AttendanceSummary
-              attendanceData={attendanceData}
-              periodLabel={selectedPeriod.label}
+          {/* Cutoff Period Selector */}
+          {hasUser && (
+            <CutoffSelector
+              onPeriodSelect={handlePeriodSelect}
+              loading={loadingAttendance}
+              disabled={!canFetchAttendance}
             />
-          </TabsContent>
-          <TabsContent value='details' className='mt-4'>
-            <AttendanceCard
-              attendanceData={attendanceData}
-              periodLabel={selectedPeriod.label}
-              employee={user}
-            />
-          </TabsContent>
-        </Tabs>
-      )}
+          )}
+
+          {/* Loading State */}
+          {loadingAttendance && (
+            <LoadingCard message='Fetching attendance records...' />
+          )}
+
+          {/* Attendance Results */}
+          {hasAttendanceData && attendanceData && selectedPeriod && user && (
+            <Tabs defaultValue='details' className='w-full'>
+              <TabsList className='grid w-full grid-cols-2'>
+                <TabsTrigger value='summary'>Summary</TabsTrigger>
+                <TabsTrigger value='details'>Daily Details</TabsTrigger>
+              </TabsList>
+              <TabsContent value='summary' className='mt-4'>
+                <AttendanceSummary
+                  attendanceData={attendanceData}
+                  periodLabel={selectedPeriod.label}
+                />
+              </TabsContent>
+              <TabsContent value='details' className='mt-4'>
+                <AttendanceCard
+                  attendanceData={attendanceData}
+                  periodLabel={selectedPeriod.label}
+                  employee={user}
+                />
+              </TabsContent>
+            </Tabs>
+          )}
+        </div>
+
+        {/* Right Column */}
+        <div className='order-1 space-y-4 md:order-2 md:col-span-1'>
+          <Events />
+        </div>
+      </div>
     </div>
   )
 }

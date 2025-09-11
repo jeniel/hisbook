@@ -29,10 +29,9 @@ import Spinner from '@/components/spinner'
 
 // Input Validation
 const TicketSchema = z.object({
-  time: z.string().min(1, { message: 'Time is required' }),
   date: z.string().min(1, { message: 'Date is required' }),
-  floor: z.string().min(1, { message: 'Floor is required' }),
-  subject: z.string().optional(),
+  floor: z.string().min(1, { message: 'Location / Department is required' }),
+  subject: z.string().min(1, { message: 'Subject is required' }),
   remarks: z.string().optional(),
 })
 
@@ -51,7 +50,6 @@ export default function CreateTickets() {
     resolver: zodResolver(TicketSchema),
     defaultValues: {
       subject: '',
-      time: '',
       date: '',
       floor: '',
       remarks: '',
@@ -66,7 +64,7 @@ export default function CreateTickets() {
     }
 
     try {
-      const missedAt = `${data.date}T${data.time}`
+      const missedAt = `${data.date}`
       await createTicket({
         variables: {
           payload: {
@@ -100,7 +98,7 @@ export default function CreateTickets() {
               variant='ghost'
               className='flex w-full items-center justify-between text-lg font-semibold'
             >
-              <span>Create Ticket</span>
+              <span>Create Ticket / Request A Service</span>
               {open ? (
                 <ChevronDown className='h-4 w-4' />
               ) : (
@@ -111,7 +109,7 @@ export default function CreateTickets() {
 
           <CollapsibleContent className='data-[state=open]:animate-collapse-down data-[state=closed]:animate-collapse-up mt-4 overflow-hidden transition-all'>
             <p className='mb-2 text-lg'>
-              <span className='font-medium'>Name:</span>{' '}
+              <span className='font-medium'>Requested By:</span>{' '}
               {user?.profile?.firstName} {user?.profile?.lastName}
             </p>
 
@@ -129,23 +127,9 @@ export default function CreateTickets() {
                         <FormLabel>Subject</FormLabel>
                         <FormControl>
                           <Input
-                            placeholder='e.g. CCTV Review, Confidential'
+                            placeholder='e.g. CCTV Review for Missed Logout, Engineering / Maintenance'
                             {...field}
                           />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name='time'
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Time of Missed Log</FormLabel>
-                        <FormControl>
-                          <Input type='time' {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -171,7 +155,7 @@ export default function CreateTickets() {
                     name='floor'
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Location</FormLabel>
+                        <FormLabel>Location / Department</FormLabel>
                         <FormControl>
                           <Input placeholder='e.g. 8th, ER or B1' {...field} />
                         </FormControl>
@@ -186,7 +170,7 @@ export default function CreateTickets() {
                   name='remarks'
                   render={({ field }) => (
                     <FormItem className='mb-4'>
-                      <FormLabel>Message</FormLabel>
+                      <FormLabel>Message (Optional)</FormLabel>
                       <FormControl>
                         <Input
                           placeholder='Additional details or context'
@@ -198,12 +182,27 @@ export default function CreateTickets() {
                   )}
                 />
 
-                <Button variant='outline' type='submit' className='shadow-md'>
+                <Button
+                  variant='outline'
+                  type='submit'
+                  className='mb-4 shadow-md'
+                >
                   <SquareCheckBig className='text-green-500' /> Submit
                 </Button>
+
+                {/* Instructions */}
+                <p className='font-bold'>Instructions:</p>
                 <p className='mb-4 text-sm italic'>
-                  Note: Once a ticket is submitted you cannot edit it. Please
-                  double check.
+                  Please fill out the form carefully. Use the{' '}
+                  <strong>Subject</strong> field to briefly describe your
+                  request or issue (e.g., <em>"CCTV Review"</em>,{' '}
+                  <em>"Aircon Leaking"</em>,<em>"Printer Not Working"</em>).
+                  This will help route your ticket to the right department (IT,
+                  Engineering, Biomed, or Maintenance).
+                  <br />
+                  <br />
+                  Note: Once the form is submitted, you cannot edit it again.
+                  Please double check your details before submitting.
                 </p>
               </form>
             </Form>

@@ -16,9 +16,9 @@ export const sidebarData: SidebarData = {
       title: 'General',
       items: [
         // { title: 'Home2', url: '/', icon: IconHome },
-        // { title: 'Home', url: '/home1', icon: IconHome },
+        // { title: 'Home', url: '/home', icon: IconHome },
         { title: 'Attendance', url: '/', icon: IconTimeDuration30 },
-        { title: 'Tickets', url: '/tickets', icon: IconLayoutBoard },
+        { title: 'Tickets / Services', url: '/tickets', icon: IconLayoutBoard },
         { title: 'Profile', url: '/profile', icon: IconUserCog },
       ],
     },
@@ -27,7 +27,7 @@ export const sidebarData: SidebarData = {
       items: [
         { title: 'Dashboard', url: '/dashboard', icon: IconLayoutDashboard },
         {
-          title: 'Admin Tickets',
+          title: 'Requested Tickets',
           url: '/admin-tickets',
           icon: IconLayoutBoard,
         },

@@ -55,7 +55,7 @@ export default function MyTicketsOverview() {
   }
 
   return (
-    <div className='grid gap-2 mb-2 md:mb-0 grid-cols-2 md:grid-cols-4'>
+    <div className='mb-2 grid grid-cols-4 gap-2'>
       {ticketsByStatus.map((t) => (
         <div
           key={t.status}

@@ -36,9 +36,6 @@ export function ProfileDropdown() {
                 : 'Guest User'}
             </p>
             <p className='text-sm'>@{user?.username || 'Guest User'}</p>
-            <p className='text-muted-foreground text-xs leading-none'>
-              {user?.email || 'No email provided'}
-            </p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />

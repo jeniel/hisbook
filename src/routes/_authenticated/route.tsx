@@ -21,12 +21,11 @@ export const Route = createFileRoute('/_authenticated')({
 
       throw redirect({
         to: '/sign-in',
-        search: {
-          redirect:
-            typeof window !== 'undefined'
-              ? window.location.pathname
-              : undefined,
-        },
+        search:
+          typeof window !== 'undefined' &&
+          window.location.pathname !== '/sign-in'
+            ? { redirect: window.location.pathname }
+            : undefined,
       })
     }
   },
