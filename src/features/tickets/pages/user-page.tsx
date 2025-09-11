@@ -1,6 +1,6 @@
 import { Ticket } from 'lucide-react'
-import CreateTickets from './components/create-tickets'
-import MyTickets from './components/my-tickets'
+import CreateTickets from '../components/create-tickets'
+import MyTickets from '../components/my-tickets'
 
 export default function Tickets() {
   return (

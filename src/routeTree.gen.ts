@@ -21,11 +21,13 @@ import { Route as AuthenticatedUsersIndexRouteImport } from './routes/_authentic
 import { Route as AuthenticatedTicketsIndexRouteImport } from './routes/_authenticated/tickets/index'
 import { Route as AuthenticatedReceivedTicketsIndexRouteImport } from './routes/_authenticated/received-tickets/index'
 import { Route as AuthenticatedProfileIndexRouteImport } from './routes/_authenticated/profile/index'
+import { Route as AuthenticatedMisTicketIndexRouteImport } from './routes/_authenticated/mis-ticket/index'
+import { Route as AuthenticatedHrTicketIndexRouteImport } from './routes/_authenticated/hr-ticket/index'
 import { Route as AuthenticatedEventsIndexRouteImport } from './routes/_authenticated/events/index'
+import { Route as AuthenticatedEngrTicketIndexRouteImport } from './routes/_authenticated/engr-ticket/index'
 import { Route as AuthenticatedDepartmentsIndexRouteImport } from './routes/_authenticated/departments/index'
 import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard/index'
 import { Route as AuthenticatedAttendanceIndexRouteImport } from './routes/_authenticated/attendance/index'
-import { Route as AuthenticatedAdminTicketsIndexRouteImport } from './routes/_authenticated/admin-tickets/index'
 
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
@@ -89,10 +91,28 @@ const AuthenticatedProfileIndexRoute =
     path: '/profile/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedMisTicketIndexRoute =
+  AuthenticatedMisTicketIndexRouteImport.update({
+    id: '/mis-ticket/',
+    path: '/mis-ticket/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedHrTicketIndexRoute =
+  AuthenticatedHrTicketIndexRouteImport.update({
+    id: '/hr-ticket/',
+    path: '/hr-ticket/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedEventsIndexRoute =
   AuthenticatedEventsIndexRouteImport.update({
     id: '/events/',
     path: '/events/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedEngrTicketIndexRoute =
+  AuthenticatedEngrTicketIndexRouteImport.update({
+    id: '/engr-ticket/',
+    path: '/engr-ticket/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedDepartmentsIndexRoute =
@@ -113,12 +133,6 @@ const AuthenticatedAttendanceIndexRoute =
     path: '/attendance/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const AuthenticatedAdminTicketsIndexRoute =
-  AuthenticatedAdminTicketsIndexRouteImport.update({
-    id: '/admin-tickets/',
-    path: '/admin-tickets/',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
 
 export interface FileRoutesByFullPath {
   '/sign-in': typeof authSignInRoute
@@ -128,11 +142,13 @@ export interface FileRoutesByFullPath {
   '/500': typeof errors500Route
   '/503': typeof errors503Route
   '/': typeof AuthenticatedIndexRoute
-  '/admin-tickets': typeof AuthenticatedAdminTicketsIndexRoute
   '/attendance': typeof AuthenticatedAttendanceIndexRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
   '/departments': typeof AuthenticatedDepartmentsIndexRoute
+  '/engr-ticket': typeof AuthenticatedEngrTicketIndexRoute
   '/events': typeof AuthenticatedEventsIndexRoute
+  '/hr-ticket': typeof AuthenticatedHrTicketIndexRoute
+  '/mis-ticket': typeof AuthenticatedMisTicketIndexRoute
   '/profile': typeof AuthenticatedProfileIndexRoute
   '/received-tickets': typeof AuthenticatedReceivedTicketsIndexRoute
   '/tickets': typeof AuthenticatedTicketsIndexRoute
@@ -146,11 +162,13 @@ export interface FileRoutesByTo {
   '/500': typeof errors500Route
   '/503': typeof errors503Route
   '/': typeof AuthenticatedIndexRoute
-  '/admin-tickets': typeof AuthenticatedAdminTicketsIndexRoute
   '/attendance': typeof AuthenticatedAttendanceIndexRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
   '/departments': typeof AuthenticatedDepartmentsIndexRoute
+  '/engr-ticket': typeof AuthenticatedEngrTicketIndexRoute
   '/events': typeof AuthenticatedEventsIndexRoute
+  '/hr-ticket': typeof AuthenticatedHrTicketIndexRoute
+  '/mis-ticket': typeof AuthenticatedMisTicketIndexRoute
   '/profile': typeof AuthenticatedProfileIndexRoute
   '/received-tickets': typeof AuthenticatedReceivedTicketsIndexRoute
   '/tickets': typeof AuthenticatedTicketsIndexRoute
@@ -166,11 +184,13 @@ export interface FileRoutesById {
   '/(errors)/500': typeof errors500Route
   '/(errors)/503': typeof errors503Route
   '/_authenticated/': typeof AuthenticatedIndexRoute
-  '/_authenticated/admin-tickets/': typeof AuthenticatedAdminTicketsIndexRoute
   '/_authenticated/attendance/': typeof AuthenticatedAttendanceIndexRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/_authenticated/departments/': typeof AuthenticatedDepartmentsIndexRoute
+  '/_authenticated/engr-ticket/': typeof AuthenticatedEngrTicketIndexRoute
   '/_authenticated/events/': typeof AuthenticatedEventsIndexRoute
+  '/_authenticated/hr-ticket/': typeof AuthenticatedHrTicketIndexRoute
+  '/_authenticated/mis-ticket/': typeof AuthenticatedMisTicketIndexRoute
   '/_authenticated/profile/': typeof AuthenticatedProfileIndexRoute
   '/_authenticated/received-tickets/': typeof AuthenticatedReceivedTicketsIndexRoute
   '/_authenticated/tickets/': typeof AuthenticatedTicketsIndexRoute
@@ -186,11 +206,13 @@ export interface FileRouteTypes {
     | '/500'
     | '/503'
     | '/'
-    | '/admin-tickets'
     | '/attendance'
     | '/dashboard'
     | '/departments'
+    | '/engr-ticket'
     | '/events'
+    | '/hr-ticket'
+    | '/mis-ticket'
     | '/profile'
     | '/received-tickets'
     | '/tickets'
@@ -204,11 +226,13 @@ export interface FileRouteTypes {
     | '/500'
     | '/503'
     | '/'
-    | '/admin-tickets'
     | '/attendance'
     | '/dashboard'
     | '/departments'
+    | '/engr-ticket'
     | '/events'
+    | '/hr-ticket'
+    | '/mis-ticket'
     | '/profile'
     | '/received-tickets'
     | '/tickets'
@@ -223,11 +247,13 @@ export interface FileRouteTypes {
     | '/(errors)/500'
     | '/(errors)/503'
     | '/_authenticated/'
-    | '/_authenticated/admin-tickets/'
     | '/_authenticated/attendance/'
     | '/_authenticated/dashboard/'
     | '/_authenticated/departments/'
+    | '/_authenticated/engr-ticket/'
     | '/_authenticated/events/'
+    | '/_authenticated/hr-ticket/'
+    | '/_authenticated/mis-ticket/'
     | '/_authenticated/profile/'
     | '/_authenticated/received-tickets/'
     | '/_authenticated/tickets/'
@@ -330,11 +356,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedProfileIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/mis-ticket/': {
+      id: '/_authenticated/mis-ticket/'
+      path: '/mis-ticket'
+      fullPath: '/mis-ticket'
+      preLoaderRoute: typeof AuthenticatedMisTicketIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/hr-ticket/': {
+      id: '/_authenticated/hr-ticket/'
+      path: '/hr-ticket'
+      fullPath: '/hr-ticket'
+      preLoaderRoute: typeof AuthenticatedHrTicketIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/events/': {
       id: '/_authenticated/events/'
       path: '/events'
       fullPath: '/events'
       preLoaderRoute: typeof AuthenticatedEventsIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/engr-ticket/': {
+      id: '/_authenticated/engr-ticket/'
+      path: '/engr-ticket'
+      fullPath: '/engr-ticket'
+      preLoaderRoute: typeof AuthenticatedEngrTicketIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/departments/': {
@@ -358,23 +405,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAttendanceIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/admin-tickets/': {
-      id: '/_authenticated/admin-tickets/'
-      path: '/admin-tickets'
-      fullPath: '/admin-tickets'
-      preLoaderRoute: typeof AuthenticatedAdminTicketsIndexRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
-  AuthenticatedAdminTicketsIndexRoute: typeof AuthenticatedAdminTicketsIndexRoute
   AuthenticatedAttendanceIndexRoute: typeof AuthenticatedAttendanceIndexRoute
   AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
   AuthenticatedDepartmentsIndexRoute: typeof AuthenticatedDepartmentsIndexRoute
+  AuthenticatedEngrTicketIndexRoute: typeof AuthenticatedEngrTicketIndexRoute
   AuthenticatedEventsIndexRoute: typeof AuthenticatedEventsIndexRoute
+  AuthenticatedHrTicketIndexRoute: typeof AuthenticatedHrTicketIndexRoute
+  AuthenticatedMisTicketIndexRoute: typeof AuthenticatedMisTicketIndexRoute
   AuthenticatedProfileIndexRoute: typeof AuthenticatedProfileIndexRoute
   AuthenticatedReceivedTicketsIndexRoute: typeof AuthenticatedReceivedTicketsIndexRoute
   AuthenticatedTicketsIndexRoute: typeof AuthenticatedTicketsIndexRoute
@@ -383,11 +425,13 @@ interface AuthenticatedRouteRouteChildren {
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
-  AuthenticatedAdminTicketsIndexRoute: AuthenticatedAdminTicketsIndexRoute,
   AuthenticatedAttendanceIndexRoute: AuthenticatedAttendanceIndexRoute,
   AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
   AuthenticatedDepartmentsIndexRoute: AuthenticatedDepartmentsIndexRoute,
+  AuthenticatedEngrTicketIndexRoute: AuthenticatedEngrTicketIndexRoute,
   AuthenticatedEventsIndexRoute: AuthenticatedEventsIndexRoute,
+  AuthenticatedHrTicketIndexRoute: AuthenticatedHrTicketIndexRoute,
+  AuthenticatedMisTicketIndexRoute: AuthenticatedMisTicketIndexRoute,
   AuthenticatedProfileIndexRoute: AuthenticatedProfileIndexRoute,
   AuthenticatedReceivedTicketsIndexRoute:
     AuthenticatedReceivedTicketsIndexRoute,

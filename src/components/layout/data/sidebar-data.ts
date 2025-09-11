@@ -25,14 +25,9 @@ export const sidebarData: SidebarData = {
       title: 'Department Tickets',
       items: [
         { title: 'Dashboard', url: '/dashboard', icon: IconLayoutDashboard },
-        { title: 'MIS', url: '/mis', icon: IconLayoutDashboard },
-        { title: 'HR', url: '/hr', icon: IconLayoutDashboard },
-        { title: 'ENGR', url: '/engr', icon: IconLayoutDashboard },
-        {
-          title: 'Requested Tickets',
-          url: '/admin-tickets',
-          icon: IconLayoutBoard,
-        },
+        { title: 'MIS', url: '/mis-ticket', icon: IconLayoutDashboard },
+        { title: 'HR', url: '/hr-ticket', icon: IconLayoutDashboard },
+        { title: 'ENGR', url: '/engr-ticket', icon: IconLayoutDashboard },
       ],
     },
     {

@@ -63,9 +63,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <p className='text-muted-foreground text-sm'>
               {profile?.title || 'guest'}
             </p>
-            <p className='text-muted-foreground text-sm'>
-              @{user?.username || 'guest'}
-            </p>
           </div>
         </div>
       </div>
