@@ -60,7 +60,7 @@ export default function MyTickets() {
       <CardContent>
         <h1 className='mb-2 flex items-center gap-2 text-xl font-semibold'>
           <Ticket className='h-6 w-6 text-green-500' />
-          My Tickets
+          My Requested Tickets / Services
         </h1>
 
         <Table>
@@ -70,7 +70,6 @@ export default function MyTickets() {
               <TableHead>Name</TableHead>
               <TableHead>Subject</TableHead>
               <TableHead>Date</TableHead>
-              <TableHead>Time</TableHead>
               <TableHead>Location</TableHead>
               <TableHead>Status</TableHead>
             </TableRow>
@@ -86,9 +85,6 @@ export default function MyTickets() {
                 </TableCell>
                 <TableCell>{ticket.subject || '-'}</TableCell>
                 <TableCell>{formatDate(ticket.missedAt)}</TableCell>
-                <TableCell>
-                  {new Date(ticket.missedAt).toLocaleTimeString()}
-                </TableCell>
                 <TableCell>{ticket.floor || '-'}</TableCell>
                 <TableCell>{ticket.status || '-'}</TableCell>
               </TableRow>

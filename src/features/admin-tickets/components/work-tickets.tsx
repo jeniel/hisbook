@@ -18,7 +18,6 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import {
   Select,
   SelectContent,
@@ -111,18 +110,17 @@ export default function WorkTicket({ ticket, onUpdated }: WorkTicketProps) {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant={'outline'} size='sm'>
-          <PencilLine className='text-blue-500' /> Update Ticket
+          <PencilLine className='text-blue-500' /> Update
         </Button>
       </DialogTrigger>
 
       <DialogContent className='max-w-6xl'>
         <DialogHeader>
           <DialogTitle className='flex flex-row items-center gap-2'>
-            <PencilLine className='text-blue-500' />
-            Update Ticket
+            <PencilLine className='font-semibold text-blue-500' />
+            Update Ticket / Service
           </DialogTitle>
         </DialogHeader>
-
         {/* Two-column grid */}
         <div className='grid grid-cols-1 gap-2 md:grid-cols-2'>
           {/* Left Column */}
@@ -130,17 +128,21 @@ export default function WorkTicket({ ticket, onUpdated }: WorkTicketProps) {
             {/* Ticket Info */}
             <div className='text-md space-y-2'>
               <p>
-                <span className='mr-2 font-semibold'>Name:</span>{' '}
+                <strong className='mr-2'>Name:</strong>{' '}
                 {ticket.createdBy?.profile
                   ? `${ticket.createdBy.profile.firstName} ${ticket.createdBy.profile.lastName}`
                   : 'Unknown'}
               </p>
               <p>
-                <span className='mr-2 font-semibold'>Subject:</span>{' '}
+                <strong className='mr-2'>Subject:</strong>{' '}
                 {ticket.subject || '-'}
               </p>
               <p>
-                <span className='mr-2 font-semibold'>Message:</span>{' '}
+                <strong className='mr-2'>Department / Location:</strong>{' '}
+                {ticket.floor || '-'}
+              </p>
+              <p>
+                <strong className='mr-2'>Message:</strong>{' '}
                 {ticket.remarks || '-'}
               </p>
             </div>
@@ -150,13 +152,13 @@ export default function WorkTicket({ ticket, onUpdated }: WorkTicketProps) {
           <div className='text-md space-y-4'>
             {/* Reviewed By */}
             <div className='space-y-2'>
-              <p>Reviewed By</p>
+              <strong>Reviewed By</strong>
               <Input value={updatedBy} readOnly placeholder='Name' />
             </div>
 
             {/* Status Dropdown */}
             <div className='space-y-2'>
-              <p>Status</p>
+              <strong>Status</strong>
               <Select value={status} onValueChange={setStatus}>
                 <SelectTrigger className='w-full'>
                   <SelectValue placeholder='Select status' />
@@ -170,10 +172,9 @@ export default function WorkTicket({ ticket, onUpdated }: WorkTicketProps) {
             </div>
           </div>
         </div>
-
         {/* File Upload */}
         <div className='space-y-2'>
-          <Label>Attach CCTV Screenshot</Label>
+          <strong>Attach File / Image</strong>
           <Input type='file' accept='image/*' onChange={handleFileChange} />
           {file && (
             <p className='text-muted-foreground text-xs'>
@@ -190,10 +191,18 @@ export default function WorkTicket({ ticket, onUpdated }: WorkTicketProps) {
             </div>
           )}
         </div>
-
         <DialogFooter>
           <Button onClick={handleSubmit} disabled={loading}>
             {loading ? 'Saving...' : 'Save'}
+          </Button>
+
+          <Button
+            type='button'
+            variant='outline'
+            onClick={() => setOpen(false)}
+            disabled={loading}
+          >
+            Close
           </Button>
         </DialogFooter>
       </DialogContent>

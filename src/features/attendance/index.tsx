@@ -24,10 +24,7 @@ const AttendancePage = () => {
   const [selectedPeriod, setSelectedPeriod] =
     React.useState<CutoffPeriod | null>(null)
 
-  // console.log('attendanceData', attendanceData)
-
   const handlePeriodSelect = async (period: CutoffPeriod) => {
-    // console.log('📅 Fetching attendance for period:', period)
     setSelectedPeriod(period)
     await fetchAttendanceLogs(period.startDate, period.endDate)
   }
@@ -46,14 +43,9 @@ const AttendancePage = () => {
         </div>
       </div>
 
-<<<<<<< Updated upstream
-      {/* User Search Section */}
-      <Information user={user} fetchUser={fetchUser} />
-=======
       <div className='space-y-4'>
           {/* User Search Section */}
           <Information user={user} fetchUser={fetchUser} />
->>>>>>> Stashed changes
 
       {/* Cutoff Period Selector */}
       {hasUser && (
@@ -69,61 +61,29 @@ const AttendancePage = () => {
         <LoadingCard message='Fetching attendance records...' />
       )}
 
-      {/* Attendance Results */}
-      {hasAttendanceData && attendanceData && selectedPeriod && user && (
-        <Tabs defaultValue='details' className='w-full'>
-          <TabsList className='grid w-full grid-cols-2'>
-            <TabsTrigger value='summary'>Summary</TabsTrigger>
-            <TabsTrigger value='details'>Daily Details</TabsTrigger>
-          </TabsList>
-          <TabsContent value='summary' className='mt-4'>
-            <AttendanceSummary
-              attendanceData={attendanceData}
-              periodLabel={selectedPeriod.label}
-            />
-<<<<<<< Updated upstream
-          </TabsContent>
-          <TabsContent value='details' className='mt-4'>
-            <AttendanceCard
-              attendanceData={attendanceData}
-              periodLabel={selectedPeriod.label}
-              employee={user}
-            />
-          </TabsContent>
-        </Tabs>
-      )}
-=======
-          )}
-
-          {/* Loading State */}
-          {loadingAttendance && (
-            <LoadingCard message='Fetching attendance records...' />
-          )}
-
-          {/* Attendance Results */}
-          {hasAttendanceData && attendanceData && selectedPeriod && user && (
-            <Tabs defaultValue='details' className='w-full'>
-              <TabsList className='grid w-full grid-cols-2'>
-                <TabsTrigger value='summary'>Summary</TabsTrigger>
-                <TabsTrigger value='details'>Daily Details</TabsTrigger>
-              </TabsList>
-              <TabsContent value='summary' className='mt-4'>
-                <AttendanceSummary
-                  attendanceData={attendanceData}
-                  periodLabel={selectedPeriod.label}
-                />
-              </TabsContent>
-              <TabsContent value='details' className='mt-4'>
-                <AttendanceCard
-                  attendanceData={attendanceData}
-                  periodLabel={selectedPeriod.label}
-                  employee={user}
-                />
-              </TabsContent>
-            </Tabs>
-          )}
+        {/* Attendance Results */}
+        {hasAttendanceData && attendanceData && selectedPeriod && user && (
+          <Tabs defaultValue='details' className='w-full'>
+            <TabsList className='grid w-full grid-cols-2'>
+              <TabsTrigger value='summary'>Summary</TabsTrigger>
+              <TabsTrigger value='details'>Daily Details</TabsTrigger>
+            </TabsList>
+            <TabsContent value='summary' className='mt-4'>
+              <AttendanceSummary
+                attendanceData={attendanceData}
+                periodLabel={selectedPeriod.label}
+              />
+            </TabsContent>
+            <TabsContent value='details' className='mt-4'>
+              <AttendanceCard
+                attendanceData={attendanceData}
+                periodLabel={selectedPeriod.label}
+                employee={user}
+              />
+            </TabsContent>
+          </Tabs>
+        )}
       </div>
->>>>>>> Stashed changes
     </div>
   )
 }

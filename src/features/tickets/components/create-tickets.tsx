@@ -1,6 +1,13 @@
 import { useState } from 'react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
+import {
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+  SelectValue,
+} from '@/components/ui/select'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Mutation, Status } from '@/graphql/codegen/graphql'
 import { CREATE_TICKET } from '@/graphql/operation/mutation/ticket'
@@ -27,19 +34,38 @@ import {
 import { Input } from '@/components/ui/input'
 import Spinner from '@/components/spinner'
 
+// Department select
+const departments = [
+  {
+    id: '12396f13-00d2-4865-8964-9babd9aa11d1',
+    name: 'HR',
+    description: 'Human Resources',
+  },
+  {
+    id: '51f3fb0d-037d-4791-ada9-48d3c2b18ff9',
+    name: 'ENGR',
+    description: 'Engineering and Maintenance',
+  },
+  {
+    id: 'fcd8ef97-9612-45d2-9afe-05c1d1e266b3',
+    name: 'MIS',
+    description: 'Management Information System',
+  },
+]
+
 // Input Validation
 const TicketSchema = z.object({
-  time: z.string().min(1, { message: 'Time is required' }),
   date: z.string().min(1, { message: 'Date is required' }),
-  floor: z.string().min(1, { message: 'Floor is required' }),
-  subject: z.string().optional(),
+  floor: z.string().min(1, { message: 'Location is required' }),
+  subject: z.string().min(1, { message: 'Subject is required' }),
   remarks: z.string().optional(),
+  departmentId: z.string().min(1, { message: 'Department is required' }),
 })
 
 export default function CreateTickets() {
   const [open, setOpen] = useState(false)
   const [createTicket] = useMutation<Mutation>(CREATE_TICKET, {
-    refetchQueries: [FIND_ALL_TICKETS_BY_USER], // After Submiting Refetch
+    refetchQueries: [FIND_ALL_TICKETS_BY_USER],
     awaitRefetchQueries: true,
   })
 
@@ -51,10 +77,10 @@ export default function CreateTickets() {
     resolver: zodResolver(TicketSchema),
     defaultValues: {
       subject: '',
-      time: '',
       date: '',
       floor: '',
       remarks: '',
+      departmentId: '',
     },
   })
 
@@ -66,24 +92,24 @@ export default function CreateTickets() {
     }
 
     try {
-      const missedAt = `${data.date}T${data.time}`
       await createTicket({
         variables: {
           payload: {
-            missedAt,
+            missedAt: data.date,
             subject: data.subject,
             floor: data.floor,
             screenshot: null,
             status: Status.Pending,
             createdById: userId,
             remarks: data.remarks,
+            departmentId: data.departmentId,
           },
         },
       })
 
       toast.success('Ticket Created')
       form.reset()
-      setOpen(false) // auto-close after success
+      setOpen(false)
     } catch (_error) {
       toast.error('Failed to create ticket')
     }
@@ -100,7 +126,7 @@ export default function CreateTickets() {
               variant='ghost'
               className='flex w-full items-center justify-between text-lg font-semibold'
             >
-              <span>Create Ticket</span>
+              <span>Create Ticket / Request A Service</span>
               {open ? (
                 <ChevronDown className='h-4 w-4' />
               ) : (
@@ -111,7 +137,7 @@ export default function CreateTickets() {
 
           <CollapsibleContent className='data-[state=open]:animate-collapse-down data-[state=closed]:animate-collapse-up mt-4 overflow-hidden transition-all'>
             <p className='mb-2 text-lg'>
-              <span className='font-medium'>Name:</span>{' '}
+              <span className='font-medium'>Requested By:</span>{' '}
               {user?.profile?.firstName} {user?.profile?.lastName}
             </p>
 
@@ -129,23 +155,9 @@ export default function CreateTickets() {
                         <FormLabel>Subject</FormLabel>
                         <FormControl>
                           <Input
-                            placeholder='e.g. CCTV Review, Confidential'
+                            placeholder='e.g. CCTV Review, Aircon Leaking, Printer Issue'
                             {...field}
                           />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name='time'
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Time of Missed Log</FormLabel>
-                        <FormControl>
-                          <Input type='time' {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -171,10 +183,39 @@ export default function CreateTickets() {
                     name='floor'
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Location</FormLabel>
+                        <FormLabel>Location / Department</FormLabel>
                         <FormControl>
-                          <Input placeholder='e.g. 8th, ER or B1' {...field} />
+                          <Input
+                            placeholder='e.g. 8th Floor, ER, Basement 1'
+                            {...field}
+                          />
                         </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name='departmentId'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Send to Department</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder='Select Department' />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {departments.map((dept) => (
+                              <SelectItem key={dept.id} value={dept.id}>
+                                {dept.name} - {dept.description}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -186,7 +227,7 @@ export default function CreateTickets() {
                   name='remarks'
                   render={({ field }) => (
                     <FormItem className='mb-4'>
-                      <FormLabel>Message</FormLabel>
+                      <FormLabel>Message (Optional)</FormLabel>
                       <FormControl>
                         <Input
                           placeholder='Additional details or context'
@@ -198,12 +239,28 @@ export default function CreateTickets() {
                   )}
                 />
 
-                <Button variant='outline' type='submit' className='shadow-md'>
+                <Button
+                  variant='outline'
+                  type='submit'
+                  className='mb-4 shadow-md'
+                >
                   <SquareCheckBig className='text-green-500' /> Submit
                 </Button>
+
+                {/* Instructions */}
+                <p className='font-bold'>Instructions:</p>
                 <p className='mb-4 text-sm italic'>
-                  Note: Once a ticket is submitted you cannot edit it. Please
-                  double check.
+                  Please fill out the form carefully. Use the{' '}
+                  <strong>Subject</strong> field to briefly describe your
+                  request or issue (e.g., <em>"CCTV Review"</em>,{' '}
+                  <em>"Aircon Leaking"</em>, <em>"Printer Not Working"</em>).
+                  <br />
+                  Select the correct <strong>Department</strong> (HR,
+                  Engineering, or MIS) so your request is routed properly.
+                  <br />
+                  <br />
+                  Note: Once the form is submitted, you cannot edit it again.
+                  Please double check your details before submitting.
                 </p>
               </form>
             </Form>

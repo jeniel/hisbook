@@ -3,7 +3,6 @@ import { Outlet } from '@tanstack/react-router'
 import { cn } from '@/lib/utils'
 import { SidebarProvider } from '@/components/ui/sidebar'
 import { AppSidebar } from '@/components/layout/app-sidebar'
-import { ProfileDropdown } from '../profile-dropdown'
 import { ThemeSwitch } from '../theme-switch'
 import { Header } from './header'
 
@@ -15,7 +14,14 @@ export function AuthenticatedLayout({ children }: Props) {
   const defaultOpen = Cookies.get('sidebar_state') !== 'false'
   return (
     <>
-      <SidebarProvider defaultOpen={defaultOpen}>
+      <SidebarProvider
+        defaultOpen={defaultOpen}
+        style={{
+          // change widths here
+          ['--sidebar-width' as string]: '310px',
+          ['--sidebar-width-icon' as string]: '50px',
+        }}
+      >
         <AppSidebar />
         <div
           id='content'
@@ -36,7 +42,6 @@ export function AuthenticatedLayout({ children }: Props) {
               <Header>
                 <div className='ml-auto flex items-center space-x-4'>
                   <ThemeSwitch />
-                  <ProfileDropdown />
                 </div>
               </Header>
               <div className='px-3'>

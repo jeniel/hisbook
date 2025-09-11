@@ -1,12 +1,12 @@
 import {
   IconLayoutDashboard,
   IconUsers,
-  // IconHome,
   IconBriefcase,
   IconUserCog,
   IconLayoutBoard,
   IconCalendarWeek,
   IconTimeDuration30,
+  IconHome,
 } from '@tabler/icons-react'
 import { type SidebarData } from '../types'
 
@@ -15,24 +15,31 @@ export const sidebarData: SidebarData = {
     {
       title: 'General',
       items: [
-        // { title: 'Home2', url: '/', icon: IconHome },
-        // { title: 'Home', url: '/home1', icon: IconHome },
-        { title: 'Attendance', url: '/', icon: IconTimeDuration30 },
-        { title: 'Tickets', url: '/tickets', icon: IconLayoutBoard },
+        { title: 'Home', url: '/', icon: IconHome },
+        { title: 'Attendance', url: '/attendance', icon: IconTimeDuration30 },
+        { title: 'Tickets / Services', url: '/tickets', icon: IconLayoutBoard },
         { title: 'Profile', url: '/profile', icon: IconUserCog },
       ],
     },
     {
-      title: 'Admin',
+      title: 'Department Tickets',
       items: [
         { title: 'Dashboard', url: '/dashboard', icon: IconLayoutDashboard },
+        { title: 'MIS', url: '/mis', icon: IconLayoutDashboard },
+        { title: 'HR', url: '/hr', icon: IconLayoutDashboard },
+        { title: 'ENGR', url: '/engr', icon: IconLayoutDashboard },
         {
-          title: 'Admin Tickets',
+          title: 'Requested Tickets',
           url: '/admin-tickets',
           icon: IconLayoutBoard,
         },
-        { title: 'Departments', url: '/departments', icon: IconBriefcase },
+      ],
+    },
+    {
+      title: 'Config',
+      items: [
         { title: 'Users', url: '/users', icon: IconUsers },
+        { title: 'Departments', url: '/departments', icon: IconBriefcase },
         { title: 'Events', url: '/events', icon: IconCalendarWeek },
       ],
     },

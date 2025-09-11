@@ -44,10 +44,10 @@ export default function AllTickets() {
   return (
     <Card>
       <CardContent>
-        <div className="flex flex-row justify-between items center">
+        <div className='items center flex flex-row justify-between'>
           <h1 className='mb-2 flex items-center gap-2 text-xl font-semibold'>
             <Ticket className='h-6 w-6 text-green-500' />
-            All Tickets
+            All Requested Tickets / Services
           </h1>
 
           <Link to='/received-tickets'>
@@ -61,10 +61,10 @@ export default function AllTickets() {
           <TableHeader>
             <TableRow>
               <TableHead>#</TableHead>
-              <TableHead>Name</TableHead>
+              <TableHead>Requested By</TableHead>
+              <TableHead>Subject</TableHead>
               <TableHead>Date</TableHead>
-              <TableHead>Time</TableHead>
-              <TableHead>Location</TableHead>
+              <TableHead>Department</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
@@ -78,10 +78,8 @@ export default function AllTickets() {
                     ? `${ticket.createdBy.profile.firstName} ${ticket.createdBy.profile.lastName}`
                     : 'Unknown'}
                 </TableCell>
+                <TableCell>{ticket.subject}</TableCell>
                 <TableCell>{formatDate(ticket.missedAt)}</TableCell>
-                <TableCell>
-                  {new Date(ticket.missedAt).toLocaleTimeString()}
-                </TableCell>
                 <TableCell>{ticket.floor}</TableCell>
                 <TableCell>{ticket.status}</TableCell>
                 <TableCell className='flex gap-2'>
