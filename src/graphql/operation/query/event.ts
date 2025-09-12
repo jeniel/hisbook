@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 
 export const GET_ALL_EVENT = gql`
-  query Query($page: Int, $perPage: Int) {
+  query FindAllEvents($page: Int, $perPage: Int) {
     findAllEvents(page: $page, perPage: $perPage) {
       data {
         createdAt

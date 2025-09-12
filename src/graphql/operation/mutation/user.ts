@@ -31,7 +31,7 @@ export const LOGOUT = gql`
 `
 
 export const CREATE_USER = gql`
-  mutation Mutation($payload: CreateUserInput!) {
+  mutation CreateUser($payload: CreateUserInput!) {
     createUser(payload: $payload) {
       message
     }
@@ -39,7 +39,7 @@ export const CREATE_USER = gql`
 `;
 
 export const UPDATE_USER = gql `
-  mutation Mutation($updateUserId: String!, $payload: UpdateUserInput!) {
+  mutation UpdateUser($updateUserId: String!, $payload: UpdateUserInput!) {
     updateUser(id: $updateUserId, payload: $payload) {
       message
     }

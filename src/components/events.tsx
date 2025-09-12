@@ -41,7 +41,7 @@ export default function Events() {
   return (
     <section className='py-4'>
       <p className='mb-4 flex items-center gap-2 text-xl md:text-2xl'>
-        <Calendar className='text-red-500' />
+        <Calendar className='text-indigo-500' />
         Events
       </p>
       <div className='flex gap-6 overflow-x-auto pb-2'>

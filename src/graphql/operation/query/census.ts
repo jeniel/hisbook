@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 
 export const CENSUS_DATA = gql`
-  query {
+  query GetCensusSummary {
     getCensusSummary {
       departmentsWithUserCount {
         departmentId
@@ -23,7 +23,7 @@ export const CENSUS_DATA = gql`
 `
 
 export const CENSUS_TICKET_DATA = gql`
-  query GetCensusSummary($userId: String!) {
+  query GetTicketData($userId: String!) {
     getCensusSummary(userId: $userId) {
       ticketByUserId {
         status

@@ -19,7 +19,9 @@ import {
 import Pagination from '@/components/pagination'
 import Spinner from '@/components/spinner'
 import AuditLogsContent from './audit-logs'
-import WorkTickets from './work-tickets'
+import DeleteTicket from './delete-ticket'
+import UpdateTicket from './update-tickets'
+import ViewTicket from './view-ticket'
 
 export default function ReceivedTickets() {
   const [page, setPage] = useState(1)
@@ -127,14 +129,26 @@ export default function ReceivedTickets() {
                           : ticket.createdBy?.username || 'Unknown'}
                       </TableCell>
                       <TableCell>{ticket.subject || '-'}</TableCell>
-                      <TableCell>{formatDate(ticket.missedAt)}</TableCell>
-                      <TableCell>{ticket.status || '-'}</TableCell>
+                      <TableCell>{formatDate(ticket.createdAt)}</TableCell>
+                      <TableCell>{ticket.statusFormatted || '-'}</TableCell>
                       <TableCell className='flex gap-2'>
-                        <WorkTickets
+                        {/* ✅ View Ticket (read-only details) */}
+                        <ViewTicket ticket={ticket} />
+
+                        {/* ✏️ Update Ticket */}
+                        <UpdateTicket
                           ticket={ticket}
                           onUpdated={() => refetch()}
                         />
+
+                        {/* 📑 Audit Logs */}
                         <AuditLogsContent ticketId={ticket.id} />
+
+                        {/* 🗑️ Delete Ticket */}
+                        <DeleteTicket
+                          ticketId={ticket.id}
+                          onDelete={() => refetch()}
+                        />
                       </TableCell>
                     </TableRow>
                   ))}

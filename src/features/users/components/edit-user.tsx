@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Role } from '@/graphql/codegen/graphql'
+import { User } from '@/graphql/codegen/graphql'
 import { UPDATE_USER } from '@/graphql/operation/mutation/user'
 import { FIND_ALL_DEPARTMENTS } from '@/graphql/operation/query/department'
 import { useMutation, useQuery } from '@apollo/client'
@@ -59,13 +59,7 @@ interface Department {
 
 // Props
 type EditUserProps = {
-  user: {
-    id: string
-    role?: Role[] | null
-    department?: Department | null
-    email: string
-    username: string
-  }
+  user: User
   onUpdated?: () => void
 }
 

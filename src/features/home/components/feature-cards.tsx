@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { CalendarCheck, User, FilePlus } from 'lucide-react'
+import { CalendarCheck, FilePlus, Star, User } from 'lucide-react'
 import {
   Card,
   CardHeader,
@@ -11,7 +11,7 @@ export default function Features() {
   const features = [
     {
       icon: <User className='h-8 w-8 text-blue-600' />,
-      title: 'Profile Update',
+      title: 'Profile',
       url: '/profile',
       description:
         'Easily update your personal information and keep it up to date.',
@@ -34,7 +34,10 @@ export default function Features() {
 
   return (
     <section className='py-4'>
-      <p className='text-xl md:text-2xl mb-4'>Check Out The Features</p>
+      <p className='mb-4 flex items-center gap-2 text-xl md:text-2xl'>
+        <Star className='text-yellow-500' />
+        Features
+      </p>
       <div className='grid gap-6 md:grid-cols-3'>
         {features.map((feature, index) => (
           <Link
@@ -42,7 +45,7 @@ export default function Features() {
             to={feature.url}
             className='block hover:no-underline'
           >
-            <Card className='cursor-pointer rounded-2xl border-red-300 shadow-lg transition hover:scale-105 hover:border-red-500 hover:shadow-xl'>
+            <Card className='cursor-pointer rounded-2xl border shadow-lg transition hover:scale-105 hover:border-red-500 hover:shadow-xl'>
               <CardHeader className='flex flex-col items-center text-center'>
                 <div className='mb-4'>{feature.icon}</div>
                 <CardTitle className='text-xl'>{feature.title}</CardTitle>

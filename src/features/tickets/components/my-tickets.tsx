@@ -15,7 +15,6 @@ import {
 } from '@/components/ui/table'
 import Pagination from '@/components/pagination'
 import Spinner from '@/components/spinner'
-import { formatDate } from '@/utils/formatDate'
 
 export default function MyTickets() {
   const [page, setPage] = useState(1)
@@ -69,8 +68,8 @@ export default function MyTickets() {
               <TableHead>#</TableHead>
               <TableHead>Name</TableHead>
               <TableHead>Subject</TableHead>
-              <TableHead>Date</TableHead>
-              <TableHead>Location</TableHead>
+              <TableHead>Send To</TableHead>
+              <TableHead>Department</TableHead>
               <TableHead>Status</TableHead>
             </TableRow>
           </TableHeader>
@@ -81,12 +80,12 @@ export default function MyTickets() {
                 <TableCell>
                   {ticket.createdBy?.profile
                     ? `${ticket.createdBy.profile.firstName} ${ticket.createdBy.profile.lastName}`
-                    : 'Unknown'}
+                    : ticket.createdBy?.username || 'Unknown'}
                 </TableCell>
                 <TableCell>{ticket.subject || '-'}</TableCell>
-                <TableCell>{formatDate(ticket.missedAt)}</TableCell>
+                <TableCell>{ticket.department?.name || '-'}</TableCell>
                 <TableCell>{ticket.floor || '-'}</TableCell>
-                <TableCell>{ticket.status || '-'}</TableCell>
+                <TableCell>{ticket.statusFormatted || '-'}</TableCell>
               </TableRow>
             ))}
           </TableBody>

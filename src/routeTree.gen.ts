@@ -28,6 +28,7 @@ import { Route as AuthenticatedEngrTicketIndexRouteImport } from './routes/_auth
 import { Route as AuthenticatedDepartmentsIndexRouteImport } from './routes/_authenticated/departments/index'
 import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard/index'
 import { Route as AuthenticatedAttendanceIndexRouteImport } from './routes/_authenticated/attendance/index'
+import { Route as AuthenticatedAllTicketIndexRouteImport } from './routes/_authenticated/all-ticket/index'
 
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
@@ -133,6 +134,12 @@ const AuthenticatedAttendanceIndexRoute =
     path: '/attendance/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAllTicketIndexRoute =
+  AuthenticatedAllTicketIndexRouteImport.update({
+    id: '/all-ticket/',
+    path: '/all-ticket/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/sign-in': typeof authSignInRoute
@@ -142,6 +149,7 @@ export interface FileRoutesByFullPath {
   '/500': typeof errors500Route
   '/503': typeof errors503Route
   '/': typeof AuthenticatedIndexRoute
+  '/all-ticket': typeof AuthenticatedAllTicketIndexRoute
   '/attendance': typeof AuthenticatedAttendanceIndexRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
   '/departments': typeof AuthenticatedDepartmentsIndexRoute
@@ -162,6 +170,7 @@ export interface FileRoutesByTo {
   '/500': typeof errors500Route
   '/503': typeof errors503Route
   '/': typeof AuthenticatedIndexRoute
+  '/all-ticket': typeof AuthenticatedAllTicketIndexRoute
   '/attendance': typeof AuthenticatedAttendanceIndexRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
   '/departments': typeof AuthenticatedDepartmentsIndexRoute
@@ -184,6 +193,7 @@ export interface FileRoutesById {
   '/(errors)/500': typeof errors500Route
   '/(errors)/503': typeof errors503Route
   '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_authenticated/all-ticket/': typeof AuthenticatedAllTicketIndexRoute
   '/_authenticated/attendance/': typeof AuthenticatedAttendanceIndexRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/_authenticated/departments/': typeof AuthenticatedDepartmentsIndexRoute
@@ -206,6 +216,7 @@ export interface FileRouteTypes {
     | '/500'
     | '/503'
     | '/'
+    | '/all-ticket'
     | '/attendance'
     | '/dashboard'
     | '/departments'
@@ -226,6 +237,7 @@ export interface FileRouteTypes {
     | '/500'
     | '/503'
     | '/'
+    | '/all-ticket'
     | '/attendance'
     | '/dashboard'
     | '/departments'
@@ -247,6 +259,7 @@ export interface FileRouteTypes {
     | '/(errors)/500'
     | '/(errors)/503'
     | '/_authenticated/'
+    | '/_authenticated/all-ticket/'
     | '/_authenticated/attendance/'
     | '/_authenticated/dashboard/'
     | '/_authenticated/departments/'
@@ -405,11 +418,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAttendanceIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/all-ticket/': {
+      id: '/_authenticated/all-ticket/'
+      path: '/all-ticket'
+      fullPath: '/all-ticket'
+      preLoaderRoute: typeof AuthenticatedAllTicketIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+  AuthenticatedAllTicketIndexRoute: typeof AuthenticatedAllTicketIndexRoute
   AuthenticatedAttendanceIndexRoute: typeof AuthenticatedAttendanceIndexRoute
   AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
   AuthenticatedDepartmentsIndexRoute: typeof AuthenticatedDepartmentsIndexRoute
@@ -425,6 +446,7 @@ interface AuthenticatedRouteRouteChildren {
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+  AuthenticatedAllTicketIndexRoute: AuthenticatedAllTicketIndexRoute,
   AuthenticatedAttendanceIndexRoute: AuthenticatedAttendanceIndexRoute,
   AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
   AuthenticatedDepartmentsIndexRoute: AuthenticatedDepartmentsIndexRoute,

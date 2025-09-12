@@ -1,21 +1,15 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
-import {
-  Select,
-  SelectTrigger,
-  SelectContent,
-  SelectItem,
-  SelectValue,
-} from '@/components/ui/select'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Mutation, Status } from '@/graphql/codegen/graphql'
-import { CREATE_TICKET } from '@/graphql/operation/mutation/ticket'
-import { FIND_ALL_TICKETS_BY_USER } from '@/graphql/operation/query/ticket'
+import { Status } from '@/graphql/codegen/graphql'
+import { FIND_ALL_DEPARTMENTS } from '@/graphql/operation/query/department'
 import { ME_QUERY } from '@/graphql/operation/query/user'
-import { useMutation, useQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client'
 import { ChevronDown, ChevronRight, SquareCheckBig } from 'lucide-react'
 import { toast } from 'sonner'
+import { useTicket } from '@/hooks/useTicket'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import {
@@ -32,59 +26,61 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import {
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+  SelectValue,
+} from '@/components/ui/select'
 import Spinner from '@/components/spinner'
-
-// Department select
-const departments = [
-  {
-    id: '12396f13-00d2-4865-8964-9babd9aa11d1',
-    name: 'HR',
-    description: 'Human Resources',
-  },
-  {
-    id: '51f3fb0d-037d-4791-ada9-48d3c2b18ff9',
-    name: 'ENGR',
-    description: 'Engineering and Maintenance',
-  },
-  {
-    id: 'fcd8ef97-9612-45d2-9afe-05c1d1e266b3',
-    name: 'MIS',
-    description: 'Management Information System',
-  },
-]
 
 // Input Validation
 const TicketSchema = z.object({
-  date: z.string().min(1, { message: 'Date is required' }),
   floor: z.string().min(1, { message: 'Location is required' }),
   subject: z.string().min(1, { message: 'Subject is required' }),
-  remarks: z.string().optional(),
+  message: z.string().optional(),
   departmentId: z.string().min(1, { message: 'Department is required' }),
 })
 
 export default function CreateTickets() {
   const [open, setOpen] = useState(false)
-  const [createTicket] = useMutation<Mutation>(CREATE_TICKET, {
-    refetchQueries: [FIND_ALL_TICKETS_BY_USER],
-    awaitRefetchQueries: true,
+
+  const { createTicket } = useTicket({
+    departmentId: '',
+    page: 1,
+    perPage: 1,
   })
 
+  // ✅ Queries
   const { data: meData, loading: meLoading } = useQuery(ME_QUERY)
+  const { data: deptData, loading: deptLoading } = useQuery(
+    FIND_ALL_DEPARTMENTS,
+    {
+      variables: { page: 1, perPage: 50 }, // get enough to filter from
+    }
+  )
+
   const user = meData?.meQuery?.user
   const userId = user?.id
+
+  // ✅ Filter only HR, ENGR, MIS
+  const allowed = ['HR', 'ENGR', 'MIS']
+  const departments =
+    deptData?.findAllDepartments?.data?.filter((dept: any) =>
+      allowed.includes(dept.name)
+    ) || []
 
   const form = useForm<z.infer<typeof TicketSchema>>({
     resolver: zodResolver(TicketSchema),
     defaultValues: {
       subject: '',
-      date: '',
       floor: '',
-      remarks: '',
+      message: '',
       departmentId: '',
     },
   })
 
-  // Submit Functionality
   async function onSubmit(data: z.infer<typeof TicketSchema>) {
     if (!userId) {
       toast.error('User not found. Please log in again.')
@@ -93,18 +89,13 @@ export default function CreateTickets() {
 
     try {
       await createTicket({
-        variables: {
-          payload: {
-            missedAt: data.date,
-            subject: data.subject,
-            floor: data.floor,
-            screenshot: null,
-            status: Status.Pending,
-            createdById: userId,
-            remarks: data.remarks,
-            departmentId: data.departmentId,
-          },
-        },
+        subject: data.subject,
+        floor: data.floor,
+        screenshot: null,
+        status: Status.Pending,
+        createdById: userId,
+        message: data.message,
+        departmentId: data.departmentId,
       })
 
       toast.success('Ticket Created')
@@ -115,7 +106,7 @@ export default function CreateTickets() {
     }
   }
 
-  if (meLoading) return <Spinner />
+  if (meLoading || deptLoading) return <Spinner />
 
   return (
     <Card>
@@ -136,8 +127,24 @@ export default function CreateTickets() {
           </CollapsibleTrigger>
 
           <CollapsibleContent className='data-[state=open]:animate-collapse-down data-[state=closed]:animate-collapse-up mt-4 overflow-hidden transition-all'>
+            {/* Instructions */}
+            <div className='mb-4 border-b border-b-gray-500'>
+              <p className='font-bold'>Instructions:</p>
+              <p className='mb-4 text-sm italic'>
+                Please fill out the form carefully. Use the{' '}
+                <strong>Subject</strong> field to briefly describe your request
+                or issue.
+                <br />
+                Select the correct <strong>Department</strong> (HR, Engineering,
+                or MIS) so your request is routed properly.
+                <br />
+                <br />
+                Note: Once the form is submitted, you cannot edit it again.
+              </p>
+            </div>
+
             <p className='mb-2 text-lg'>
-              <span className='font-medium'>Requested By:</span>{' '}
+              <span className='font-medium'>Requested by:</span>{' '}
               {user?.profile?.firstName} {user?.profile?.lastName}
             </p>
 
@@ -158,20 +165,6 @@ export default function CreateTickets() {
                             placeholder='e.g. CCTV Review, Aircon Leaking, Printer Issue'
                             {...field}
                           />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name='date'
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Date</FormLabel>
-                        <FormControl>
-                          <Input type='date' {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -209,7 +202,7 @@ export default function CreateTickets() {
                             <SelectValue placeholder='Select Department' />
                           </SelectTrigger>
                           <SelectContent>
-                            {departments.map((dept) => (
+                            {departments.map((dept: any) => (
                               <SelectItem key={dept.id} value={dept.id}>
                                 {dept.name} - {dept.description}
                               </SelectItem>
@@ -224,7 +217,7 @@ export default function CreateTickets() {
 
                 <FormField
                   control={form.control}
-                  name='remarks'
+                  name='message'
                   render={({ field }) => (
                     <FormItem className='mb-4'>
                       <FormLabel>Message (Optional)</FormLabel>
@@ -246,22 +239,6 @@ export default function CreateTickets() {
                 >
                   <SquareCheckBig className='text-green-500' /> Submit
                 </Button>
-
-                {/* Instructions */}
-                <p className='font-bold'>Instructions:</p>
-                <p className='mb-4 text-sm italic'>
-                  Please fill out the form carefully. Use the{' '}
-                  <strong>Subject</strong> field to briefly describe your
-                  request or issue (e.g., <em>"CCTV Review"</em>,{' '}
-                  <em>"Aircon Leaking"</em>, <em>"Printer Not Working"</em>).
-                  <br />
-                  Select the correct <strong>Department</strong> (HR,
-                  Engineering, or MIS) so your request is routed properly.
-                  <br />
-                  <br />
-                  Note: Once the form is submitted, you cannot edit it again.
-                  Please double check your details before submitting.
-                </p>
               </form>
             </Form>
           </CollapsibleContent>

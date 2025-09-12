@@ -7,6 +7,10 @@ import {
   IconCalendarWeek,
   IconTimeDuration30,
   IconHome,
+  IconTicket,
+  IconDeviceDesktop,
+  IconUserSearch,
+  IconHammer,
 } from '@tabler/icons-react'
 import { type SidebarData } from '../types'
 
@@ -25,9 +29,10 @@ export const sidebarData: SidebarData = {
       title: 'Department Tickets',
       items: [
         { title: 'Dashboard', url: '/dashboard', icon: IconLayoutDashboard },
-        { title: 'MIS', url: '/mis-ticket', icon: IconLayoutDashboard },
-        { title: 'HR', url: '/hr-ticket', icon: IconLayoutDashboard },
-        { title: 'ENGR', url: '/engr-ticket', icon: IconLayoutDashboard },
+        { title: 'All Tickets', url: '/all-ticket', icon: IconTicket },
+        { title: 'MIS', url: '/mis-ticket', icon: IconDeviceDesktop },
+        { title: 'HR', url: '/hr-ticket', icon: IconUserSearch },
+        { title: 'ENGR', url: '/engr-ticket', icon: IconHammer },
       ],
     },
     {

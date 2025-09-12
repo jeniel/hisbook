@@ -23,7 +23,6 @@ export default function HomeTickets() {
 
   const userId = meData?.meQuery?.user?.id
 
-  // Always call CENSUS_TICKET_DATA
   const {
     data: ticketsData,
     loading: ticketsLoading,
@@ -73,7 +72,10 @@ export default function HomeTickets() {
 
   return (
     <div>
-      <p className='text-xl md:text-2xl'>Your Tickets / Requests Overview</p>
+      <p className='flex items-center gap-2 text-xl md:text-2xl'>
+        <Ticket className='text-green-500' />
+        Tickets Overview
+      </p>
       <section className='py-4'>
         <div className='grid gap-6 grid-cols-2 md:grid-cols-4'>
           {allCards.map((t) => (

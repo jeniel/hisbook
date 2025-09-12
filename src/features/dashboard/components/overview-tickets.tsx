@@ -31,7 +31,7 @@ export default function TicketsOverview({
           <Ticket className='mr-2 h-6 w-6 text-green-500' /> Tickets Overview by
           Status
         </CardTitle>
-        <Link to='/admin-tickets'>
+        <Link to='/all-ticket'>
           <Button variant='outline'>
             <Ticket className='h-6 w-6 text-green-500' /> Go To Tickets
           </Button>

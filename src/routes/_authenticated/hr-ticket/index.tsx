@@ -1,9 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
+import HrTickets from '@/features/tickets/pages/hr-page'
 
 export const Route = createFileRoute('/_authenticated/hr-ticket/')({
-  component: RouteComponent,
+  component: HrTickets,
 })
-
-function RouteComponent() {
-  return <div>Hello "/_authenticated/hr-ticket/"!</div>
-}

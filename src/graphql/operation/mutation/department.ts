@@ -16,7 +16,7 @@ export const UPDATE_DEPARTMENT = gql`
 `;
 
 export const DELETE_DEPARTMENT = gql `
-    mutation Mutation($deleteDepartmentId: String!) {
+    mutation DeleteDepartment($deleteDepartmentId: String!) {
         deleteDepartment(id: $deleteDepartmentId) {
             message
         }

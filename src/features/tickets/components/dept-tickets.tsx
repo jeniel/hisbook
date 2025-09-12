@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { Query } from '@/graphql/codegen/graphql'
-import { FIND_ALL_TICKETS } from '@/graphql/operation/query/ticket'
-import { useQuery } from '@apollo/client'
-import { Ticket } from 'lucide-react'
+import { Link } from '@tanstack/react-router'
+import { Ticket as TicketIcon } from 'lucide-react'
 import { formatDate } from '@/utils/formatDate'
+import { useTicket } from '@/hooks/useTicket'
+import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import {
   Table,
@@ -20,35 +20,43 @@ import DeleteTicket from './delete-ticket'
 import UpdateTicket from './update-tickets'
 import ViewTicket from './view-ticket'
 
-export default function AllTickets() {
+interface DeptTicketsProps {
+  departmentId: string
+}
+
+export default function DeptTickets({ departmentId }: DeptTicketsProps) {
   const [page, setPage] = useState(1)
   const perPage = 10
 
-  const { loading, error, data, refetch } = useQuery<Query>(FIND_ALL_TICKETS, {
-    variables: { page, perPage },
-    fetchPolicy: 'cache-and-network',
-    nextFetchPolicy: 'cache-and-network',
+  const { tickets, meta, loading, error, refetch } = useTicket({
+    departmentId,
+    page,
+    perPage,
   })
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage)
+    refetch({ departmentId, page: newPage, perPage })
+  }
 
   if (loading) return <Spinner />
   if (error) return <p>Error loading tickets: {error.message}</p>
 
-  const tickets = data?.findAllTickets?.data || []
-  const meta = data?.findAllTickets?.meta
-
-  const handlePageChange = (newPage: number) => {
-    setPage(newPage)
-    refetch({ page: newPage, perPage })
-  }
-
   return (
     <Card>
       <CardContent>
-        <div>
+        <div className='items center flex flex-row justify-between'>
           <h1 className='mb-2 flex items-center gap-2 text-xl font-semibold'>
-            <Ticket className='h-6 w-6 text-green-500' />
+            <TicketIcon className='h-6 w-6 text-green-500' />
             All Requested Tickets / Services
           </h1>
+
+          <Link to='/received-tickets'>
+            <Button variant={'outline'}>
+              <TicketIcon className='h-6 w-6 text-blue-500' /> Your Received
+              Tickets
+            </Button>
+          </Link>
         </div>
 
         <Table>
@@ -58,7 +66,6 @@ export default function AllTickets() {
               <TableHead>Requested By</TableHead>
               <TableHead>Subject</TableHead>
               <TableHead>Date</TableHead>
-              <TableHead>Sent To</TableHead>
               <TableHead>Department</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Actions</TableHead>
@@ -73,12 +80,10 @@ export default function AllTickets() {
                     ? `${ticket.createdBy.profile.firstName} ${ticket.createdBy.profile.lastName}`
                     : 'Unknown'}
                 </TableCell>
-
                 <TableCell>{ticket.subject}</TableCell>
                 <TableCell>{formatDate(ticket.createdAt)}</TableCell>
-                <TableCell>{ticket.department?.name || '-'}</TableCell>
                 <TableCell>{ticket.floor}</TableCell>
-                <TableCell>{ticket.statusFormatted || '-'}</TableCell>
+                <TableCell>{ticket.statusFormatted}</TableCell>
                 <TableCell className='flex gap-2'>
                   {/* ✅ View Ticket (read-only details) */}
                   <ViewTicket ticket={ticket} />

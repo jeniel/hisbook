@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 
 export const CREATE_POST = gql`
-  mutation Mutation($payload: CreatePostInput!) {
+  mutation CreatePost($payload: CreatePostInput!) {
     createPost(payload: $payload) {
       message
     }
@@ -9,7 +9,7 @@ export const CREATE_POST = gql`
 `
 
 export const UPDATE_POST = gql`
-  mutation Mutation($data: UpdatePostInput!, $postId: String!) {
+  mutation UpdatePost($data: UpdatePostInput!, $postId: String!) {
     updatePost(data: $data, postId: $postId) {
       message
     }

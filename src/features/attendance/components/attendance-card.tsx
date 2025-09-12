@@ -79,7 +79,7 @@ export function AttendanceCard({
     if (log.isRestDay) return <Badge variant='outline'>Rest Day</Badge>
     if (log.isEmpty) return <Badge variant='destructive'>No Schedule</Badge>
     if (log.isError) return <Badge variant='destructive'>Error</Badge>
-    if (log.worked > 0) return <Badge variant='default'>Present</Badge>
+    if (log.worked > 0) return <Badge className="bg-green-500 text-white dark:bg-green-600">Present</Badge>
     return <Badge variant='secondary'>Absent</Badge>
   }
 
