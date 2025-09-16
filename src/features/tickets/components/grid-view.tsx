@@ -1,9 +1,6 @@
 import { useState } from 'react'
-import { Link } from '@tanstack/react-router'
-import { Ticket as TicketIcon } from 'lucide-react'
 import { formatDate } from '@/utils/formatDate'
 import { useTicket } from '@/hooks/useTicket'
-import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import {
   Table,
@@ -20,7 +17,7 @@ import DeleteTicket from './delete-ticket'
 import UpdateTicket from './update-tickets'
 import ViewTicket from './view-ticket'
 
-export default function DeptTickets() {
+export default function GridView() {
   const [page, setPage] = useState(1)
   const perPage = 10
 
@@ -40,20 +37,6 @@ export default function DeptTickets() {
   return (
     <Card>
       <CardContent>
-        <div className='items center flex flex-row justify-between'>
-          <h1 className='mb-2 flex items-center gap-2 text-sm font-semibold md:text-xl'>
-            <TicketIcon className='h-6 w-6 text-green-500' />
-            Deparment Tickets
-          </h1>
-
-          <Link to='/received-tickets'>
-            <Button variant='outline'>
-              <TicketIcon className='h-6 w-6 text-blue-500' />
-              Received Tickets
-            </Button>
-          </Link>
-        </div>
-
         <Table>
           <TableHeader>
             <TableRow>
