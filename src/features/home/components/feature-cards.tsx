@@ -25,7 +25,7 @@ export default function Features() {
     },
     {
       icon: <FilePlus className='h-8 w-8 text-green-600' />,
-      title: 'Ticket & Services',
+      title: 'Tickets',
       url: '/tickets',
       description:
         'Create tickets or request IT, Engineering, or Maintenance services.',

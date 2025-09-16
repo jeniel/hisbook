@@ -85,7 +85,7 @@ export default function AllTickets() {
 
                 <TableCell>{ticket.subject}</TableCell>
                 <TableCell>{formatDate(ticket.createdAt)}</TableCell>
-                <TableCell>{ticket.department?.name || '-'}</TableCell>
+                <TableCell>{ticket.department.name || '-'}</TableCell>
                 <TableCell>{ticket.floor}</TableCell>
                 <TableCell>{ticket.statusFormatted || '-'}</TableCell>
                 <TableCell className='flex gap-2'>
