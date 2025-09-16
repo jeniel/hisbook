@@ -13,13 +13,12 @@ import {
 } from '@/features/tickets/types/ticket'
 
 interface UseTicketParams {
-  departmentId: string
   page?: number
   perPage?: number
   search?: string
 }
+
 export const useTicket = ({
-  departmentId,
   page = 1,
   perPage = 10,
   search = '',
@@ -28,9 +27,8 @@ export const useTicket = ({
   const { data, loading, error, refetch } = useQuery(
     FIND_TICKETS_BY_DEPARTMENT,
     {
-      variables: { departmentId, page, perPage, search },
+      variables: { page, perPage, search },
       fetchPolicy: 'network-only',
-      skip: !departmentId,
     }
   )
 

@@ -126,18 +126,8 @@ export const FIND_TICKETS_WORKED_BY_USER = gql`
 `
 
 export const FIND_TICKETS_BY_DEPARTMENT = gql`
-  query FindTicketsByDepartment(
-    $departmentId: String!
-    $page: Int
-    $perPage: Int
-    $search: String
-  ) {
-    findTicketsByDepartment(
-      departmentId: $departmentId
-      page: $page
-      perPage: $perPage
-      search: $search
-    ) {
+  query FindTicketsByDepartment($page: Int, $perPage: Int, $search: String) {
+    findTicketsByDepartment(page: $page, perPage: $perPage, search: $search) {
       meta {
         currentPage
         lastPage

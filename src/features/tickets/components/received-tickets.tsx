@@ -94,7 +94,7 @@ export default function ReceivedTickets() {
               </p>
             </div>
 
-            <Link to='/mis-ticket'>
+            <Link to='/assigned-ticket'>
               <Button variant={'outline'}>
                 <Ticket className='h-6 w-6 text-red-500' />
                 Back

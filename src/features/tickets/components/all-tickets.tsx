@@ -1,9 +1,11 @@
 import { useState } from 'react'
+import { Link } from '@tanstack/react-router'
 import { Query } from '@/graphql/codegen/graphql'
 import { FIND_ALL_TICKETS } from '@/graphql/operation/query/ticket'
 import { useQuery } from '@apollo/client'
-import { Ticket } from 'lucide-react'
+import { TicketIcon } from 'lucide-react'
 import { formatDate } from '@/utils/formatDate'
+import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import {
   Table,
@@ -44,11 +46,18 @@ export default function AllTickets() {
   return (
     <Card>
       <CardContent>
-        <div>
-          <h1 className='mb-2 flex items-center gap-2 text-xl font-semibold'>
-            <Ticket className='h-6 w-6 text-green-500' />
-            All Requested Tickets / Services
-          </h1>
+        <div className='items center flex flex-row justify-between'>
+          <p className='mb-2 flex items-center gap-2 text-sm font-semibold md:text-xl'>
+            <TicketIcon className='h-6 w-6 text-green-500' />
+            All Tickets
+          </p>
+
+          <Link to='/received-tickets'>
+            <Button variant={'outline'}>
+              <TicketIcon className='h-6 w-6 text-blue-500' />
+              Received Tickets
+            </Button>
+          </Link>
         </div>
 
         <Table>

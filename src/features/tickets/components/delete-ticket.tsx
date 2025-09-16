@@ -23,7 +23,7 @@ export default function DeleteTicket({
   onDelete,
 }: DeleteTicketProps) {
   const [open, setOpen] = useState(false)
-  const { deleteTicket } = useTicket({ departmentId: '' }) // only use mutation here
+  const { deleteTicket } = useTicket({}) // only use mutation here
 
   const handleDelete = async () => {
     try {

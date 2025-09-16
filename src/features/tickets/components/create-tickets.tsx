@@ -7,16 +7,17 @@ import { Status } from '@/graphql/codegen/graphql'
 import { FIND_ALL_DEPARTMENTS } from '@/graphql/operation/query/department'
 import { ME_QUERY } from '@/graphql/operation/query/user'
 import { useQuery } from '@apollo/client'
-import { ChevronDown, ChevronRight, SquareCheckBig } from 'lucide-react'
+import { Send, TicketPlus } from 'lucide-react'
 import { toast } from 'sonner'
 import { useTicket } from '@/hooks/useTicket'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
 import {
-  Collapsible,
-  CollapsibleTrigger,
-  CollapsibleContent,
-} from '@/components/ui/collapsible'
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
 import {
   Form,
   FormField,
@@ -47,7 +48,6 @@ export default function CreateTickets() {
   const [open, setOpen] = useState(false)
 
   const { createTicket } = useTicket({
-    departmentId: '',
     page: 1,
     perPage: 1,
   })
@@ -56,20 +56,12 @@ export default function CreateTickets() {
   const { data: meData, loading: meLoading } = useQuery(ME_QUERY)
   const { data: deptData, loading: deptLoading } = useQuery(
     FIND_ALL_DEPARTMENTS,
-    {
-      variables: { page: 1, perPage: 50 }, // get enough to filter from
-    }
+    { variables: { page: 1, perPage: 50 } }
   )
 
   const user = meData?.meQuery?.user
   const userId = user?.id
-
-  // ✅ Filter only HR, ENGR, MIS
-  const allowed = ['HR', 'ENGR', 'MIS']
-  const departments =
-    deptData?.findAllDepartments?.data?.filter((dept: any) =>
-      allowed.includes(dept.name)
-    ) || []
+  const departments = deptData?.findAllDepartments?.data || []
 
   const form = useForm<z.infer<typeof TicketSchema>>({
     resolver: zodResolver(TicketSchema),
@@ -109,141 +101,145 @@ export default function CreateTickets() {
   if (meLoading || deptLoading) return <Spinner />
 
   return (
-    <Card>
-      <CardContent>
-        <Collapsible open={open} onOpenChange={setOpen}>
-          <CollapsibleTrigger asChild>
-            <Button
-              variant='ghost'
-              className='flex w-full items-center justify-between text-lg font-semibold'
-            >
-              <span>Create Ticket / Request A Service</span>
-              {open ? (
-                <ChevronDown className='h-4 w-4' />
-              ) : (
-                <ChevronRight className='h-4 w-4' />
-              )}
-            </Button>
-          </CollapsibleTrigger>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button
+          className='flex items-center gap-2 font-semibold'
+          variant='outline'
+        >
+          <TicketPlus className='h-5 w-5 text-green-500' />
+          Create Ticket
+        </Button>
+      </DialogTrigger>
 
-          <CollapsibleContent className='data-[state=open]:animate-collapse-down data-[state=closed]:animate-collapse-up mt-4 overflow-hidden transition-all'>
-            {/* Instructions */}
-            <div className='mb-4 border-b border-b-gray-500'>
-              <p className='font-bold'>Instructions:</p>
-              <p className='mb-4 text-sm italic'>
-                Please fill out the form carefully. Use the{' '}
-                <strong>Subject</strong> field to briefly describe your request
-                or issue.
-                <br />
-                Select the correct <strong>Department</strong> (HR, Engineering,
-                or MIS) so your request is routed properly.
-                <br />
-                <br />
-                Note: Once the form is submitted, you cannot edit it again.
-              </p>
+      <DialogContent className='max-h-[90vh] max-w-6xl overflow-y-auto'>
+        <DialogHeader>
+          <DialogTitle>Create Ticket</DialogTitle>
+        </DialogHeader>
+
+        <p className='mb-4 text-sm italic'>
+          Please fill out the form carefully. Use the <strong>Subject</strong>{' '}
+          field to briefly describe your request or issue.
+          <br />
+          Select the correct <strong>Department</strong> (HR, Engineering, or
+          MIS).
+          <br />
+          <br />
+          <strong>Note:</strong> Once submitted, you cannot edit it again.
+        </p>
+
+        <p className='mb-2 text-lg'>
+          <span className='font-medium'>Requested by:</span>{' '}
+          {user?.profile?.firstName} {user?.profile?.lastName}
+        </p>
+
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className='grid gap-6 md:grid-cols-2'
+          >
+            {/* Left Column */}
+            <div className='space-y-4'>
+              {/* Subject */}
+              <FormField
+                control={form.control}
+                name='subject'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Subject</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder='e.g. CCTV Review, Aircon Leaking, Printer Issue'
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Floor */}
+              <FormField
+                control={form.control}
+                name='floor'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Location / Department</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder='e.g. 8th Floor, ER, Basement 1'
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Department */}
+              <FormField
+                control={form.control}
+                name='departmentId'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Send to Department</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder='Select Department' />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {departments.map((dept: any) => (
+                          <SelectItem key={dept.id} value={dept.id}>
+                            {dept.name} - {dept.description}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
 
-            <p className='mb-2 text-lg'>
-              <span className='font-medium'>Requested by:</span>{' '}
-              {user?.profile?.firstName} {user?.profile?.lastName}
-            </p>
+            {/* Right Column */}
+            <div className='space-y-4'>
+              {/* Message */}
+              <FormField
+                control={form.control}
+                name='message'
+                render={({ field }) => (
+                  <FormItem className='h-full'>
+                    <FormLabel>Message (Optional)</FormLabel>
+                    <FormControl>
+                      <textarea
+                        placeholder='Additional details or context'
+                        {...field}
+                        className='border-input bg-background focus-visible:ring-ring h-[180px] w-full resize-none rounded-md border px-3 py-2 text-sm shadow-sm focus-visible:ring-2 focus-visible:outline-none'
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className='space-y-2'
+            {/* Submit Button (spans both columns) */}
+            <div className='flex justify-end md:col-span-2'>
+              <Button
+                type='submit'
+                variant='outline'
+                className='flex items-center gap-2'
               >
-                <div className='mb-4 grid grid-cols-1 gap-4 md:grid-cols-2'>
-                  <FormField
-                    control={form.control}
-                    name='subject'
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Subject</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder='e.g. CCTV Review, Aircon Leaking, Printer Issue'
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name='floor'
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Location / Department</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder='e.g. 8th Floor, ER, Basement 1'
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name='departmentId'
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Send to Department</FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder='Select Department' />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {departments.map((dept: any) => (
-                              <SelectItem key={dept.id} value={dept.id}>
-                                {dept.name} - {dept.description}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
-                <FormField
-                  control={form.control}
-                  name='message'
-                  render={({ field }) => (
-                    <FormItem className='mb-4'>
-                      <FormLabel>Message (Optional)</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder='Additional details or context'
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <Button
-                  variant='outline'
-                  type='submit'
-                  className='mb-4 shadow-md'
-                >
-                  <SquareCheckBig className='text-green-500' /> Submit
-                </Button>
-              </form>
-            </Form>
-          </CollapsibleContent>
-        </Collapsible>
-      </CardContent>
-    </Card>
+                <Send className='h-4 w-4 text-green-500' />
+                Submit
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
   )
 }

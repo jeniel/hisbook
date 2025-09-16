@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/table'
 import Pagination from '@/components/pagination'
 import Spinner from '@/components/spinner'
+import CreateTickets from './create-tickets'
 
 export default function MyTickets() {
   const [page, setPage] = useState(1)
@@ -57,10 +58,13 @@ export default function MyTickets() {
   return (
     <Card className='w-full'>
       <CardContent>
-        <h1 className='mb-2 flex items-center gap-2 text-xl font-semibold'>
-          <Ticket className='h-6 w-6 text-green-500' />
-          My Requested Tickets / Services
-        </h1>
+        <div className='mb-4 flex flex-row items-center justify-between'>
+          <h1 className='flex items-center gap-2 text-xl font-semibold'>
+            <Ticket className='h-6 w-6 text-green-500' />
+            My Tickets
+          </h1>
+          <CreateTickets />
+        </div>
 
         <Table>
           <TableHeader>

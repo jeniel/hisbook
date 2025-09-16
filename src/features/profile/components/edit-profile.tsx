@@ -92,6 +92,20 @@ export default function EditProfile() {
         toast.error('Profile information is missing.')
         return
       }
+
+      // ✅ Transform all string fields to uppercase before submission
+      const transformedValues: ProfileFormData = {
+        ...values,
+        firstName: values.firstName?.toUpperCase() || '',
+        middleName: values.middleName?.toUpperCase() || '',
+        lastName: values.lastName?.toUpperCase() || '',
+        title: values.title?.toUpperCase() || '',
+        gender: values.gender, // keep gender as is (since it's from a select)
+        address: values.address?.toUpperCase() || '',
+        contact: values.contact?.toUpperCase() || '',
+        employeeID: values.employeeID?.toUpperCase() || '',
+      }
+
       let avatarUrl = profile.avatar || null
       if (file) {
         avatarUrl = await handleUpload()
@@ -100,7 +114,7 @@ export default function EditProfile() {
       await updateProfile({
         variables: {
           updateProfileId: profile.id,
-          payload: { ...values, avatar: avatarUrl },
+          payload: { ...transformedValues, avatar: avatarUrl },
         },
         refetchQueries: [{ query: ME_QUERY }],
       })
@@ -128,7 +142,6 @@ export default function EditProfile() {
                 className='max-w-80'
               />
 
-              {/* Show local preview if uploading new file, otherwise show fetched avatar */}
               {file ? (
                 <img
                   src={URL.createObjectURL(file)}
@@ -156,7 +169,7 @@ export default function EditProfile() {
                 <label className='mb-1 block'>First Name</label>
                 <Input
                   {...form.register('firstName')}
-                  className='border border-black'
+                  className='border border-black uppercase'
                 />
               </div>
 
@@ -164,7 +177,7 @@ export default function EditProfile() {
                 <label className='mb-1 block'>Middle Name</label>
                 <Input
                   {...form.register('middleName')}
-                  className='border border-black'
+                  className='border border-black uppercase'
                 />
               </div>
 
@@ -172,7 +185,7 @@ export default function EditProfile() {
                 <label className='mb-1 block'>Last Name</label>
                 <Input
                   {...form.register('lastName')}
-                  className='border border-black'
+                  className='border border-black uppercase'
                 />
               </div>
 
@@ -180,7 +193,7 @@ export default function EditProfile() {
                 <label className='mb-1 block'>Job Title</label>
                 <Input
                   {...form.register('title')}
-                  className='border border-black'
+                  className='border border-black uppercase'
                 />
               </div>
 
@@ -194,7 +207,7 @@ export default function EditProfile() {
                       onValueChange={field.onChange}
                       value={field.value || ''}
                     >
-                      <SelectTrigger className='border border-black'>
+                      <SelectTrigger className='border border-black uppercase'>
                         <SelectValue placeholder='Select gender' />
                       </SelectTrigger>
                       <SelectContent>
@@ -211,7 +224,7 @@ export default function EditProfile() {
                 <label className='mb-1 block'>Address</label>
                 <Input
                   {...form.register('address')}
-                  className='border border-black'
+                  className='border border-black uppercase'
                 />
               </div>
 
@@ -219,7 +232,7 @@ export default function EditProfile() {
                 <label className='mb-1 block'>Contact</label>
                 <Input
                   {...form.register('contact')}
-                  className='border border-black'
+                  className='border border-black uppercase'
                 />
               </div>
 
@@ -227,7 +240,7 @@ export default function EditProfile() {
                 <label className='mb-1 block'>Employee ID</label>
                 <Input
                   {...form.register('employeeID')}
-                  className='border border-black'
+                  className='border border-black uppercase'
                   inputMode='numeric'
                   pattern='[0-9]*'
                 />

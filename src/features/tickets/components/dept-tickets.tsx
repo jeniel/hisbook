@@ -20,23 +20,18 @@ import DeleteTicket from './delete-ticket'
 import UpdateTicket from './update-tickets'
 import ViewTicket from './view-ticket'
 
-interface DeptTicketsProps {
-  departmentId: string
-}
-
-export default function DeptTickets({ departmentId }: DeptTicketsProps) {
+export default function DeptTickets() {
   const [page, setPage] = useState(1)
   const perPage = 10
 
   const { tickets, meta, loading, error, refetch } = useTicket({
-    departmentId,
     page,
     perPage,
   })
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage)
-    refetch({ departmentId, page: newPage, perPage })
+    refetch({ page: newPage, perPage })
   }
 
   if (loading) return <Spinner />
@@ -46,15 +41,15 @@ export default function DeptTickets({ departmentId }: DeptTicketsProps) {
     <Card>
       <CardContent>
         <div className='items center flex flex-row justify-between'>
-          <h1 className='mb-2 flex items-center gap-2 text-xl font-semibold'>
+          <h1 className='mb-2 flex items-center gap-2 text-sm font-semibold md:text-xl'>
             <TicketIcon className='h-6 w-6 text-green-500' />
-            All Requested Tickets / Services
+            Deparment Tickets
           </h1>
 
           <Link to='/received-tickets'>
-            <Button variant={'outline'}>
-              <TicketIcon className='h-6 w-6 text-blue-500' /> Your Received
-              Tickets
+            <Button variant='outline'>
+              <TicketIcon className='h-6 w-6 text-blue-500' />
+              Received Tickets
             </Button>
           </Link>
         </div>
@@ -65,8 +60,9 @@ export default function DeptTickets({ departmentId }: DeptTicketsProps) {
               <TableHead>#</TableHead>
               <TableHead>Requested By</TableHead>
               <TableHead>Subject</TableHead>
-              <TableHead>Date</TableHead>
+              <TableHead>Created Date</TableHead>
               <TableHead>Department</TableHead>
+              <TableHead>Department Assigned</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
@@ -83,6 +79,7 @@ export default function DeptTickets({ departmentId }: DeptTicketsProps) {
                 <TableCell>{ticket.subject}</TableCell>
                 <TableCell>{formatDate(ticket.createdAt)}</TableCell>
                 <TableCell>{ticket.floor}</TableCell>
+                <TableCell>{ticket.department.name}</TableCell>
                 <TableCell>{ticket.statusFormatted}</TableCell>
                 <TableCell className='flex gap-2'>
                   {/* ✅ View Ticket (read-only details) */}

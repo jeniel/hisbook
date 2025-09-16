@@ -60,11 +60,7 @@ export default function UpdateTicket({ ticket, onUpdated }: UpdateTicketProps) {
     }
   }, [open])
 
-  const allowed = ['HR', 'ENGR', 'MIS']
-  const departments =
-    deptData?.findAllDepartments?.data?.filter((d: any) =>
-      allowed.includes(d.name)
-    ) || []
+  const departments = deptData?.findAllDepartments?.data || []
 
   // Fetch user only when modal opens
   useEffect(() => {

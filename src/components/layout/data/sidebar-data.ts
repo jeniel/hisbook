@@ -1,5 +1,5 @@
 import {
-  IconLayoutDashboard,
+  // IconLayoutDashboard,
   IconUsers,
   IconBriefcase,
   IconUserCog,
@@ -7,10 +7,8 @@ import {
   IconCalendarWeek,
   IconTimeDuration30,
   IconHome,
-  IconTicket,
+  // IconTicket,
   IconDeviceDesktop,
-  IconUserSearch,
-  IconHammer,
 } from '@tabler/icons-react'
 import { type SidebarData } from '../types'
 
@@ -26,13 +24,10 @@ export const sidebarData: SidebarData = {
       ],
     },
     {
-      title: 'Department Tickets',
+      title: 'Assigned Tickets',
       items: [
-        { title: 'Dashboard', url: '/dashboard', icon: IconLayoutDashboard },
-        { title: 'All Tickets', url: '/all-ticket', icon: IconTicket },
-        { title: 'MIS', url: '/mis-ticket', icon: IconDeviceDesktop },
-        { title: 'HR', url: '/hr-ticket', icon: IconUserSearch },
-        { title: 'ENGR', url: '/engr-ticket', icon: IconHammer },
+        // { title: 'Dashboard', url: '/dashboard', icon: IconLayoutDashboard },
+        { title: 'Department Tickets', url: '/assigned-ticket', icon: IconDeviceDesktop },
       ],
     },
     {

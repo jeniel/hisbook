@@ -96,10 +96,7 @@ export default function CreateDepartment() {
                     <Input
                       placeholder='MIS'
                       {...field}
-                      value={field.value?.toUpperCase() || ''}
-                      onChange={(e) =>
-                        field.onChange(e.target.value.toUpperCase())
-                      }
+                      value={field.value || ''}
                     />
                   </FormControl>
                 </FormItem>
@@ -116,10 +113,7 @@ export default function CreateDepartment() {
                     <Input
                       placeholder='MANAGEMENT INFORMATION SYSTEM'
                       {...field}
-                      value={field.value?.toUpperCase() || ''}
-                      onChange={(e) =>
-                        field.onChange(e.target.value.toUpperCase())
-                      }
+                      value={field.value || ''}
                     />
                   </FormControl>
                 </FormItem>

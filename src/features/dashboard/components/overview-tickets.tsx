@@ -27,9 +27,9 @@ export default function TicketsOverview({
   return (
     <Card>
       <CardHeader className='flex flex-row items-center justify-between'>
-        <CardTitle className='flex flex-row items-center'>
-          <Ticket className='mr-2 h-6 w-6 text-green-500' /> Tickets Overview by
-          Status
+        <CardTitle className='flex flex-row items-center gap-2'>
+          <Ticket className='h-6 w-6 text-green-500' />
+          <p className='text-sm md:text-lg'>Tickets Overview by Status</p>
         </CardTitle>
         <Link to='/all-ticket'>
           <Button variant='outline'>
