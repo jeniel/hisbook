@@ -7,21 +7,22 @@ import { CREATE_USER } from '@/graphql/operation/mutation/user'
 import { FIND_ALL_DEPARTMENTS } from '@/graphql/operation/query/department'
 import { FIND_ALL_USER } from '@/graphql/operation/query/user'
 import { useMutation, useQuery } from '@apollo/client'
-import { ChevronDown, ChevronRight, SquareCheckBig } from 'lucide-react'
+import { UserPlus, SquareCheckBig } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
 import {
-  Collapsible,
-  CollapsibleTrigger,
-  CollapsibleContent,
-} from '@/components/ui/collapsible'
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
 import {
   Form,
+  FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormControl,
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
@@ -38,7 +39,7 @@ interface Department {
   name: string
 }
 
-// Input Validation
+// Validation Schema
 const FormSchema = z
   .object({
     username: z.string().min(1, { message: 'Username is required' }),
@@ -79,6 +80,7 @@ export default function CreateUser() {
     },
   })
 
+  // Handle submit
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     try {
       await createUser({
@@ -94,143 +96,157 @@ export default function CreateUser() {
 
       toast.success('User Created Successfully!')
       form.reset()
-      setOpen(false) // auto-close after success
+      setOpen(false) // close modal after success
     } catch (_error) {
       toast.error('Failed to create user')
     }
   }
 
   return (
-    <Card>
-      <CardContent>
-        <Collapsible open={open} onOpenChange={setOpen}>
-          <CollapsibleTrigger asChild>
-            <Button
-              variant='ghost'
-              className='flex w-full items-center justify-between text-lg font-semibold'
-            >
-              <span>Create A New User</span>
-              {open ? (
-                <ChevronDown className='h-4 w-4' />
-              ) : (
-                <ChevronRight className='h-4 w-4' />
-              )}
-            </Button>
-          </CollapsibleTrigger>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button
+          className='flex items-center gap-2 font-semibold'
+          variant='outline'
+        >
+          <UserPlus className='h-5 w-5 text-blue-500' />
+          Create
+        </Button>
+      </DialogTrigger>
 
-          <CollapsibleContent className='mt-4'>
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className='w-full space-y-6'
+      <DialogContent className='max-w-5xl'>
+        <DialogHeader>
+          <DialogTitle>Create New User</DialogTitle>
+        </DialogHeader>
+
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
+            <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+              {/* Username */}
+              <FormField
+                control={form.control}
+                name='username'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Username</FormLabel>
+                    <FormControl>
+                      <Input placeholder='Enter username' {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Password */}
+              <FormField
+                control={form.control}
+                name='password'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        type='password'
+                        placeholder='Enter password'
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Confirm Password */}
+              <FormField
+                control={form.control}
+                name='confirmPassword'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Confirm Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        type='password'
+                        placeholder='Re-enter password'
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Department */}
+              <FormField
+                control={form.control}
+                name='department'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Department</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder='Select department' />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {departments.map((dept: Department) => (
+                          <SelectItem key={dept.id} value={dept.name}>
+                            {dept.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Role */}
+              <FormField
+                control={form.control}
+                name='role'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Role</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder='Select role' />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {roles.map((role) => (
+                          <SelectItem key={role} value={role}>
+                            {role}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            {/* Submit */}
+            <div className='flex justify-end'>
+              <Button
+                type='submit'
+                className='flex items-center gap-2'
+                variant={'outline'}
               >
-                <div className='grid grid-cols-1 gap-6 md:grid-cols-2'>
-                  {[
-                    {
-                      name: 'username',
-                      label: 'Username',
-                      type: 'text',
-                      placeholder: 'Enter username',
-                    },
-                    {
-                      name: 'password',
-                      label: 'Password',
-                      type: 'password',
-                      placeholder: 'Enter password',
-                    },
-                    {
-                      name: 'confirmPassword',
-                      label: 'Confirm Password',
-                      type: 'password',
-                      placeholder: 'Re-enter password',
-                    },
-                  ].map(({ name, label, type, placeholder }) => (
-                    <FormField
-                      key={name}
-                      control={form.control}
-                      name={name as keyof z.infer<typeof FormSchema>}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>{label}</FormLabel>
-                          <FormControl>
-                            <Input
-                              type={type}
-                              placeholder={placeholder}
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  ))}
-
-                  {/* Department Select */}
-                  <FormField
-                    control={form.control}
-                    name='department'
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Department</FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder='Select department' />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {departments.map((dept: Department) => (
-                              <SelectItem key={dept.name} value={dept.name}>
-                                {dept.name}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  {/* Role Select */}
-                  <FormField
-                    control={form.control}
-                    name='role'
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Role</FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder='Select role' />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {roles.map((role) => (
-                              <SelectItem key={role} value={role}>
-                                {role}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <Button variant='outline' type='submit' className='shadow-md'>
-                  <SquareCheckBig className='text-green-500' /> Submit
-                </Button>
-              </form>
-            </Form>
-          </CollapsibleContent>
-        </Collapsible>
-      </CardContent>
-    </Card>
+                <SquareCheckBig className='h-4 w-4 text-green-500' />
+                Submit
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
   )
 }

@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -5,9 +6,16 @@ import { Mutation } from '@/graphql/codegen/graphql'
 import { CREATE_DEPARTMENT } from '@/graphql/operation/mutation/department'
 import { FIND_ALL_DEPARTMENTS } from '@/graphql/operation/query/department'
 import { useMutation } from '@apollo/client'
+import { Building2, SquareCheckBig } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
 import {
   Form,
   FormControl,
@@ -16,13 +24,6 @@ import {
   FormLabel,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from '@/components/ui/collapsible'
-import { useState } from 'react'
-import { ChevronDown, ChevronRight, SquareCheckBig } from 'lucide-react'
 
 // Input Validation
 const FormSchema = z.object({
@@ -60,72 +61,85 @@ export default function CreateDepartment() {
 
       toast.success(res.data?.createDepartment?.message ?? 'Department created')
       form.reset()
-      setOpen(false) // auto-close after success
+      setOpen(false) // close modal after success
     } catch (_error) {
       toast.error('Failed to Create Department')
     }
   }
 
   return (
-    <Card>
-      <CardContent>
-        <Collapsible open={open} onOpenChange={setOpen}>
-          <CollapsibleTrigger asChild>
-            <Button
-              variant="ghost"
-              className="flex w-full items-center justify-between text-lg font-semibold"
-            >
-              <span>Create A New Department</span>
-              {open ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
-            </Button>
-          </CollapsibleTrigger>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button
+          className='flex items-center gap-2 font-semibold'
+          variant={'outline'}
+        >
+          <Building2 className='h-5 w-5 text-purple-500' />
+          Create
+        </Button>
+      </DialogTrigger>
 
-          <CollapsibleContent className="mt-4">
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="grid grid-cols-1 gap-6 md:grid-cols-2"
+      <DialogContent className='sm:max-w-lg'>
+        <DialogHeader>
+          <DialogTitle>Create New Department</DialogTitle>
+        </DialogHeader>
+
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
+            <FormField
+              control={form.control}
+              name='department'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Department</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder='MIS'
+                      {...field}
+                      value={field.value?.toUpperCase() || ''}
+                      onChange={(e) =>
+                        field.onChange(e.target.value.toUpperCase())
+                      }
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name='description'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder='MANAGEMENT INFORMATION SYSTEM'
+                      {...field}
+                      value={field.value?.toUpperCase() || ''}
+                      onChange={(e) =>
+                        field.onChange(e.target.value.toUpperCase())
+                      }
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+
+            {/* Submit button spans full width */}
+            <div className='flex justify-end md:col-span-2'>
+              <Button
+                type='submit'
+                className='flex items-center gap-2'
+                variant={'outline'}
               >
-                <FormField
-                  control={form.control}
-                  name="department"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Department</FormLabel>
-                      <FormControl>
-                        <Input placeholder="MIS" {...field} />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="description"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Description</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Management Information System"
-                          {...field}
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-
-                {/* Submit button spans full width */}
-                <div className="md:col-span-2">
-                  <Button variant='outline' type='submit' className="shadow-md">
-                    <SquareCheckBig className='text-green-500' /> Submit
-                  </Button>
-                </div>
-              </form>
-            </Form>
-          </CollapsibleContent>
-        </Collapsible>
-      </CardContent>
-    </Card>
+                <SquareCheckBig className='h-4 w-4 text-green-500' />
+                Submit
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
   )
 }

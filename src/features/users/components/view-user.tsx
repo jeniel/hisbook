@@ -13,6 +13,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import Pagination from '@/components/pagination'
+import CreateUser from './create-user'
 import DeleteUser from './delete-user'
 import EditUser from './edit-user'
 
@@ -39,11 +40,13 @@ export default function ViewUsers() {
   return (
     <Card>
       <CardContent>
-        <h1 className='mb-2 flex items-center gap-2 text-xl font-semibold'>
-          <UserPen className='h-6 w-6 text-blue-500' />
-          All Users
-        </h1>
-
+        <div className='mb-4 flex flex-row items-center justify-between'>
+          <h1 className='flex items-center gap-2 text-xl font-semibold'>
+            <UserPen className='h-6 w-6 text-blue-500' />
+            All Users
+          </h1>
+          <CreateUser />
+        </div>
         <Table>
           <TableHeader>
             <TableRow>

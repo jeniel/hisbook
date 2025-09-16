@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Query } from '@/graphql/codegen/graphql'
 import { FIND_ALL_DEPARTMENTS } from '@/graphql/operation/query/department'
 import { useQuery } from '@apollo/client'
+import { Hotel } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import {
   Table,
@@ -12,10 +13,10 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import Pagination from '@/components/pagination'
+import Spinner from '@/components/spinner'
+import CreateDepartment from './create-department'
 import DeleteDepartment from './delete-department'
 import EditDepartment from './edit-department'
-import Spinner from '@/components/spinner'
-import { Hotel } from 'lucide-react'
 
 export default function ViewDepartments() {
   const [page, setPage] = useState(1)
@@ -43,11 +44,13 @@ export default function ViewDepartments() {
   return (
     <Card>
       <CardContent>
-        <h1 className='mb-2 flex items-center gap-2 text-xl font-semibold'>
-          <Hotel className='h-6 w-6 text-purple-500' />
-          All Departments
-        </h1>
-
+        <div className='mb-4 flex flex-row items-center justify-between'>
+          <h1 className='mb-2 flex items-center gap-2 text-xl font-semibold'>
+            <Hotel className='h-6 w-6 text-purple-500' />
+            Departments
+          </h1>
+          <CreateDepartment />
+        </div>
 
         <Table>
           <TableHeader>

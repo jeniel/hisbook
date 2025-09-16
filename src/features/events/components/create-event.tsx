@@ -6,15 +6,16 @@ import { Mutation } from '@/graphql/codegen/graphql'
 import { CREATE_EVENT } from '@/graphql/operation/mutation/event'
 import { GET_ALL_EVENT } from '@/graphql/operation/query/event'
 import { useMutation } from '@apollo/client'
-import { ChevronDown, ChevronRight, SquareCheckBig } from 'lucide-react'
+import { CalendarPlus, SquareCheckBig } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
 import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from '@/components/ui/collapsible'
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
 import {
   Form,
   FormControl,
@@ -37,7 +38,7 @@ export default function CreateEvent() {
   const [open, setOpen] = useState(false)
 
   const [createEvent] = useMutation<Mutation>(CREATE_EVENT, {
-    refetchQueries: [GET_ALL_EVENT], // After Submiting Refetch
+    refetchQueries: [GET_ALL_EVENT],
     awaitRefetchQueries: true,
   })
 
@@ -56,130 +57,133 @@ export default function CreateEvent() {
     try {
       const payload = {
         ...data,
-        endDate: data.endDate || undefined, // convert empty string to undefined
-        detailsUrl: data.detailsUrl || undefined, // convert empty string to undefined
+        endDate: data.endDate || undefined,
+        detailsUrl: data.detailsUrl || undefined,
       }
 
-      const res = await createEvent({
-        variables: { payload },
-      })
+      const res = await createEvent({ variables: { payload } })
 
       toast.success(res.data?.createEvent?.message ?? 'Event created')
       form.reset()
       setOpen(false)
-    } catch (_error) {
+    } catch {
       toast.error('Failed to create Event')
     }
   }
 
   return (
-    <Card>
-      <CardContent>
-        <Collapsible open={open} onOpenChange={setOpen}>
-          <CollapsibleTrigger asChild>
-            <Button
-              variant='ghost'
-              className='flex w-full items-center justify-between text-lg font-semibold'
-            >
-              <span>Create A New Event</span>
-              {open ? (
-                <ChevronDown className='h-4 w-4' />
-              ) : (
-                <ChevronRight className='h-4 w-4' />
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button className='flex items-center gap-2' variant={'outline'}>
+          <CalendarPlus className='h-5 w-5 text-red-500' />
+          Create
+        </Button>
+      </DialogTrigger>
+
+      <DialogContent className='max-w-2xl'>
+        <DialogHeader>
+          <DialogTitle>Create New Event</DialogTitle>
+        </DialogHeader>
+
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className='grid grid-cols-1 gap-6 md:grid-cols-2'
+          >
+            <FormField
+              control={form.control}
+              name='title'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Title</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder='CHRISTMAS PARTY'
+                      {...field}
+                      value={field.value?.toUpperCase() || ''}
+                      onChange={(e) =>
+                        field.onChange(e.target.value.toUpperCase())
+                      }
+                      className='uppercase'
+                    />
+                  </FormControl>
+                </FormItem>
               )}
-            </Button>
-          </CollapsibleTrigger>
+            />
 
-          <CollapsibleContent className='mt-4'>
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className='grid grid-cols-1 gap-6 md:grid-cols-2'
-              >
-                <FormField
-                  control={form.control}
-                  name='title'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Title</FormLabel>
-                      <FormControl>
-                        <Input placeholder='Christmas Party' {...field} />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
+            <FormField
+              control={form.control}
+              name='location'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Location</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder='ACE'
+                      {...field}
+                      value={field.value?.toUpperCase() || ''}
+                      onChange={(e) =>
+                        field.onChange(e.target.value.toUpperCase())
+                      }
+                      className='uppercase'
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
 
-                <FormField
-                  control={form.control}
-                  name='location'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Location</FormLabel>
-                      <FormControl>
-                        <Input placeholder='ACE' {...field} />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
+            <FormField
+              control={form.control}
+              name='startDate'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Start Date</FormLabel>
+                  <FormControl>
+                    <Input type='date' {...field} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
 
-                <FormField
-                  control={form.control}
-                  name='startDate'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Start Date</FormLabel>
-                      <FormControl>
-                        <Input
-                          type='date'
-                          placeholder='August 4, 2025'
-                          {...field}
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
+            <FormField
+              control={form.control}
+              name='endDate'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>End Date (Optional)</FormLabel>
+                  <FormControl>
+                    <Input type='date' {...field} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
 
-                <FormField
-                  control={form.control}
-                  name='endDate'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>End Date (Optional)</FormLabel>
-                      <FormControl>
-                        <Input
-                          type='date'
-                          placeholder='August 7, 2025'
-                          {...field}
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
+            <FormField
+              control={form.control}
+              name='detailsUrl'
+              render={({ field }) => (
+                <FormItem className='md:col-span-2'>
+                  <FormLabel>Details URL (Optional)</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder='https://google.com'
+                      {...field}
+                      className='lowercase'
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
 
-                <FormField
-                  control={form.control}
-                  name='detailsUrl'
-                  render={({ field }) => (
-                    <FormItem className='md:col-span-2'>
-                      <FormLabel>Details URL (Optional)</FormLabel>
-                      <FormControl>
-                        <Input placeholder='https://google.com' {...field} />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-
-                {/* Submit button spans full width */}
-                <div className='md:col-span-2'>
-                  <Button variant='outline' type='submit' className="shadow-md">
-                    <SquareCheckBig className='text-green-500' /> Submit
-                  </Button>
-                </div>
-              </form>
-            </Form>
-          </CollapsibleContent>
-        </Collapsible>
-      </CardContent>
-    </Card>
+            <div className='md:col-span-2'>
+              <Button variant='outline' type='submit' className='shadow-md'>
+                <SquareCheckBig className='mr-2 text-green-500' />
+                Submit
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
   )
 }

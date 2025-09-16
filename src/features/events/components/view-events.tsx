@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/table'
 import Pagination from '@/components/pagination'
 import Spinner from '@/components/spinner'
+import CreateEvent from './create-event'
 import DeleteEvent from './delete-event'
 import EditEvent from './edit-event'
 
@@ -40,11 +41,14 @@ export default function ViewEvents() {
   return (
     <Card>
       <CardContent>
-        <h1 className='mb-2 flex items-center gap-2 text-xl font-semibold'>
-          <CalendarDays className='text-primary h-6 w-6' />
-          Events
-        </h1>
+        <div className='mb-4 flex flex-row items-center justify-between'>
+          <h1 className='flex items-center gap-2 text-xl font-semibold'>
+            <CalendarDays className='text-red-500 h-6 w-6' />
+            Events
+          </h1>
 
+          <CreateEvent />
+        </div>
         <Table>
           <TableHeader>
             <TableRow>
