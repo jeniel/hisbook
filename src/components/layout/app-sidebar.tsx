@@ -27,7 +27,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   // Filter navGroups based on roles
   const visibleNavGroups = sidebarData.navGroups.filter((group) => {
     // Only allow Admins to see Config & Department Tickets
-    if (group.title === 'Config' || group.title === 'Department Tickets') {
+    if (group.title === 'Config' || group.title === 'Assigned Tickets') {
       return roles.includes(Role.Admin)
     }
     return true // Always show other groups
