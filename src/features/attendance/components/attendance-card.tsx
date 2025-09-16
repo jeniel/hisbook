@@ -12,6 +12,7 @@ import { Badge } from '@/components/ui/badge'
 // import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
+import CreateTickets from '@/features/tickets/components/create-tickets'
 import { AttendanceData, HisUser, AttendanceLog } from '../hooks/useAttendance'
 import { AttendanceDetails } from './attendance-details'
 
@@ -79,7 +80,12 @@ export function AttendanceCard({
     if (log.isRestDay) return <Badge variant='outline'>Rest Day</Badge>
     if (log.isEmpty) return <Badge variant='destructive'>No Schedule</Badge>
     if (log.isError) return <Badge variant='destructive'>Error</Badge>
-    if (log.worked > 0) return <Badge className="bg-green-500 text-white dark:bg-green-600">Present</Badge>
+    if (log.worked > 0)
+      return (
+        <Badge className='bg-green-500 text-white dark:bg-green-600'>
+          Present
+        </Badge>
+      )
     return <Badge variant='secondary'>Absent</Badge>
   }
 
@@ -93,10 +99,22 @@ export function AttendanceCard({
     return <AlertCircle className='h-4 w-4 text-orange-500' />
   }
 
+  const getLoggedTime = (log: AttendanceLog) => {
+    if ((!log.outTime || !log.inTime) && !log.isRestDay) {
+      return `File A Ticket`
+    }
+  }
+
+  const getMessage = (log: AttendanceLog) => {
+    if ((!log.outTime || !log.inTime) && !log.isRestDay) {
+      return `Employee did not time In or Out`
+    }
+  }
+
   return (
-    <Card className='w-full mb-4'>
+    <Card className='mb-4 w-full'>
       <CardHeader>
-        <div className='flex flex-col items-start gap-2 md:items-center md:justify-between md:flex-row'>
+        <div className='flex flex-col items-start gap-2 md:flex-row md:items-center md:justify-between'>
           <CardTitle className='flex items-center gap-2'>
             <Calendar className='h-8 w-8 text-green-500' />
             <p className='text-xl'>Attendance Summary</p>
@@ -196,7 +214,7 @@ export function AttendanceCard({
                   <div className='flex flex-1 items-center gap-3'>
                     {getStatusIcon(log)}
                     <div>
-                      <div className='text-sm font-medium'>
+                      <div className='text-md font-semibold'>
                         {new Date(log.date).toLocaleDateString('en-US', {
                           weekday: 'short',
                           month: 'short',
@@ -204,7 +222,7 @@ export function AttendanceCard({
                           year: 'numeric',
                         })}
                       </div>
-                      <div className='text-muted-foreground text-xs'>
+                      <div className='text-muted-foreground text-sm'>
                         {log.inTime || log.outTime ? (
                           <>
                             In: {formatTime(log.inTime)} • Out:{' '}
@@ -215,9 +233,10 @@ export function AttendanceCard({
                             {log.message}
                           </span>
                         )}
+                        <div>{getMessage(log)}</div>
                       </div>
                       {log.late > 0 && (
-                        <div className='text-xs text-orange-500'>
+                        <div className='text-sm text-orange-500'>
                           Late: {formatHours(log.late)}
                         </div>
                       )}
@@ -228,14 +247,18 @@ export function AttendanceCard({
                     <div className='text-sm font-medium'>
                       {formatHours(log.worked)}
                     </div>
-                    <div className='flex flex-col md:flex-wrap gap-2 items-end'>
+
+                    {/* Badges */}
+                    <div className='flex flex-col items-end gap-2 md:flex-wrap'>
                       {getStatusBadge(log)}
                       {log.withNSD && (
                         <Badge variant='outline' className='text-xs'>
                           NSD: {formatHours(log.hoursWorkedNSD)}
                         </Badge>
                       )}
+                      {getLoggedTime(log) && <CreateTickets />}
                     </div>
+
                     <Dialog>
                       <DialogTrigger asChild>
                         {/* <Button variant='outline' size='sm' className='mt-1'>

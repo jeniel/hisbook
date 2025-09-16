@@ -14,7 +14,7 @@ export const getCutoffPeriods = (year: number, month: number): CutoffPeriod[] =>
   
   // First cutoff: 11th to 25th of the current month
   const firstCutoffStart = new Date(year, month - 1, 11)
-  const firstCutoffEnd = new Date(year, month - 1, 25)
+  const firstCutoffEnd = new Date(year, month - 1, 26)
   
   periods.push({
     label: `1st Cutoff - ${getMonthName(month)} ${year}`,
@@ -29,7 +29,7 @@ export const getCutoffPeriods = (year: number, month: number): CutoffPeriod[] =>
   const secondCutoffStart = new Date(year, month - 1, 26)
   const nextMonth = month === 12 ? 1 : month + 1
   const nextYear = month === 12 ? year + 1 : year
-  const secondCutoffEnd = new Date(nextYear, nextMonth - 1, 10)
+  const secondCutoffEnd = new Date(nextYear, nextMonth - 1, 11)
   
   periods.push({
     label: `2nd Cutoff - ${getMonthName(month)} ${year}`,

@@ -25,6 +25,7 @@ export function AttendanceSummary({
 
     const summary = attendanceData.logs.reduce(
       (acc, log) => {
+        const isNoWork = log.isEmpty || log.hoursAbsent > 0
         return {
           totalWorked: acc.totalWorked + log.worked,
           totalLate: acc.totalLate + log.late,
@@ -85,9 +86,7 @@ export function AttendanceSummary({
           // Day counts
           daysPresent: log.worked > 0 ? acc.daysPresent + 1 : acc.daysPresent,
           daysAbsent:
-            log.isEmpty || log.hoursAbsent > 0
-              ? acc.daysAbsent + 1
-              : acc.daysAbsent,
+            isNoWork && !log.isRestDay ? acc.daysAbsent + 1 : acc.daysAbsent,
           daysLeave: log.isLeave ? acc.daysLeave + 1 : acc.daysLeave,
           daysHoliday: log.isHoliday ? acc.daysHoliday + 1 : acc.daysHoliday,
           daysRestDay: log.isRestDay ? acc.daysRestDay + 1 : acc.daysRestDay,
@@ -313,7 +312,7 @@ export function AttendanceSummary({
         </Card>
 
         {/* Day Counts */}
-        <Card className='md:col-span-2 lg:col-span-3 mb-4'>
+        <Card className='mb-4 md:col-span-2 lg:col-span-3'>
           <CardHeader className='pb-3'>
             <CardTitle className='flex items-center gap-2 text-sm'>
               <Calendar className='h-4 w-4 text-purple-600' />
