@@ -131,7 +131,7 @@ export default function UpdateTicket({ ticket, onUpdated }: UpdateTicketProps) {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className='max-w-6xl'>
+      <DialogContent className='max-h-[90vh] w-full max-w-lg overflow-y-auto sm:max-w-2xl lg:max-w-4xl'>
         <DialogHeader>
           <DialogTitle className='flex flex-row items-center gap-2'>
             <PencilLine className='font-semibold text-blue-500' />

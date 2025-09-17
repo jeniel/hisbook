@@ -1,17 +1,45 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from '@tanstack/react-router'
 import { Ticket, TicketIcon, LayoutGrid, LayoutList } from 'lucide-react'
+import { useTicket } from '@/hooks/useTicket'
 import { Button } from '@/components/ui/button'
-import GridView from '../components/grid-view'
-import ListView from '../components/list-view'
+import Spinner from '@/components/spinner'
+import ListView from '../components/assigned-tickets/list-view'
+import TableView from '../components/assigned-tickets/table-view'
 
 export default function AssignedTickets() {
-  const [view, setView] = useState<'grid' | 'list'>('grid') // default to grid view
+  const [view, setView] = useState<'table' | 'list'>(() => {
+    return (
+      (localStorage.getItem('assignedTicketsView') as 'table' | 'list') ||
+      'table'
+    )
+  })
+
+  useEffect(() => {
+    // ✅ store preference when it changes
+    localStorage.setItem('assignedTicketsView', view)
+  }, [view])
+
+  const [page, setPage] = useState(1)
+  const perPage = 10
+
+  const { tickets, meta, loading, error, refetch } = useTicket({
+    page,
+    perPage,
+  })
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage)
+    refetch({ page: newPage, perPage })
+  }
+
+  if (loading) return <Spinner />
+  if (error) return <p>Error loading tickets: {error.message}</p>
 
   return (
     <>
       {/* Header */}
-      <div className='mb-4 flex flex-col items-center justify-between gap-4 md:flex-row'>
+      <div className='mb-4 flex flex-col justify-between gap-4 md:flex-row'>
         <div>
           <h1 className='mb-2 flex items-center gap-2 text-3xl font-semibold'>
             <Ticket className='h-10 w-10 text-green-500' />
@@ -34,27 +62,45 @@ export default function AssignedTickets() {
             </Button>
           </Link>
 
-          {/* View Toggle Buttons */}
+          {/* Toggle view */}
           <Button
-            variant={view === 'grid' ? 'default' : 'outline'}
+            variant={view === 'table' ? 'default' : 'outline'}
             size='sm'
-            onClick={() => setView('grid')}
+            onClick={() => setView('table')}
           >
-            <LayoutGrid className='h-4 w-4' />
+            <LayoutList className='h-4 w-4' />
           </Button>
           <Button
             variant={view === 'list' ? 'default' : 'outline'}
             size='sm'
             onClick={() => setView('list')}
           >
-            <LayoutList className='h-4 w-4' />
+            <LayoutGrid className='h-4 w-4' />
           </Button>
         </div>
       </div>
 
       {/* Content */}
-      <div className='space-y-4'>
-        {view === 'grid' ? <GridView /> : <ListView />}
+      <div className='mb-4'>
+        {view === 'table' ? (
+          <TableView
+            tickets={tickets}
+            meta={meta}
+            page={page}
+            perPage={perPage}
+            onPageChange={handlePageChange}
+            refetch={refetch}
+          />
+        ) : (
+          <ListView
+            tickets={tickets}
+            meta={meta}
+            page={page}
+            perPage={perPage}
+            onPageChange={handlePageChange}
+            refetch={refetch}
+          />
+        )}
       </div>
     </>
   )

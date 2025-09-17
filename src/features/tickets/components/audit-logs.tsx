@@ -38,7 +38,7 @@ export default function AuditLogsContent({ ticketId }: { ticketId: string }) {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className='max-w-md'>
+      <DialogContent className='max-h-[90vh] w-full max-w-lg overflow-y-auto sm:max-w-2xl lg:max-w-4xl'>
         <DialogTitle className='flex flex-row items-center gap-2'>
           <BookCheck className='text-yellow-500' /> Audit Logs
         </DialogTitle>

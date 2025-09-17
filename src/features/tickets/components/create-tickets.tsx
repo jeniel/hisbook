@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Status } from '@/graphql/codegen/graphql'
 import { FIND_ALL_DEPARTMENTS } from '@/graphql/operation/query/department'
 import { ME_QUERY } from '@/graphql/operation/query/user'
-import { useQuery } from '@apollo/client'
+import { useLazyQuery } from '@apollo/client'
 import { Send, TicketPlus } from 'lucide-react'
 import { toast } from 'sonner'
 import { useTicket } from '@/hooks/useTicket'
@@ -52,12 +52,18 @@ export default function CreateTickets() {
     perPage: 1,
   })
 
-  // ✅ Queries
-  const { data: meData, loading: meLoading } = useQuery(ME_QUERY)
-  const { data: deptData, loading: deptLoading } = useQuery(
-    FIND_ALL_DEPARTMENTS,
-    { variables: { page: 1, perPage: 50 } }
-  )
+  // ✅ Lazy queries (don’t run on mount)
+  const [fetchMe, { data: meData, loading: meLoading }] = useLazyQuery(ME_QUERY)
+  const [fetchDepts, { data: deptData, loading: deptLoading }] =
+    useLazyQuery(FIND_ALL_DEPARTMENTS)
+
+  // ✅ Trigger queries only when modal opens
+  useEffect(() => {
+    if (open) {
+      fetchMe()
+      fetchDepts({ variables: { page: 1, perPage: 50 } })
+    }
+  }, [open, fetchMe, fetchDepts])
 
   const user = meData?.meQuery?.user
   const userId = user?.id
@@ -98,7 +104,8 @@ export default function CreateTickets() {
     }
   }
 
-  if (meLoading || deptLoading) return <Spinner />
+  // ✅ Show spinner only inside modal
+  const isLoading = meLoading || deptLoading
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -117,128 +124,135 @@ export default function CreateTickets() {
           <DialogTitle>Create Ticket</DialogTitle>
         </DialogHeader>
 
-        <p className='mb-4 text-sm italic'>
-          Please fill out the form carefully. Use the <strong>Subject</strong>{' '}
-          field to briefly describe your request or issue.
-          <br />
-          Select the correct <strong>Department</strong> (HR, Engineering, or
-          MIS).
-          <br />
-          <br />
-          <strong>Note:</strong> Once submitted, you cannot edit it again.
-        </p>
+        {isLoading ? (
+          <Spinner />
+        ) : (
+          <>
+            <p className='mb-4 text-sm italic'>
+              Please fill out the form carefully. Use the{' '}
+              <strong>Subject</strong> field to briefly describe your request or
+              issue.
+              <br />
+              Select the correct <strong>Department</strong> (HR, Engineering,
+              or MIS).
+              <br />
+              <br />
+              <strong>Note:</strong> Once submitted, you cannot edit it again.
+            </p>
 
-        <p className='mb-2 text-lg'>
-          <span className='font-medium'>Requested by:</span>{' '}
-          {user?.profile?.firstName} {user?.profile?.lastName}
-        </p>
+            <p className='mb-2 text-lg'>
+              <span className='font-medium'>Requested by:</span>{' '}
+              {user?.profile?.firstName} {user?.profile?.lastName}
+            </p>
 
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className='grid gap-6 md:grid-cols-2'
-          >
-            {/* Left Column */}
-            <div className='space-y-4'>
-              {/* Subject */}
-              <FormField
-                control={form.control}
-                name='subject'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Subject</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder='e.g. CCTV Review, Aircon Leaking, Printer Issue'
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* Floor */}
-              <FormField
-                control={form.control}
-                name='floor'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Location / Department</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder='e.g. 8th Floor, ER, Basement 1'
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* Department */}
-              <FormField
-                control={form.control}
-                name='departmentId'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Send to Department</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder='Select Department' />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {departments.map((dept: any) => (
-                          <SelectItem key={dept.id} value={dept.id}>
-                            {dept.name} - {dept.description}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            {/* Right Column */}
-            <div className='space-y-4'>
-              {/* Message */}
-              <FormField
-                control={form.control}
-                name='message'
-                render={({ field }) => (
-                  <FormItem className='h-full'>
-                    <FormLabel>Message (Optional)</FormLabel>
-                    <FormControl>
-                      <textarea
-                        placeholder='Additional details or context'
-                        {...field}
-                        className='border-input bg-background focus-visible:ring-ring h-[180px] w-full resize-none rounded-md border px-3 py-2 text-sm shadow-sm focus-visible:ring-2 focus-visible:outline-none'
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            {/* Submit Button (spans both columns) */}
-            <div className='flex justify-end md:col-span-2'>
-              <Button
-                type='submit'
-                variant='outline'
-                className='flex items-center gap-2'
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className='grid gap-6 md:grid-cols-2'
               >
-                <Send className='h-4 w-4 text-green-500' />
-                Submit
-              </Button>
-            </div>
-          </form>
-        </Form>
+                {/* Left Column */}
+                <div className='space-y-4'>
+                  {/* Subject */}
+                  <FormField
+                    control={form.control}
+                    name='subject'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Subject</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder='e.g. CCTV Review, Aircon Leaking, Printer Issue'
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Floor */}
+                  <FormField
+                    control={form.control}
+                    name='floor'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Location / Department</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder='e.g. 8th Floor, ER, Basement 1'
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Department */}
+                  <FormField
+                    control={form.control}
+                    name='departmentId'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Send to Department</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder='Select Department' />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {departments.map((dept: any) => (
+                              <SelectItem key={dept.id} value={dept.id}>
+                                {dept.name} - {dept.description}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                {/* Right Column */}
+                <div className='space-y-4'>
+                  {/* Message */}
+                  <FormField
+                    control={form.control}
+                    name='message'
+                    render={({ field }) => (
+                      <FormItem className='h-full'>
+                        <FormLabel>Message (Optional)</FormLabel>
+                        <FormControl>
+                          <textarea
+                            placeholder='Additional details or context'
+                            {...field}
+                            className='border-input bg-background focus-visible:ring-ring h-[180px] w-full resize-none rounded-md border px-3 py-2 text-sm shadow-sm focus-visible:ring-2 focus-visible:outline-none'
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                {/* Submit Button */}
+                <div className='flex justify-end md:col-span-2'>
+                  <Button
+                    type='submit'
+                    variant='outline'
+                    className='flex items-center gap-2'
+                  >
+                    <Send className='h-4 w-4 text-green-500' />
+                    Submit
+                  </Button>
+                </div>
+              </form>
+            </Form>
+          </>
+        )}
       </DialogContent>
     </Dialog>
   )

@@ -1,6 +1,5 @@
-import { useState } from 'react'
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { formatDate } from '@/utils/formatDate'
-import { useTicket } from '@/hooks/useTicket'
 import { Card, CardContent } from '@/components/ui/card'
 import {
   Table,
@@ -11,29 +10,26 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import Pagination from '@/components/pagination'
-import Spinner from '@/components/spinner'
-import AuditLogsContent from './audit-logs'
-import DeleteTicket from './delete-ticket'
-import UpdateTicket from './update-tickets'
-import ViewTicket from './view-ticket'
+import AuditLogsContent from '../audit-logs'
+import DeleteTicket from '../delete-ticket'
+import UpdateTicket from '../update-tickets'
+import ViewTicket from '../view-ticket'
 
-export default function GridView() {
-  const [page, setPage] = useState(1)
-  const perPage = 10
-
-  const { tickets, meta, loading, error, refetch } = useTicket({
-    page,
-    perPage,
-  })
-
-  const handlePageChange = (newPage: number) => {
-    setPage(newPage)
-    refetch({ page: newPage, perPage })
-  }
-
-  if (loading) return <Spinner />
-  if (error) return <p>Error loading tickets: {error.message}</p>
-
+export default function TableView({
+  tickets,
+  meta,
+  page,
+  perPage,
+  onPageChange,
+  refetch,
+}: {
+  tickets: any[]
+  meta: any
+  page: number
+  perPage: number
+  onPageChange: (page: number) => void
+  refetch: () => void
+}) {
   return (
     <Card>
       <CardContent>
@@ -65,16 +61,9 @@ export default function GridView() {
                 <TableCell>{ticket.department.name}</TableCell>
                 <TableCell>{ticket.statusFormatted}</TableCell>
                 <TableCell className='flex gap-2'>
-                  {/* ✅ View Ticket (read-only details) */}
                   <ViewTicket ticket={ticket} />
-
-                  {/* ✏️ Update Ticket */}
                   <UpdateTicket ticket={ticket} onUpdated={() => refetch()} />
-
-                  {/* 📑 Audit Logs */}
                   <AuditLogsContent ticketId={ticket.id} />
-
-                  {/* 🗑️ Delete Ticket */}
                   <DeleteTicket
                     ticketId={ticket.id}
                     onDelete={() => refetch()}
@@ -89,7 +78,7 @@ export default function GridView() {
           <Pagination
             currentPage={meta.currentPage}
             lastPage={meta.lastPage}
-            onPageChange={handlePageChange}
+            onPageChange={onPageChange}
           />
         )}
       </CardContent>
