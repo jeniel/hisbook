@@ -61,7 +61,7 @@ export default function MyTickets() {
   return (
     <>
       <div>
-        <div className='mb-4 flex flex-row items-center justify-between'>
+        <div className='mb-4 flex flex-col justify-between gap-4 md:flex-row'>
           <div>
             <h1 className='mb-2 flex items-center gap-2 text-3xl font-semibold'>
               <Ticket className='h-10 w-10 text-green-500' />
@@ -90,7 +90,7 @@ export default function MyTickets() {
           </div>
         </div>
 
-        <Card className='w-full'>
+        <Card className='w-full mb-4'>
           <CardContent>
             {view === 'table' ? (
               <TableView
