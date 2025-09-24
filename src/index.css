@@ -45,6 +45,72 @@ body {
   --sidebar-accent-foreground: oklch(0.21 0.006 285.885);
   --sidebar-border: oklch(0.92 0.004 286.32);
   --sidebar-ring: oklch(0.637 0.237 25.331);
+
+  /* n8n */
+
+  /* === Brand Colors === */
+  --chat--color-primary: #139b35 !important;
+  --chat--color-primary-shade-50: #0e8021 !important;
+  --chat--color-primary-shade-100: #136e36 !important;
+  --chat--color-secondary: #20b69e !important;
+  --chat--color-secondary-shade-50: #1ca08a !important;
+  --chat--color-white: #ffffff !important;
+  --chat--color-light: #f9fafb !important;
+  --chat--color-light-shade-50: #e5e7eb !important;
+  --chat--color-light-shade-100: #d1d5db !important;
+  --chat--color-medium: #9ca3af !important;
+  --chat--color-dark: #1d398f !important;
+  --chat--color-disabled: #9ca3af !important;
+  --chat--color-typing: #4b5563 !important;
+
+  /* === Layout === */
+  --chat--spacing: 0.75rem !important;
+  --chat--border-radius: 0.75rem !important;
+  --chat--transition-duration: 0.25s !important;
+
+  --chat--window--width: 380px !important;
+  --chat--window--height: 540px !important;
+
+  /* === Header === */
+  --chat--header-height: 100px !important;
+  --chat--header--padding: 0.75rem 1rem !important;
+  --chat--header--background: linear-gradient(
+    135deg,
+    #139b35,
+    #20b69e
+  ) !important;
+  --chat--header--color: var(--chat--color-white) !important;
+  --chat--heading--font-size: 1.125rem !important;
+  --chat--subtitle--font-size: 0.875rem !important;
+  --chat--subtitle--line-height: 1.4 !important;
+
+  /* === Messages === */
+  --chat--message--font-size: 0.95rem !important;
+  --chat--message--padding: 0.6rem 0.8rem !important;
+  --chat--message--border-radius: 0.75rem !important;
+  --chat--message-line-height: 1.5 !important;
+  --chat--message--bot--background: #ffffff !important;
+  --chat--message--bot--color: #111827 !important;
+  --chat--message--bot--border: 1px solid #e5e7eb !important;
+  --chat--message--user--background: var(--chat--color-primary) !important;
+  --chat--message--user--color: #ffffff !important;
+  --chat--message--user--border: none !important;
+  --chat--message--pre--background: #f3f4f6 !important;
+
+  /* === Input === */
+  --chat--textarea--height: 48px !important;
+  --chat--textarea--border-radius: 0.5rem !important;
+
+  /* === Toggle === */
+  --chat--toggle--background: var(--chat--color-primary) !important;
+  --chat--toggle--hover--background: var(
+    --chat--color-primary-shade-50
+  ) !important;
+  --chat--toggle--active--background: var(
+    --chat--color-primary-shade-100
+  ) !important;
+  --chat--toggle--color: #ffffff !important;
+  --chat--toggle--size: 56px !important;
 }
 
 .dark {
