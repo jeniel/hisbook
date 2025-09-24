@@ -1,5 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
 import Pagination from '@/components/pagination'
 
 type TableViewProps = {
@@ -10,7 +17,13 @@ type TableViewProps = {
   onPageChange: (newPage: number) => void
 }
 
-export default function TableView({ tickets, page, perPage, meta, onPageChange }: TableViewProps) {
+export default function TableView({
+  tickets,
+  page,
+  perPage,
+  meta,
+  onPageChange,
+}: TableViewProps) {
   return (
     <>
       <Table>
@@ -25,24 +38,32 @@ export default function TableView({ tickets, page, perPage, meta, onPageChange }
           </TableRow>
         </TableHeader>
         <TableBody>
-          {tickets.map((ticket, index) => (
-            <TableRow key={ticket.id}>
-              <TableCell>{index + 1 + (page - 1) * perPage}</TableCell>
-              <TableCell>
-                {ticket.createdBy?.profile
-                  ? `${ticket.createdBy.profile.firstName} ${ticket.createdBy.profile.lastName}`
-                  : ticket.createdBy?.username || 'Unknown'}
+          {tickets.length > 0 ? (
+            tickets.map((ticket, index) => (
+              <TableRow key={ticket.id}>
+                <TableCell>{index + 1 + (page - 1) * perPage}</TableCell>
+                <TableCell>
+                  {ticket.createdBy?.profile
+                    ? `${ticket.createdBy.profile.firstName} ${ticket.createdBy.profile.lastName}`
+                    : ticket.createdBy?.username || 'Unknown'}
+                </TableCell>
+                <TableCell>{ticket.subject || '-'}</TableCell>
+                <TableCell>{ticket.department?.name || '-'}</TableCell>
+                <TableCell>{ticket.floor || '-'}</TableCell>
+                <TableCell>{ticket.statusFormatted || '-'}</TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={6} className='py-6 text-center text-gray-500'>
+                You don’t have tickets
               </TableCell>
-              <TableCell>{ticket.subject || '-'}</TableCell>
-              <TableCell>{ticket.department?.name || '-'}</TableCell>
-              <TableCell>{ticket.floor || '-'}</TableCell>
-              <TableCell>{ticket.statusFormatted || '-'}</TableCell>
             </TableRow>
-          ))}
+          )}
         </TableBody>
       </Table>
 
-      {meta && (
+      {meta && tickets.length > 0 && (
         <div className='mt-4'>
           <Pagination
             currentPage={meta.currentPage}

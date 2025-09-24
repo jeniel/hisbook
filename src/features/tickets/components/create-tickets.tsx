@@ -61,7 +61,7 @@ export default function CreateTickets() {
   useEffect(() => {
     if (open) {
       fetchMe()
-      fetchDepts({ variables: { page: 1, perPage: 50 } })
+      fetchDepts({ variables: { page: 1, perPage: 500 } })
     }
   }, [open, fetchMe, fetchDepts])
 

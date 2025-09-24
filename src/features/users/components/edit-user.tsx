@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { User } from '@/graphql/codegen/graphql'
 import { UPDATE_USER } from '@/graphql/operation/mutation/user'
-import { FIND_ALL_DEPARTMENTS } from '@/graphql/operation/query/department'
+import { FIND_ALL_DEPARTMENTS_IN_DROPDOWN } from '@/graphql/operation/query/department'
 import { useMutation, useQuery } from '@apollo/client'
 import { PencilLine } from 'lucide-react'
 import { toast } from 'sonner'
@@ -53,6 +53,7 @@ const EditSchema = z
 
 //  Interface
 interface Department {
+  description: string
   id: string
   name: string
 }
@@ -65,11 +66,11 @@ type EditUserProps = {
 
 export default function EditUser({ user, onUpdated }: EditUserProps) {
   const [open, setOpen] = useState(false)
-  const { data: deptData } = useQuery(FIND_ALL_DEPARTMENTS)
   const [updateUser, { loading }] = useMutation(UPDATE_USER)
 
   // Roles and Departments
-  const departments = deptData?.findAllDepartments?.data || []
+  const { data: deptData } = useQuery(FIND_ALL_DEPARTMENTS_IN_DROPDOWN)
+  const departments = deptData?.findAllForDropdown || []
   const roles = ['USER', 'ADMIN']
 
   const form = useForm<z.infer<typeof EditSchema>>({
@@ -105,7 +106,6 @@ export default function EditUser({ user, onUpdated }: EditUserProps) {
       toast.error('Failed to update user')
     }
   }
-
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -114,7 +114,7 @@ export default function EditUser({ user, onUpdated }: EditUserProps) {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className='max-w-lg'>
+      <DialogContent className='max-w-5xl'>
         <DialogHeader>
           <DialogTitle>Edit User</DialogTitle>
         </DialogHeader>
@@ -187,10 +187,11 @@ export default function EditUser({ user, onUpdated }: EditUserProps) {
                         <SelectValue placeholder='Select department' />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent>
+                    <SelectContent className='max-h-60 overflow-y-auto'>
                       {departments.map((dept: Department) => (
                         <SelectItem key={dept.id} value={dept.id}>
-                          {dept.name}
+                          {dept.name}{' '}
+                          {dept.description && `- ${dept.description}`}
                         </SelectItem>
                       ))}
                     </SelectContent>

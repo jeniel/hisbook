@@ -46,8 +46,8 @@ export default function DeleteDepartment({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant={'outline'} size='sm'>
-          <Trash2 className='text-red-500' />
+        <Button variant='destructive' size='sm'>
+          <Trash2 />
         </Button>
       </DialogTrigger>
 

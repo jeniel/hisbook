@@ -20,3 +20,13 @@ export const FIND_ALL_DEPARTMENTS = gql`
     }
   }
 `
+
+export const FIND_ALL_DEPARTMENTS_IN_DROPDOWN = gql`
+  query FindAllForDropdown {
+    findAllForDropdown {
+      id
+      name
+      description
+    }
+  }
+`

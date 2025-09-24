@@ -48,7 +48,7 @@ export default function UpdateTicket({ ticket, onUpdated }: UpdateTicketProps) {
   // ✅ Fetch departments
   const [fetchDepartments, { data: deptData, loading: deptLoading }] =
     useLazyQuery(FIND_ALL_DEPARTMENTS, {
-      variables: { page: 1, perPage: 50 },
+      variables: { page: 1, perPage: 1000 },
       fetchPolicy: 'network-only', // ensures fresh data every time
     })
 
