@@ -1,7 +1,3 @@
-import { useState } from 'react'
-import { Query } from '@/graphql/codegen/graphql'
-import { FIND_ALL_DEPARTMENTS } from '@/graphql/operation/query/department'
-import { useQuery } from '@apollo/client'
 import { Hotel } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import {
@@ -14,31 +10,18 @@ import {
 } from '@/components/ui/table'
 import Pagination from '@/components/pagination'
 import Spinner from '@/components/spinner'
+import useDepartments from '../hooks/useDepartments'
 import CreateDepartment from './create-department'
 import DeleteDepartment from './delete-department'
 import EditDepartment from './edit-department'
 
 export default function ViewDepartments() {
-  const [page, setPage] = useState(1)
-  const perPage = 10
-
-  const { data, loading, error, refetch } = useQuery<Query>(
-    FIND_ALL_DEPARTMENTS,
-    {
-      variables: { page, perPage },
-      fetchPolicy: 'cache-and-network',
-    }
-  )
-
-  if (loading) return <Spinner />
-  if (error) return <p>Error: {error.message}</p>
-
-  const departments = data?.findAllDepartments?.data || []
-  const meta = data?.findAllDepartments?.meta
+  const { departments, loading, error, page, setPage, totalPages, refetch } =
+    useDepartments()
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage)
-    refetch({ page: newPage, perPage })
+    refetch()
   }
 
   return (
@@ -49,39 +32,52 @@ export default function ViewDepartments() {
             <Hotel className='h-6 w-6 text-purple-500' />
             Departments
           </h1>
-          <CreateDepartment />
+          <CreateDepartment onCreated={refetch} />
         </div>
 
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>#</TableHead>
               <TableHead>Department</TableHead>
               <TableHead>Description</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
+
           <TableBody>
-            {departments.length === 0 ? (
+            {loading ? (
+              <TableRow>
+                <TableCell colSpan={4} className='h-40 text-center'>
+                  <div className='flex items-center justify-center'>
+                    <Spinner />
+                  </div>
+                </TableCell>
+              </TableRow>
+            ) : error ? (
+              <TableRow>
+                <TableCell colSpan={4} className='text-center text-red-500'>
+                  Error: {error}
+                </TableCell>
+              </TableRow>
+            ) : departments.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={4} className='text-center'>
                   No departments found
                 </TableCell>
               </TableRow>
             ) : (
-              departments.map((department, index) => (
+              departments.map((department) => (
                 <TableRow key={department.id}>
-                  <TableCell>{index + 1 + (page - 1) * perPage}</TableCell>
                   <TableCell>{department.name}</TableCell>
                   <TableCell>{department.description}</TableCell>
                   <TableCell className='flex flex-row items-center space-x-2'>
                     <EditDepartment
                       department={department}
-                      onUpdated={() => refetch()}
+                      onUpdated={refetch}
                     />
                     <DeleteDepartment
                       department={department}
-                      onDelete={() => refetch()}
+                      onDelete={refetch}
                     />
                   </TableCell>
                 </TableRow>
@@ -90,10 +86,10 @@ export default function ViewDepartments() {
           </TableBody>
         </Table>
 
-        {meta && (
+        {totalPages > 1 && !loading && (
           <Pagination
-            currentPage={meta.currentPage}
-            lastPage={meta.lastPage}
+            currentPage={page}
+            lastPage={totalPages}
             onPageChange={handlePageChange}
           />
         )}

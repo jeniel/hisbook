@@ -1,9 +1,5 @@
 import { useState } from 'react'
-import { Mutation } from '@/graphql/codegen/graphql'
-import { DELETE_DEPARTMENT } from '@/graphql/operation/mutation/department'
-import { useMutation } from '@apollo/client'
 import { Trash2 } from 'lucide-react'
-import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -14,8 +10,8 @@ import {
   DialogTrigger,
   DialogFooter,
 } from '@/components/ui/dialog'
+import useDepartments from '../hooks/useDepartments'
 
-// Props
 type DeleteDepartmentProps = {
   department: { id: string; name: string }
   onDelete?: () => void
@@ -26,21 +22,12 @@ export default function DeleteDepartment({
   onDelete,
 }: DeleteDepartmentProps) {
   const [open, setOpen] = useState(false)
-  const [deleteDepartment] = useMutation<Mutation>(DELETE_DEPARTMENT)
+  const { deleteDepartment, deleting } = useDepartments()
 
-  // Delete Functionality
   const handleDelete = async () => {
-    try {
-      await deleteDepartment({
-        variables: { deleteDepartmentId: department.id },
-      })
-
-      toast.error('Department deleted')
-      if (onDelete) onDelete()
-      setOpen(false)
-    } catch (_error) {
-      toast.error('Failed to delete department')
-    }
+    await deleteDepartment(department.id)
+    if (onDelete) onDelete()
+    setOpen(false)
   }
 
   return (
@@ -65,7 +52,13 @@ export default function DeleteDepartment({
           <Button variant='outline' onClick={() => setOpen(false)}>
             Cancel
           </Button>
-          <Button onClick={handleDelete}>Delete</Button>
+          <Button
+            onClick={handleDelete}
+            variant='destructive'
+            disabled={deleting}
+          >
+            {deleting ? 'Deleting...' : 'Delete'}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

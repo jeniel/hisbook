@@ -2,12 +2,7 @@ import { useState } from 'react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Mutation } from '@/graphql/codegen/graphql'
-import { CREATE_DEPARTMENT } from '@/graphql/operation/mutation/department'
-import { FIND_ALL_DEPARTMENTS } from '@/graphql/operation/query/department'
-import { useMutation } from '@apollo/client'
 import { Building2, SquareCheckBig } from 'lucide-react'
-import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -24,47 +19,35 @@ import {
   FormLabel,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import useDepartments from '../hooks/useDepartments'
 
-// Input Validation
+// ✅ Schema
 const FormSchema = z.object({
   department: z.string().min(1, { message: 'Department is required' }),
   description: z.string().min(1, { message: 'Description is required' }),
 })
 
-export default function CreateDepartment() {
-  const [open, setOpen] = useState(false)
+interface CreateDepartmentProps {
+  onCreated: () => void
+}
 
-  const [createDepartment] = useMutation<Mutation>(CREATE_DEPARTMENT, {
-    refetchQueries: [FIND_ALL_DEPARTMENTS], // After Submiting Refetch
-    awaitRefetchQueries: true,
-  })
+export default function CreateDepartment({ onCreated }: CreateDepartmentProps) {
+  const [open, setOpen] = useState(false)
+  const { createDepartment, creating } = useDepartments()
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-    defaultValues: {
-      department: '',
-      description: '',
-    },
+    defaultValues: { department: '', description: '' },
   })
 
-  // Submit Functionality
-  async function onSubmit(data: z.infer<typeof FormSchema>) {
-    try {
-      const res = await createDepartment({
-        variables: {
-          payload: {
-            name: data.department,
-            description: data.description,
-          },
-        },
-      })
-
-      toast.success(res.data?.createDepartment?.message ?? 'Department created')
-      form.reset()
-      setOpen(false) // close modal after success
-    } catch (_error) {
-      toast.error('Failed to Create Department')
-    }
+  const onSubmit = async (data: z.infer<typeof FormSchema>) => {
+    await createDepartment({
+      name: data.department,
+      description: data.description,
+    })
+    form.reset()
+    setOpen(false)
+    onCreated()
   }
 
   return (
@@ -72,7 +55,7 @@ export default function CreateDepartment() {
       <DialogTrigger asChild>
         <Button
           className='flex items-center gap-2 font-semibold'
-          variant={'outline'}
+          variant='outline'
         >
           <Building2 className='h-5 w-5 text-purple-500' />
           Create
@@ -93,11 +76,7 @@ export default function CreateDepartment() {
                 <FormItem>
                   <FormLabel>Department</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder='MIS'
-                      {...field}
-                      value={field.value || ''}
-                    />
+                    <Input placeholder='MIS' {...field} />
                   </FormControl>
                 </FormItem>
               )}
@@ -113,22 +92,21 @@ export default function CreateDepartment() {
                     <Input
                       placeholder='MANAGEMENT INFORMATION SYSTEM'
                       {...field}
-                      value={field.value || ''}
                     />
                   </FormControl>
                 </FormItem>
               )}
             />
 
-            {/* Submit button spans full width */}
-            <div className='flex justify-end md:col-span-2'>
+            <div className='flex justify-end'>
               <Button
                 type='submit'
                 className='flex items-center gap-2'
-                variant={'outline'}
+                variant='outline'
+                disabled={creating}
               >
                 <SquareCheckBig className='h-4 w-4 text-green-500' />
-                Submit
+                {creating ? 'Submitting...' : 'Submit'}
               </Button>
             </div>
           </form>

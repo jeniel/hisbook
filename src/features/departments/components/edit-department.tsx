@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Mutation } from '@/graphql/codegen/graphql'
 import { UPDATE_DEPARTMENT } from '@/graphql/operation/mutation/department'
 import { useMutation } from '@apollo/client'
+import { PencilLine } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import {
@@ -13,7 +14,6 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { PencilLine } from 'lucide-react'
 
 // Props
 type EditDepartmentProps = {
@@ -33,6 +33,7 @@ export default function EditDepartment({
 
   const [updateDepartment, { loading }] =
     useMutation<Mutation>(UPDATE_DEPARTMENT)
+
   const handleChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }

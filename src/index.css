@@ -12,6 +12,19 @@ body {
   font-weight: 600;
 }
 
+.dark textarea,
+.dark input[type='text'],
+.dark .chat-textarea {
+  color: var(--chat--textarea--color) !important;
+  background: var(--chat--textarea--background) !important;
+}
+
+.dark textarea::placeholder,
+.dark input[type='text']::placeholder,
+.dark .chat-textarea::placeholder {
+  color: var(--chat--textarea--placeholder-color) !important;
+}
+
 :root {
   --radius: 0.65rem;
   --background: oklch(1 0 0);
@@ -145,6 +158,45 @@ body {
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.637 0.237 25.331);
+
+  /* === Chat Colors (Dark Mode) === */
+  --chat--color-primary: #139b35 !important; /* keep brand */
+  --chat--color-primary-shade-50: #0e8021 !important;
+  --chat--color-primary-shade-100: #136e36 !important;
+  --chat--color-secondary: #20b69e !important;
+  --chat--color-secondary-shade-50: #1ca08a !important;
+
+  --chat--color-white: #111827 !important; /* darker white substitute */
+  --chat--color-light: #1f2937 !important;
+  --chat--color-light-shade-50: #374151 !important;
+  --chat--color-light-shade-100: #4b5563 !important;
+  --chat--color-medium: #9ca3af !important;
+  --chat--color-dark: #f3f4f6 !important; /* invert for dark mode */
+  --chat--color-disabled: #6b7280 !important;
+  --chat--color-typing: #9ca3af !important;
+
+  /* === Chat Layout Overrides === */
+  --chat--header--background: linear-gradient(
+    135deg,
+    #0e8021,
+    #1ca08a
+  ) !important;
+  --chat--header--color: #f9fafb !important;
+
+  /* === Messages in Dark Mode === */
+  --chat--message--bot--background: #1f2937 !important;
+  --chat--message--bot--color: #f9fafb !important;
+  --chat--message--bot--border: 1px solid #374151 !important;
+
+  --chat--message--user--background: var(--chat--color-primary) !important;
+  --chat--message--user--color: #ffffff !important;
+
+  --chat--message--pre--background: #374151 !important;
+  /* === Chat Input Overrides === */
+
+  --chat--textarea--color: #ffffff !important; /* text color */
+  --chat--textarea--background: #1f2937 !important; /* dark bg */
+  --chat--textarea--placeholder-color: #9ca3af !important; /* lighter gray placeholder */
 }
 
 @theme inline {

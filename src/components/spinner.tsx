@@ -1,9 +1,31 @@
-import { LoaderIcon } from 'lucide-react'
+import clsx from 'clsx'
+import { Loader2 } from 'lucide-react'
 
-export default function Spinner() {
+interface SpinnerProps {
+  fullScreen?: boolean
+  size?: number
+  message?: string
+}
+
+export default function Spinner({
+  fullScreen = false,
+  size = 32,
+  message,
+}: SpinnerProps) {
   return (
-    <div className='flex h-screen items-center justify-center'>
-      <LoaderIcon className='h-10 w-10 animate-spin text-gray-500' />
+    <div
+      className={clsx(
+        'flex items-center justify-center',
+        fullScreen ? 'h-screen w-screen' : 'h-32 w-full'
+      )}
+    >
+      <div className='flex flex-col items-center gap-3'>
+        <Loader2
+          className='animate-spin text-gray-500'
+          style={{ width: size, height: size }}
+        />
+        {message && <p className='text-sm text-gray-600'>{message}</p>}
+      </div>
     </div>
   )
 }

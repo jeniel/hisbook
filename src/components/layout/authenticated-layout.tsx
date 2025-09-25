@@ -25,16 +25,16 @@ export function AuthenticatedLayout({ children }: Props) {
           'https://n8n.acemcbohol.ph/webhook/2c8aa089-7afd-4b4a-81ba-6931cc3d2fd5/chat',
         loadPreviousSession: false, // avoids auto-triggering executions
         initialMessages: [
-          'Hi there!',
-          'My name is ACE. How can I assist you today?',
+          'Hi there! 🏥 ',
+          'My name is 🩺 Pulse. How can I assist you today?',
         ],
         i18n: {
           en: {
-            title: 'Hi there! 👋',
-            subtitle: "Start a chat. We're here to help you 24/7.",
+            title: 'Hi there! ❤️',
+            subtitle: "Start a chat. We're here to help you 24/7. 🕕",
             footer: '',
             getStarted: 'New Conversation',
-            inputPlaceholder: 'Type your question..',
+            inputPlaceholder: 'Ask. . .',
             closeButtonTooltip: '',
           },
         },
