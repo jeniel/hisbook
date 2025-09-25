@@ -1,5 +1,5 @@
 import {
-  // IconLayoutDashboard,
+  IconLayoutDashboard,
   IconUsers,
   IconBriefcase,
   IconUserCog,
@@ -7,7 +7,6 @@ import {
   IconCalendarWeek,
   IconTimeDuration30,
   IconHome,
-  // IconTicket,
   IconDeviceDesktop,
 } from '@tabler/icons-react'
 import { type SidebarData } from '../types'
@@ -26,8 +25,12 @@ export const sidebarData: SidebarData = {
     {
       title: 'Assigned Tickets',
       items: [
-        // { title: 'Dashboard', url: '/dashboard', icon: IconLayoutDashboard },
-        { title: 'Department Tickets', url: '/assigned-ticket', icon: IconDeviceDesktop },
+        { title: 'Dashboard', url: '/dashboard', icon: IconLayoutDashboard },
+        {
+          title: 'Department Tickets',
+          url: '/assigned-ticket',
+          icon: IconDeviceDesktop,
+        },
       ],
     },
     {
