@@ -39,7 +39,7 @@ interface Department {
   name: string
 }
 
-// Validation Schema (role removed)
+// Validation Schema
 const FormSchema = z
   .object({
     username: z.string().min(1, { message: 'Username is required' }),
@@ -82,7 +82,7 @@ export default function SignUp() {
           payload: {
             username: data.username,
             password: data.password,
-            role: ['USER'], // default role (no dropdown needed)
+            role: ['USER'], // default role
             departmentName: data.department,
           },
         },
@@ -90,7 +90,7 @@ export default function SignUp() {
 
       toast.success('Signing up is successful!')
       form.reset()
-      setOpen(false) // close modal after success
+      setOpen(false)
     } catch (_error) {
       toast.error('Failed to sign up')
     }
@@ -108,15 +108,21 @@ export default function SignUp() {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className='max-w-5xl'>
+      <DialogContent className='max-w-lg'>
         <DialogHeader>
-          <DialogTitle>Sign Up Here</DialogTitle>
+          <DialogTitle className='text-lg font-semibold'>
+            Sign Up Here
+          </DialogTitle>
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
-            <div className='space-y-4'>
-              {/* Username */}
+          <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
+            {/* Account Info */}
+            <div className='grid gap-4'>
+              <h3 className='text-sm font-medium text-gray-500'>
+                Account Information
+              </h3>
+
               <FormField
                 control={form.control}
                 name='username'
@@ -131,7 +137,6 @@ export default function SignUp() {
                 )}
               />
 
-              {/* Password */}
               <FormField
                 control={form.control}
                 name='password'
@@ -150,7 +155,6 @@ export default function SignUp() {
                 )}
               />
 
-              {/* Confirm Password */}
               <FormField
                 control={form.control}
                 name='confirmPassword'
@@ -168,14 +172,17 @@ export default function SignUp() {
                   </FormItem>
                 )}
               />
+            </div>
 
-              {/* Department */}
+            {/* Department */}
+            <div className='grid gap-4'>
+              <h3 className='text-sm font-medium text-gray-500'>Department</h3>
               <FormField
                 control={form.control}
                 name='department'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Department</FormLabel>
+                    <FormLabel>Select Department</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
@@ -185,11 +192,17 @@ export default function SignUp() {
                           <SelectValue placeholder='Select department' />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent className='max-h-80 overflow-y-auto'>
+                      <SelectContent className='max-h-72 overflow-y-auto'>
                         {departments.map((dept: Department) => (
-                          <SelectItem key={dept.id} value={dept.name}>
-                            {dept.name}{' '}
-                            {dept.description && `- ${dept.description}`}
+                          <SelectItem
+                            key={dept.id}
+                            value={dept.name}
+                            className='truncate'
+                          >
+                            <span className='block w-64 truncate'>
+                              {dept.name}
+                              {dept.description ? ` - ${dept.description}` : ''}
+                            </span>
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -199,12 +212,13 @@ export default function SignUp() {
                 )}
               />
             </div>
+
             {/* Submit */}
             <div className='flex justify-end'>
               <Button
                 type='submit'
                 className='flex items-center gap-2'
-                variant={'outline'}
+                variant='outline'
               >
                 <SquareCheckBig className='h-4 w-4 text-green-500' />
                 Sign Up

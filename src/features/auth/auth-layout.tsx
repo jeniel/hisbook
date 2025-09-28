@@ -6,7 +6,6 @@ export default function AuthLayout({ children }: Props) {
   return (
     <div className='flex h-screen w-screen items-center justify-center'>
       <div className='flex h-[80vh] w-full max-w-7xl overflow-hidden rounded-lg border'>
-        
         {/* Login */}
         <div className='flex flex-1 flex-col items-center justify-center p-8'>
           <div className='mb-4 text-center'>
@@ -14,7 +13,7 @@ export default function AuthLayout({ children }: Props) {
               src='/images/acebook-logo.webp'
               alt='Acebook Logo'
               className='mx-auto'
-              loading="lazy"
+              loading='lazy'
             />
           </div>
           <div className='w-full max-w-md space-y-4'>{children}</div>
@@ -26,7 +25,7 @@ export default function AuthLayout({ children }: Props) {
             src='/images/acebuilding.webp'
             alt='Building Image'
             className='h-full w-full object-cover'
-            loading="lazy"
+            loading='lazy'
           />
         </div>
       </div>
