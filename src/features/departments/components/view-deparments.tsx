@@ -1,10 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Department } from '@/graphql/codegen/graphql'
 import { Card, CardContent } from '@/components/ui/card'
 import DeleteDepartment from './delete-department'
 import EditDepartment from './edit-department'
 
 interface DepartmentListProps {
-  departments: any[]
+  departments: Department[]
   refetch: () => void
 }
 

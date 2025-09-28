@@ -7,8 +7,6 @@ import EditUser from './edit-user'
 interface UserListProps {
   users: User[]
   refetch: () => void
-  page: number
-  perPage: number
 }
 
 export default function UserList({ users, refetch }: UserListProps) {

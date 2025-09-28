@@ -47,8 +47,6 @@ export default function Users() {
             <UserList
               users={users}
               refetch={refetch}
-              page={page}
-              perPage={perPage}
             />
           )}
 

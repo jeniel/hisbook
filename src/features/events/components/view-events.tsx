@@ -1,12 +1,12 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { MapPin, Calendar, ExternalLink } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import DeleteEvent from './delete-event'
 import EditEvent from './edit-event'
+import { Event } from '@/graphql/codegen/graphql'
 
 interface EventListProps {
-  events: any[]
+  events: Event[]
   refetch: () => void
 }
 
