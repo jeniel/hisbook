@@ -14,11 +14,12 @@ import useEventsMutation from '../hooks/useEventMutation'
 
 interface DeleteEventProps {
   event: { id: string; title: string }
+  onDeleted?: () => void
 }
 
-export default function DeleteEvent({ event }: DeleteEventProps) {
+export default function DeleteEvent({ event, onDeleted }: DeleteEventProps) {
   const [open, setOpen] = useState(false)
-  const { deleteEvent, deleting } = useEventsMutation()
+  const { deleteEvent, deleting } = useEventsMutation(onDeleted)
 
   const handleDelete = async () => {
     await deleteEvent(event.id)

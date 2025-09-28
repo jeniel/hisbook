@@ -10,7 +10,7 @@ interface EventListProps {
   refetch: () => void
 }
 
-export default function EventList({ events }: EventListProps) {
+export default function EventList({ events, refetch }: EventListProps) {
   return (
     <div className='space-y-6'>
       {/* List */}
@@ -37,8 +37,8 @@ export default function EventList({ events }: EventListProps) {
                       </a>
                     </Button>
                   )}
-                  <EditEvent event={event} />
-                  <DeleteEvent event={event} />
+                  <EditEvent event={event} onUpdated={refetch} />
+                  <DeleteEvent event={event} onDeleted={refetch} />
                 </div>
               </CardHeader>
 

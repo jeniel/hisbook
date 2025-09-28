@@ -1,32 +1,34 @@
 import { gql } from '@apollo/client'
 
 export const FIND_ALL_DEPARTMENTS = gql`
-  query FindAllDepartments($page: Int, $perPage: Int) {
-    findAllDepartments(page: $page, perPage: $perPage) {
+  query FindAllDepartments($search: String, $page: Int, $perPage: Int) {
+    findAllDepartments(search: $search, page: $page, perPage: $perPage) {
       data {
-        description
         id
         name
+        description
+        isSupport
         createdAt
       }
       meta {
+        total
         currentPage
         lastPage
+        prev
         next
         perPage
-        prev
-        total
       }
     }
   }
 `
 
 export const FIND_ALL_DEPARTMENTS_IN_DROPDOWN = gql`
-  query FindAllForDropdown {
+  query FindAllDepartmentsDropdown {
     findAllForDropdown {
       id
       name
       description
+      isSupport
     }
   }
 `

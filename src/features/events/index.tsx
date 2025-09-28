@@ -37,7 +37,7 @@ export default function Events() {
       <div className='grid grid-cols-1 gap-4 lg:grid-cols-3'>
         {/* Create Form (Top on mobile, right on desktop) */}
         <div className='order-1 lg:order-2'>
-          <CreateEvent />
+          <CreateEvent onCreated={refetch} />
         </div>
 
         {/* Event List (Below create on mobile, left on desktop) */}

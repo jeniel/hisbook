@@ -1,16 +1,10 @@
-import { useState } from 'react'
 import { z } from 'zod'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Building2, SquareCheckBig } from 'lucide-react'
+import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   Form,
   FormControl,
@@ -19,56 +13,55 @@ import {
   FormLabel,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import useDepartments from '../hooks/useDepartments'
+import { Switch } from '@/components/ui/switch'
+import useDepartmentsMutation from '../hooks/useDepartmentsMutation'
 
 // ✅ Schema
 const FormSchema = z.object({
   department: z.string().min(1, { message: 'Department is required' }),
   description: z.string().min(1, { message: 'Description is required' }),
+  isSupport: z.boolean(),
 })
 
-interface CreateDepartmentProps {
-  onCreated: () => void
+type CreateDepartmentProps = {
+  onCreated?: () => void
 }
 
 export default function CreateDepartment({ onCreated }: CreateDepartmentProps) {
-  const [open, setOpen] = useState(false)
-  const { createDepartment, creating } = useDepartments()
+  const { createDepartment, creating } = useDepartmentsMutation(onCreated)
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-    defaultValues: { department: '', description: '' },
+    defaultValues: { department: '', description: '', isSupport: false },
   })
 
-  const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-    await createDepartment({
-      name: data.department,
-      description: data.description,
-    })
-    form.reset()
-    setOpen(false)
-    onCreated()
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
+    try {
+      const payload = {
+        name: data.department,
+        description: data.description,
+        isSupport: data.isSupport,
+      }
+
+      await createDepartment(payload)
+      form.reset()
+    } catch {
+      toast.error('Failed to create Department')
+    }
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button
-          className='flex items-center gap-2 font-semibold'
-          variant='outline'
-        >
+    <Card className='shadow-sm'>
+      <CardHeader>
+        <CardTitle className='flex items-center gap-2 text-lg font-semibold'>
           <Building2 className='h-5 w-5 text-purple-500' />
-          Create
-        </Button>
-      </DialogTrigger>
-
-      <DialogContent className='sm:max-w-lg'>
-        <DialogHeader>
-          <DialogTitle>Create New Department</DialogTitle>
-        </DialogHeader>
-
+          Create New Department
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
+            {/* Department Name */}
             <FormField
               control={form.control}
               name='department'
@@ -82,6 +75,7 @@ export default function CreateDepartment({ onCreated }: CreateDepartmentProps) {
               )}
             />
 
+            {/* Description */}
             <FormField
               control={form.control}
               name='description'
@@ -98,6 +92,30 @@ export default function CreateDepartment({ onCreated }: CreateDepartmentProps) {
               )}
             />
 
+            {/* Is Support */}
+            <FormField
+              control={form.control}
+              name='isSupport'
+              render={() => (
+                <FormItem className='flex items-center justify-between'>
+                  <FormLabel>Is Support Department?</FormLabel>
+                  <FormControl>
+                    <Controller
+                      control={form.control}
+                      name='isSupport'
+                      render={({ field: switchField }) => (
+                        <Switch
+                          checked={switchField.value}
+                          onCheckedChange={switchField.onChange}
+                        />
+                      )}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+
+            {/* Submit Button */}
             <div className='flex justify-end'>
               <Button
                 type='submit'
@@ -111,7 +129,7 @@ export default function CreateDepartment({ onCreated }: CreateDepartmentProps) {
             </div>
           </form>
         </Form>
-      </DialogContent>
-    </Dialog>
+      </CardContent>
+    </Card>
   )
 }

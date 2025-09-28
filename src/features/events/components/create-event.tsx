@@ -24,8 +24,12 @@ const FormSchema = z.object({
   detailsUrl: z.string().optional().or(z.literal('')),
 })
 
-export default function CreateEvent() {
-  const { createEvent, creating } = useEventsMutation()
+type CreateEventProps = {
+  onCreated?: () => void
+}
+
+export default function CreateEvent({ onCreated }: CreateEventProps) {
+  const { createEvent, creating } = useEventsMutation(onCreated)
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -45,9 +49,7 @@ export default function CreateEvent() {
         detailsUrl: data.detailsUrl || undefined,
       }
 
-      const res = await createEvent(payload)
-
-      toast.success(res?.message ?? 'Event created')
+      await createEvent(payload)
       form.reset()
     } catch {
       toast.error('Failed to create Event')

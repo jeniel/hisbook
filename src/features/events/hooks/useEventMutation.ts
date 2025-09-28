@@ -7,18 +7,20 @@ import {
 import { useMutation } from '@apollo/client'
 import { toast } from 'sonner'
 
+interface EventPayload {
+  title: string
+  location: string
+  startDate: string
+  endDate?: string
+  detailsUrl?: string
+}
+
 export default function useEventsMutation(refetch?: () => void) {
   // --- Create ---
   const [createEventMutation, { loading: creating }] =
     useMutation<Mutation>(CREATE_EVENT)
 
-  const createEvent = async (payload: {
-    title: string
-    location: string
-    startDate: string
-    endDate?: string
-    detailsUrl?: string
-  }) => {
+  const createEvent = async (payload: EventPayload) => {
     try {
       const res = await createEventMutation({ variables: { payload } })
       toast.success(res.data?.createEvent?.message ?? 'Event created')
@@ -33,16 +35,7 @@ export default function useEventsMutation(refetch?: () => void) {
   const [updateEventMutation, { loading: updating }] =
     useMutation<Mutation>(UPDATE_EVENT)
 
-  const updateEvent = async (
-    id: string,
-    payload: {
-      title: string
-      location: string
-      startDate: string
-      endDate?: string | null
-      detailsUrl?: string | null
-    }
-  ) => {
+  const updateEvent = async (id: string, payload: EventPayload) => {
     try {
       await updateEventMutation({
         variables: { updateEventId: id, payload },

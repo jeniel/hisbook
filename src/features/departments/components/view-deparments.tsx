@@ -1,99 +1,57 @@
-import { Hotel } from 'lucide-react'
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Card, CardContent } from '@/components/ui/card'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
-import Pagination from '@/components/pagination'
-import Spinner from '@/components/spinner'
-import useDepartments from '../hooks/useDepartments'
-import CreateDepartment from './create-department'
 import DeleteDepartment from './delete-department'
 import EditDepartment from './edit-department'
 
-export default function ViewDepartments() {
-  const { departments, loading, error, page, setPage, totalPages, refetch } =
-    useDepartments()
+interface DepartmentListProps {
+  departments: any[]
+  refetch: () => void
+}
 
-  const handlePageChange = (newPage: number) => {
-    setPage(newPage)
-    refetch()
-  }
-
+export default function DepartmentList({
+  departments,
+  refetch,
+}: DepartmentListProps) {
   return (
-    <Card>
-      <CardContent>
-        <div className='mb-4 flex flex-row items-center justify-between'>
-          <h1 className='mb-2 flex items-center gap-2 text-xl font-semibold'>
-            <Hotel className='h-6 w-6 text-purple-500' />
-            Departments
-          </h1>
-          <CreateDepartment onCreated={refetch} />
+    <div className='space-y-6'>
+      {departments.length === 0 ? (
+        <div className='text-muted-foreground text-center'>
+          No Departments Found
         </div>
-
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Department</TableHead>
-              <TableHead>Description</TableHead>
-              <TableHead>Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-
-          <TableBody>
-            {loading ? (
-              <TableRow>
-                <TableCell colSpan={4} className='h-40 text-center'>
-                  <div className='flex items-center justify-center'>
-                    <Spinner />
+      ) : (
+        <div className='space-y-4'>
+          {departments.map((department) => (
+            <Card key={department.id} className='shadow-sm'>
+              <CardContent>
+                <div className='flex flex-col gap-3 space-y-0 sm:flex-row sm:items-center sm:justify-between'>
+                  <div className='flex items-center gap-2 text-lg font-semibold'>
+                    {department.name}
+                    {department.isSupport && (
+                      <span className='rounded-full bg-purple-100 px-2 py-0.5 text-xs font-medium text-purple-700'>
+                        Support
+                      </span>
+                    )}
                   </div>
-                </TableCell>
-              </TableRow>
-            ) : error ? (
-              <TableRow>
-                <TableCell colSpan={4} className='text-center text-red-500'>
-                  Error: {error}
-                </TableCell>
-              </TableRow>
-            ) : departments.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={4} className='text-center'>
-                  No departments found
-                </TableCell>
-              </TableRow>
-            ) : (
-              departments.map((department) => (
-                <TableRow key={department.id}>
-                  <TableCell>{department.name}</TableCell>
-                  <TableCell>{department.description}</TableCell>
-                  <TableCell className='flex flex-row items-center space-x-2'>
+
+                  <div className='flex flex-wrap gap-2 sm:justify-end'>
                     <EditDepartment
                       department={department}
                       onUpdated={refetch}
                     />
                     <DeleteDepartment
                       department={department}
-                      onDelete={refetch}
+                      onDeleted={refetch}
                     />
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-
-        {totalPages > 1 && !loading && (
-          <Pagination
-            currentPage={page}
-            lastPage={totalPages}
-            onPageChange={handlePageChange}
-          />
-        )}
-      </CardContent>
-    </Card>
+                  </div>
+                </div>
+                <div className='text-muted-foreground space-y-1 text-sm'>
+                  {department.description || 'No description provided.'}
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
+    </div>
   )
 }

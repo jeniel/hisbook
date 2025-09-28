@@ -23,9 +23,10 @@ type EditEventProps = {
     endDate?: string | null
     detailsUrl?: string | null
   }
+  onUpdated?: () => void
 }
 
-export default function EditEvent({ event }: EditEventProps) {
+export default function EditEvent({ event, onUpdated }: EditEventProps) {
   const [open, setOpen] = useState(false)
   const [formData, setFormData] = useState({
     title: event.title,
@@ -35,7 +36,7 @@ export default function EditEvent({ event }: EditEventProps) {
     detailsUrl: event.detailsUrl ?? '',
   })
 
-  const { updateEvent, updating } = useEventsMutation()
+  const { updateEvent, updating } = useEventsMutation(onUpdated)
 
   const handleChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
@@ -46,8 +47,8 @@ export default function EditEvent({ event }: EditEventProps) {
     try {
       await updateEvent(event.id, {
         ...formData,
-        endDate: formData.endDate || null,
-        detailsUrl: formData.detailsUrl || null,
+        endDate: formData.endDate || undefined,
+        detailsUrl: formData.detailsUrl || undefined,
       })
       setOpen(false)
     } catch {

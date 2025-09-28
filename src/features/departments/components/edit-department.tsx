@@ -1,7 +1,5 @@
 import { useState } from 'react'
-import { Mutation } from '@/graphql/codegen/graphql'
-import { UPDATE_DEPARTMENT } from '@/graphql/operation/mutation/department'
-import { useMutation } from '@apollo/client'
+import { useForm, Controller } from 'react-hook-form'
 import { PencilLine } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
@@ -14,10 +12,19 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Switch } from '@/components/ui/switch'
+import useDepartmentsMutation, {
+  DepartmentPayload,
+} from '../hooks/useDepartmentsMutation'
 
 // Props
 type EditDepartmentProps = {
-  department: { id: string; name: string; description: string }
+  department: {
+    id: string
+    name: string
+    description: string
+    isSupport?: boolean
+  }
   onUpdated?: () => void
 }
 
@@ -26,36 +33,22 @@ export default function EditDepartment({
   onUpdated,
 }: EditDepartmentProps) {
   const [open, setOpen] = useState(false)
-  const [formData, setFormData] = useState({
-    name: department?.name || '',
-    description: department?.description || '',
+
+  const { updateDepartment, updating } = useDepartmentsMutation(onUpdated)
+
+  const form = useForm<DepartmentPayload>({
+    defaultValues: {
+      name: department.name,
+      description: department.description,
+      isSupport: department.isSupport ?? false,
+    },
   })
 
-  const [updateDepartment, { loading }] =
-    useMutation<Mutation>(UPDATE_DEPARTMENT)
-
-  const handleChange = (field: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }))
-  }
-
-  // Update Functionality
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const onSubmit = async (data: DepartmentPayload) => {
     try {
-      await updateDepartment({
-        variables: {
-          updateDepartmentId: department.id,
-          payload: {
-            name: formData.name,
-            description: formData.description,
-          },
-        },
-      })
-
-      toast.success('Department updated')
-      if (onUpdated) onUpdated()
+      await updateDepartment(department.id, data)
       setOpen(false)
-    } catch (_error) {
+    } catch {
       toast.error('Failed to update department')
     }
   }
@@ -63,7 +56,7 @@ export default function EditDepartment({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant={'outline'} size='sm'>
+        <Button variant='outline' size='sm'>
           <PencilLine className='text-blue-500' /> Edit
         </Button>
       </DialogTrigger>
@@ -73,25 +66,36 @@ export default function EditDepartment({
           <DialogTitle>Edit Department</DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className='space-y-4'>
+        <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
+          {/* Name */}
           <div className='space-y-2'>
             <Label>Department Name</Label>
-            <Input
-              value={formData.name}
-              onChange={(e) => handleChange('name', e.target.value)}
-            />
+            <Input {...form.register('name')} />
           </div>
 
+          {/* Description */}
           <div className='space-y-2'>
             <Label>Description</Label>
-            <Input
-              value={formData.description}
-              onChange={(e) => handleChange('description', e.target.value)}
+            <Input {...form.register('description')} />
+          </div>
+
+          {/* Is Support */}
+          <div className='flex items-center justify-between'>
+            <Label>Is Support Department?</Label>
+            <Controller
+              control={form.control}
+              name='isSupport'
+              render={({ field }) => (
+                <Switch
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              )}
             />
           </div>
 
-          <Button type='submit' className='w-full' disabled={loading}>
-            {loading ? 'Saving...' : 'Save Changes'}
+          <Button type='submit' className='w-full' disabled={updating}>
+            {updating ? 'Saving...' : 'Save Changes'}
           </Button>
         </form>
       </DialogContent>

@@ -10,23 +10,22 @@ import {
   DialogTrigger,
   DialogFooter,
 } from '@/components/ui/dialog'
-import useDepartments from '../hooks/useDepartments'
+import useDepartmentsMutation from '../hooks/useDepartmentsMutation'
 
 type DeleteDepartmentProps = {
   department: { id: string; name: string }
-  onDelete?: () => void
+  onDeleted?: () => void
 }
 
 export default function DeleteDepartment({
   department,
-  onDelete,
+  onDeleted,
 }: DeleteDepartmentProps) {
   const [open, setOpen] = useState(false)
-  const { deleteDepartment, deleting } = useDepartments()
+  const { deleteDepartment, deleting } = useDepartmentsMutation(onDeleted)
 
   const handleDelete = async () => {
     await deleteDepartment(department.id)
-    if (onDelete) onDelete()
     setOpen(false)
   }
 
