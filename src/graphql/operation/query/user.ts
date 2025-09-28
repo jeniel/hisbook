@@ -1,19 +1,21 @@
 import { gql } from '@apollo/client'
 
 export const FIND_ALL_USER = gql`
-  query FindAllUsers($page: Int, $perPage: Int) {
-      findAllUsers(perPage: $perPage, page: $page) {
-        data {
-        email
+  query FindAllUsers($page: Int, $perPage: Int, $search: String) {
+    findAllUsers(page: $page, perPage: $perPage, search: $search) {
+      data {
         id
-        role
+        email
         username
+        role
         createdAt
+        deletedAt
         department {
-          name
           id
+          name
         }
         profile {
+          id
           firstName
           lastName
           middleName
@@ -23,18 +25,17 @@ export const FIND_ALL_USER = gql`
           employeeID
           gender
           title
-          id
         }
       }
-        meta {
-          currentPage
-          lastPage
-          next
-          perPage
-          prev
-          total
-        }
+      meta {
+        total
+        currentPage
+        lastPage
+        perPage
+        prev
+        next
       }
+    }
   }
 `
 

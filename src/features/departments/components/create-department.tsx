@@ -53,8 +53,8 @@ export default function CreateDepartment({ onCreated }: CreateDepartmentProps) {
   return (
     <Card className='shadow-sm'>
       <CardHeader>
-        <CardTitle className='flex items-center gap-2 text-lg font-semibold'>
-          <Building2 className='h-5 w-5 text-purple-500' />
+        <CardTitle className='flex items-center gap-2'>
+          <Building2 className='h-6 w-6 text-purple-500' />
           Create New Department
         </CardTitle>
       </CardHeader>
@@ -116,17 +116,15 @@ export default function CreateDepartment({ onCreated }: CreateDepartmentProps) {
             />
 
             {/* Submit Button */}
-            <div className='flex justify-end'>
-              <Button
-                type='submit'
-                className='flex items-center gap-2'
-                variant='outline'
-                disabled={creating}
-              >
-                <SquareCheckBig className='h-4 w-4 text-green-500' />
-                {creating ? 'Submitting...' : 'Submit'}
-              </Button>
-            </div>
+            <Button
+              type='submit'
+              className='w-full shadow-md'
+              variant='outline'
+              disabled={creating}
+            >
+              <SquareCheckBig className='h-4 w-4 text-green-500' />
+              {creating ? 'Submitting...' : 'Submit'}
+            </Button>
           </form>
         </Form>
       </CardContent>

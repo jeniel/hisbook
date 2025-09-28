@@ -1,4 +1,4 @@
-import Events from '@/components/events'
+import Events from './components/events'
 import Features from './components/feature-cards'
 import Hero from './components/hero'
 

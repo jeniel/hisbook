@@ -1,93 +1,56 @@
-import { useState } from 'react'
-import { Query } from '@/graphql/codegen/graphql'
-import { FIND_ALL_USER } from '@/graphql/operation/query/user'
-import { useQuery } from '@apollo/client'
-import { UserPen } from 'lucide-react'
+import { User } from '@/graphql/codegen/graphql'
+import { User as UserIcon, Shield, Building } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
-import Pagination from '@/components/pagination'
-import CreateUser from './create-user'
 import DeleteUser from './delete-user'
 import EditUser from './edit-user'
 
-export default function ViewUsers() {
-  const [page, setPage] = useState(1)
-  const perPage = 10
+interface UserListProps {
+  users: User[]
+  refetch: () => void
+  page: number
+  perPage: number
+}
 
-  const { loading, error, data, refetch } = useQuery<Query>(FIND_ALL_USER, {
-    variables: { page, perPage },
-    fetchPolicy: 'cache-and-network',
-  })
-
-  if (loading) return <p>Loading users...</p>
-  if (error) return <p>Error loading users: {error.message}</p>
-
-  const Users = data?.findAllUsers?.data || []
-  const meta = data?.findAllUsers?.meta
-
-  const handlePageChange = (newPage: number) => {
-    setPage(newPage)
-    refetch({ page: newPage, perPage })
-  }
+export default function UserList({ users, refetch }: UserListProps) {
+  if (users.length === 0)
+    return (
+      <div className='text-muted-foreground text-center'>No Users Found</div>
+    )
 
   return (
-    <Card>
-      <CardContent>
-        <div className='mb-4 flex flex-row items-center justify-between'>
-          <h1 className='flex items-center gap-2 text-xl font-semibold'>
-            <UserPen className='h-6 w-6 text-blue-500' />
-            All Users
-          </h1>
-          <CreateUser />
-        </div>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>#</TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>Username</TableHead>
-              <TableHead>Role</TableHead>
-              <TableHead>Department</TableHead>
-              <TableHead>Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {Users.map((user, index: number) => (
-              <TableRow key={user.id}>
-                <TableCell>{index + 1 + (page - 1) * perPage}</TableCell>
-                <TableCell>
-                  {user.profile?.lastName}, {user.profile?.firstName}
-                </TableCell>
-                <TableCell>{user.username}</TableCell>
-                <TableCell>{user.role}</TableCell>
-                <TableCell>{user.department?.name ?? '—'}</TableCell>
-                <TableCell className='flex flex-row items-center space-x-2'>
-                  <EditUser user={user} onUpdated={() => refetch()} />
-                  <DeleteUser
-                    user={{ id: user.id, username: user.username }}
-                    onDelete={() => refetch()}
-                  />
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+    <div className='space-y-4'>
+      {users.map((user) => (
+        <Card key={user.id} className='shadow-sm'>
+          <CardContent>
+            {/* Header */}
+            <div className='flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
+              <h1 className='text-lg font-semibold'>
+                {user.profile?.lastName}, {user.profile?.firstName}{' '}
+                {user.profile?.employeeID && `(${user.profile.employeeID})`}
+              </h1>
+              <div className='flex flex-wrap gap-2 sm:justify-end'>
+                <EditUser user={user} onUpdated={refetch} />
+                <DeleteUser user={user} onDelete={refetch} />
+              </div>
+            </div>
 
-        {meta && (
-          <Pagination
-            currentPage={meta.currentPage}
-            lastPage={meta.lastPage}
-            onPageChange={handlePageChange}
-          />
-        )}
-      </CardContent>
-    </Card>
+            {/* Info */}
+            <div className='text-muted-foreground mt-2 space-y-1 text-sm'>
+              <p className='flex items-center gap-2'>
+                <UserIcon className='h-4 w-4 text-blue-500' /> Username:{' '}
+                {user.username}
+              </p>
+              <p className='flex items-center gap-2'>
+                <Shield className='h-4 w-4 text-red-500' /> Role: {user.role}
+              </p>
+              <p className='flex items-center gap-2'>
+                <Building className='h-4 w-4 text-purple-500' /> Department:{' '}
+                {user.department?.name ?? '—'}
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
   )
 }

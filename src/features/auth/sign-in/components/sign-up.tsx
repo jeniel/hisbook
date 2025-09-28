@@ -1,13 +1,11 @@
+/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
 import { useState } from 'react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Mutation } from '@/graphql/codegen/graphql'
-import { CREATE_USER } from '@/graphql/operation/mutation/user'
-import { FIND_ALL_DEPARTMENTS_IN_DROPDOWN } from '@/graphql/operation/query/department'
-import { useMutation, useQuery } from '@apollo/client'
 import { UserPlus, SquareCheckBig } from 'lucide-react'
 import { toast } from 'sonner'
+import useDepartments from '@/hooks/useDepartmentDropdown'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -32,12 +30,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-
-interface Department {
-  description: string
-  id: string
-  name: string
-}
+import useUserMutation from '@/features/users/hooks/useUserMutation'
 
 // Validation Schema
 const FormSchema = z
@@ -58,11 +51,8 @@ const FormSchema = z
 
 export default function SignUp() {
   const [open, setOpen] = useState(false)
-
-  const [createUser] = useMutation<Mutation>(CREATE_USER)
-
-  const { data: deptData } = useQuery(FIND_ALL_DEPARTMENTS_IN_DROPDOWN)
-  const departments = deptData?.findAllForDropdown || []
+  const { createUser, creating } = useUserMutation()
+  const { departments } = useDepartments()
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -74,24 +64,20 @@ export default function SignUp() {
     },
   })
 
-  // Handle submit
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     try {
       await createUser({
-        variables: {
-          payload: {
-            username: data.username,
-            password: data.password,
-            role: ['USER'], // default role
-            departmentName: data.department,
-          },
-        },
+        username: data.username,
+        password: data.password,
+        role: ['USER'], // default role
+        departmentName: departments.find((d) => d.id === data.department)
+          ?.name!,
       })
 
-      toast.success('Signing up is successful!')
+      toast.success('Sign up successful!')
       form.reset()
       setOpen(false)
-    } catch (_error) {
+    } catch {
       toast.error('Failed to sign up')
     }
   }
@@ -172,37 +158,32 @@ export default function SignUp() {
                   </FormItem>
                 )}
               />
-            </div>
 
-            {/* Department */}
-            <div className='grid gap-4'>
-              <h3 className='text-sm font-medium text-gray-500'>Department</h3>
+              {/* Department */}
               <FormField
                 control={form.control}
                 name='department'
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Select Department</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                  <FormItem className='w-full sm:w-auto'>
+                    <FormLabel>Department</FormLabel>
+                    <Select onValueChange={field.onChange} value={field.value}>
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger className='w-full truncate sm:w-80'>
                           <SelectValue placeholder='Select department' />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent className='max-h-72 overflow-y-auto'>
-                        {departments.map((dept: Department) => (
+                      <SelectContent className='max-h-60 overflow-y-auto'>
+                        {departments.map((dept) => (
                           <SelectItem
                             key={dept.id}
-                            value={dept.name}
-                            className='truncate'
+                            value={dept.id}
+                            className='max-w-full truncate sm:max-w-[28rem]'
+                            title={`${dept.name}${
+                              dept.description ? ` - ${dept.description}` : ''
+                            }`}
                           >
-                            <span className='block w-64 truncate'>
-                              {dept.name}
-                              {dept.description ? ` - ${dept.description}` : ''}
-                            </span>
+                            {dept.name}
+                            {dept.description ? ` - ${dept.description}` : ''}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -219,9 +200,10 @@ export default function SignUp() {
                 type='submit'
                 className='flex items-center gap-2'
                 variant='outline'
+                disabled={creating}
               >
                 <SquareCheckBig className='h-4 w-4 text-green-500' />
-                Sign Up
+                {creating ? 'Signing Up...' : 'Sign Up'}
               </Button>
             </div>
           </form>

@@ -145,12 +145,12 @@ export default function CreateEvent({ onCreated }: CreateEventProps) {
             />
 
             <Button
-              variant='default'
+              variant={'outline'}
               type='submit'
               className='w-full shadow-md'
               disabled={creating}
             >
-              <SquareCheckBig className='mr-2 text-gray-200' />
+              <SquareCheckBig className='mr-2 text-green-500' />
               {creating ? 'Submitting...' : 'Submit'}
             </Button>
           </form>
