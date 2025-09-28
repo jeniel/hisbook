@@ -1,8 +1,7 @@
-import { Query, Role } from '@/graphql/codegen/graphql'
-import { ME_QUERY } from '@/graphql/operation/query/user'
-import { useQuery } from '@apollo/client'
+import { Role } from '@/graphql/codegen/graphql'
 import { LogOut } from 'lucide-react'
 import { useLogout } from '@/hooks/useLogout'
+import { useMeQuery } from '@/hooks/useMeQuery'
 import { Button } from '@/components/ui/button'
 import {
   Sidebar,
@@ -10,12 +9,12 @@ import {
   SidebarFooter,
   SidebarRail,
 } from '@/components/ui/sidebar'
-import Avatar from '@/components/avatar'
 import { NavGroup } from '@/components/layout/nav-group'
 import { sidebarData } from './data/sidebar-data'
+import Avatar from '../avatar'
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { data, loading } = useQuery<Query>(ME_QUERY)
+  const { data, loading } = useMeQuery()
   const { logout } = useLogout()
 
   if (loading || !data?.meQuery?.user) return null
@@ -26,7 +25,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   // Filter navGroups based on roles
   const visibleNavGroups = sidebarData.navGroups.filter((group) => {
-    // Only allow Admins to see Config & Department Tickets
+    // Only allow Admins to see Config & Assigned Tickets
     if (group.title === 'Config' || group.title === 'Assigned Tickets') {
       return roles.includes(Role.Admin)
     }
@@ -54,8 +53,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               size={64} // bigger than header avatar
             />
           </div>
-          <div className=''>
-            <p className='text-md font-medium'>
+          <div>
+            <p className='text-md font-semibold'>
               {profile?.firstName && profile?.lastName
                 ? `${profile.firstName} ${profile.lastName}`
                 : 'Guest User'}

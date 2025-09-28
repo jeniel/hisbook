@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
 import { Link } from '@tanstack/react-router'
 import { Ticket, TicketIcon, LayoutGrid, LayoutList } from 'lucide-react'
-import { useTicket } from '@/hooks/useTicket'
 import { Button } from '@/components/ui/button'
 import Spinner from '@/components/spinner'
+import { useTicket } from '@/features/tickets/hooks/useTicket'
 import ListView from '../components/assigned-tickets/list-view'
 import TableView from '../components/assigned-tickets/table-view'
 

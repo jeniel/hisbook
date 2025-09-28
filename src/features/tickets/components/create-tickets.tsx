@@ -9,7 +9,6 @@ import { ME_QUERY } from '@/graphql/operation/query/user'
 import { useLazyQuery } from '@apollo/client'
 import { Send, TicketPlus } from 'lucide-react'
 import { toast } from 'sonner'
-import { useTicket } from '@/hooks/useTicket'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -35,6 +34,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import Spinner from '@/components/spinner'
+import { useTicket } from '@/features/tickets/hooks/useTicket'
 
 // Input Validation
 const TicketSchema = z.object({
@@ -68,6 +68,7 @@ export default function CreateTickets() {
   const user = meData?.meQuery?.user
   const userId = user?.id
   const departments = deptData?.findAllDepartments?.data || []
+  const supportDepartments = departments.filter((dept: any) => dept.isSupport)
 
   const form = useForm<z.infer<typeof TicketSchema>>({
     resolver: zodResolver(TicketSchema),
@@ -203,9 +204,12 @@ export default function CreateTickets() {
                             <SelectValue placeholder='Select Department' />
                           </SelectTrigger>
                           <SelectContent>
-                            {departments.map((dept: any) => (
+                            {supportDepartments.map((dept: any) => (
                               <SelectItem key={dept.id} value={dept.id}>
-                                {dept.name} - {dept.description}
+                                {dept.name}{' '}
+                                {dept.description
+                                  ? `- ${dept.description}`
+                                  : ''}
                               </SelectItem>
                             ))}
                           </SelectContent>

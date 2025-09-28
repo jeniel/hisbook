@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { Trash2 } from 'lucide-react'
 import { toast } from 'sonner'
-import { useTicket } from '@/hooks/useTicket'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -12,6 +11,7 @@ import {
   DialogTrigger,
   DialogFooter,
 } from '@/components/ui/dialog'
+import { useTicket } from '@/features/tickets/hooks/useTicket'
 
 type DeleteTicketProps = {
   ticketId: string

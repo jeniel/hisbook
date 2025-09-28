@@ -5,7 +5,6 @@ import { useQuery } from '@apollo/client'
 export const useMeQuery = () => {
   const { data, loading, error } = useQuery<Query>(ME_QUERY)
 
-  // Extract employeeID safely
   const employeeID = data?.meQuery?.user?.profile?.employeeID ?? null
 
   return { data, loading, error, employeeID }

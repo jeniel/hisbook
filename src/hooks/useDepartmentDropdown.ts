@@ -5,14 +5,20 @@ export interface Department {
   id: string
   name: string
   description?: string
+  isSupport?: boolean
 }
 
-export default function useDepartments() {
+export default function useDepartments({ onlySupport = false } = {}) {
   const { data, loading, error } = useQuery(FIND_ALL_DEPARTMENTS_IN_DROPDOWN, {
     fetchPolicy: 'cache-first',
   })
 
-  const departments: Department[] = data?.findAllForDropdown || []
+  let departments: Department[] = data?.findAllForDropdown || []
+
+  // For Departments such as MIS, Engineering, HR etc.
+  if (onlySupport) {
+    departments = departments.filter((dept) => dept.isSupport)
+  }
 
   return { departments, loading, error }
 }
