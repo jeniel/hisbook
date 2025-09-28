@@ -1,7 +1,5 @@
 import { useState } from 'react'
-import { Mutation } from '@/graphql/codegen/graphql'
-import { UPDATE_EVENT } from '@/graphql/operation/mutation/event'
-import { useMutation } from '@apollo/client'
+import { PencilLine } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import {
@@ -13,7 +11,7 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { PencilLine } from 'lucide-react'
+import useEventsMutation from '../hooks/useEventMutation'
 
 // Props
 type EditEventProps = {
@@ -25,20 +23,19 @@ type EditEventProps = {
     endDate?: string | null
     detailsUrl?: string | null
   }
-  onUpdated?: () => void
 }
 
-export default function EditEvent({ event, onUpdated }: EditEventProps) {
+export default function EditEvent({ event }: EditEventProps) {
   const [open, setOpen] = useState(false)
   const [formData, setFormData] = useState({
     title: event.title,
     location: event.location,
-    startDate: event.startDate,
+    startDate: event.startDate ?? '', // default to empty string
     endDate: event.endDate ?? '',
     detailsUrl: event.detailsUrl ?? '',
   })
 
-  const [updateEvent, { loading }] = useMutation<Mutation>(UPDATE_EVENT)
+  const { updateEvent, updating } = useEventsMutation()
 
   const handleChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
@@ -47,23 +44,13 @@ export default function EditEvent({ event, onUpdated }: EditEventProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      await updateEvent({
-        variables: {
-          updateEventId: event.id,
-          payload: {
-            title: formData.title,
-            location: formData.location,
-            startDate: formData.startDate,
-            endDate: formData.endDate || null, // optional
-            detailsUrl: formData.detailsUrl || null, // optional
-          },
-        },
+      await updateEvent(event.id, {
+        ...formData,
+        endDate: formData.endDate || null,
+        detailsUrl: formData.detailsUrl || null,
       })
-
-      toast.success('Event updated')
-      if (onUpdated) onUpdated()
       setOpen(false)
-    } catch (_error) {
+    } catch {
       toast.error('Failed to update event')
     }
   }
@@ -124,8 +111,8 @@ export default function EditEvent({ event, onUpdated }: EditEventProps) {
             />
           </div>
 
-          <Button type='submit' className='w-full' disabled={loading}>
-            {loading ? 'Saving...' : 'Save Changes'}
+          <Button type='submit' className='w-full' disabled={updating}>
+            {updating ? 'Saving...' : 'Save Changes'}
           </Button>
         </form>
       </DialogContent>

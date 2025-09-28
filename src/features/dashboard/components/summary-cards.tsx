@@ -1,6 +1,6 @@
 import { Ticket, Hotel, UserPen } from 'lucide-react'
-import { useCensus } from '@/hooks/useCensus'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+import { useCensus } from '@/features/dashboard/hooks/useCensus'
 
 export default function Summary({
   summary,

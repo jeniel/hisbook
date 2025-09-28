@@ -1,115 +1,71 @@
-import { useState } from 'react'
-import { Query } from '@/graphql/codegen/graphql'
-import { GET_ALL_EVENT } from '@/graphql/operation/query/event'
-import { useQuery } from '@apollo/client'
-import { CalendarDays } from 'lucide-react'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { MapPin, Calendar, ExternalLink } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
-import Pagination from '@/components/pagination'
-import Spinner from '@/components/spinner'
-import CreateEvent from './create-event'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import DeleteEvent from './delete-event'
 import EditEvent from './edit-event'
 
-export default function ViewEvents() {
-  const [page, setPage] = useState(1)
-  const perPage = 10
+interface EventListProps {
+  events: any[]
+  refetch: () => void
+}
 
-  const { data, loading, error, refetch } = useQuery<Query>(GET_ALL_EVENT, {
-    variables: { page, perPage },
-    fetchPolicy: 'cache-and-network',
-  })
-
-  if (loading) return <Spinner />
-  if (error) return <p>Error: {error.message}</p>
-
-  const events = data?.findAllEvents?.data || []
-  const meta = data?.findAllEvents?.meta
-
-  const handlePageChange = (newPage: number) => {
-    setPage(newPage)
-    refetch({ page: newPage, perPage })
-  }
+export default function EventList({ events }: EventListProps) {
   return (
-    <Card>
-      <CardContent>
-        <div className='mb-4 flex flex-row items-center justify-between'>
-          <h1 className='flex items-center gap-2 text-xl font-semibold'>
-            <CalendarDays className='text-red-500 h-6 w-6' />
-            Events
-          </h1>
+    <div className='space-y-6'>
+      {/* List */}
+      {events.length === 0 ? (
+        <div className='text-muted-foreground text-center'>No Events Found</div>
+      ) : (
+        <div className='space-y-4'>
+          {events.map((event) => (
+            <Card key={event.id} className='shadow-sm'>
+              <CardHeader className='flex flex-col gap-3 space-y-0 sm:flex-row sm:items-center sm:justify-between'>
+                <CardTitle className='text-lg font-semibold'>
+                  {event.title}
+                </CardTitle>
+                <div className='flex flex-wrap gap-2 sm:justify-end'>
+                  {event.detailsUrl && (
+                    <Button size='sm' asChild>
+                      <a
+                        href={event.detailsUrl}
+                        target='_blank'
+                        rel='noopener noreferrer'
+                      >
+                        <ExternalLink className='mr-1 h-4 w-4' />
+                        View Event Details
+                      </a>
+                    </Button>
+                  )}
+                  <EditEvent event={event} />
+                  <DeleteEvent event={event} />
+                </div>
+              </CardHeader>
 
-          <CreateEvent />
+              <CardContent className='text-muted-foreground space-y-1 text-sm'>
+                <p className='flex items-center gap-2'>
+                  <MapPin className='h-4 w-4 text-blue-500' />
+                  {event.location}
+                </p>
+                <p className='flex items-center gap-2'>
+                  <Calendar className='h-4 w-4 text-green-500' />
+                  Start:{' '}
+                  {event.startDate
+                    ? new Date(event.startDate).toLocaleDateString()
+                    : '—'}
+                </p>
+                <p className='flex items-center gap-2'>
+                  <Calendar className='h-4 w-4 text-red-500' />
+                  End:{' '}
+                  {event.endDate
+                    ? new Date(event.endDate).toLocaleDateString()
+                    : '—'}
+                </p>
+              </CardContent>
+            </Card>
+          ))}
         </div>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>#</TableHead>
-              <TableHead>Title</TableHead>
-              <TableHead>Location</TableHead>
-              <TableHead>Start Date</TableHead>
-              <TableHead>End Date</TableHead>
-              <TableHead>Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {events.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={4} className='text-center'>
-                  No Events Found
-                </TableCell>
-              </TableRow>
-            ) : (
-              events.map((event, index) => (
-                <TableRow key={event.id}>
-                  <TableCell>{index + 1 + (page - 1) * perPage}</TableCell>
-                  <TableCell>{event.title}</TableCell>
-                  <TableCell>{event.location}</TableCell>
-                  <TableCell>
-                    {new Date(event.startDate).toLocaleDateString()}
-                  </TableCell>
-                  <TableCell>
-                    {event.endDate
-                      ? new Date(event.endDate).toLocaleDateString()
-                      : null}
-                  </TableCell>
-                  <TableCell className='flex flex-row items-center space-x-2'>
-                    {event.detailsUrl && (
-                      <Button size='sm' asChild>
-                        <a
-                          href={event.detailsUrl}
-                          target='_blank'
-                          rel='noopener noreferrer'
-                        >
-                          View Details
-                        </a>
-                      </Button>
-                    )}
-                    <EditEvent event={event} onUpdated={() => refetch()} />
-                    <DeleteEvent event={event} onDelete={() => refetch()} />
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-
-        {meta && (
-          <Pagination
-            currentPage={meta.currentPage}
-            lastPage={meta.lastPage}
-            onPageChange={handlePageChange}
-          />
-        )}
-      </CardContent>
-    </Card>
+      )}
+    </div>
   )
 }

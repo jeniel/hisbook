@@ -1,6 +1,6 @@
 import { Hospital } from 'lucide-react'
-import { useCensus } from '@/hooks/useCensus'
 import Spinner from '@/components/spinner'
+import { useCensus } from '@/features/dashboard/hooks/useCensus'
 import TicketsOverview from './components/overview-tickets'
 import Summary from './components/summary-cards'
 
