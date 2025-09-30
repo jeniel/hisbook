@@ -7,6 +7,7 @@ const statusColors: Record<string, string> = {
   Pending: 'text-blue-400',
   Completed: 'text-green-400',
   OnHold: 'text-purple-400',
+  InProgess: 'text-red-400',
 }
 
 export default function TicketsOverview({

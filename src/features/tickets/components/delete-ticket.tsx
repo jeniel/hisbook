@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { Trash2 } from 'lucide-react'
-import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -11,7 +10,7 @@ import {
   DialogTrigger,
   DialogFooter,
 } from '@/components/ui/dialog'
-import { useTicket } from '@/features/tickets/hooks/useTicket'
+import useTicketMutation from '@/features/tickets/hooks/useTicketMutation'
 
 type DeleteTicketProps = {
   ticketId: string
@@ -23,18 +22,11 @@ export default function DeleteTicket({
   onDelete,
 }: DeleteTicketProps) {
   const [open, setOpen] = useState(false)
-  const { deleteTicket } = useTicket({}) // only use mutation here
+  const { deleteTicket, deleting } = useTicketMutation(onDelete)
 
   const handleDelete = async () => {
-    try {
-      await deleteTicket(ticketId)
-
-      toast.success(`Ticket successfully deleted`)
-      if (onDelete) onDelete() // trigger parent refetch
-      setOpen(false)
-    } catch (_error) {
-      toast.error('Failed to delete ticket')
-    }
+    await deleteTicket(ticketId)
+    setOpen(false)
   }
 
   return (
@@ -57,8 +49,12 @@ export default function DeleteTicket({
           <Button variant='outline' onClick={() => setOpen(false)}>
             Cancel
           </Button>
-          <Button onClick={handleDelete} className='bg-red-600 text-white'>
-            Delete
+          <Button
+            onClick={handleDelete}
+            disabled={deleting}
+            className='bg-red-600 text-white'
+          >
+            {deleting ? 'Deleting...' : 'Delete'}
           </Button>
         </DialogFooter>
       </DialogContent>

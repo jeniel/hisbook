@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useMeQuery } from '@/hooks/useMeQuery'
+import useMeQuery from '@/hooks/useMeQuery'
 import { Card, CardContent } from '@/components/ui/card'
 import { HisUser } from '../hooks/useAttendance'
 

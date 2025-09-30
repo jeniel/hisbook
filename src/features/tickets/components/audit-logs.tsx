@@ -1,6 +1,4 @@
-import { useState, useEffect } from 'react'
-import { FIND_TICKET_AUDIT_LOGS } from '@/graphql/operation/query/ticket'
-import { useLazyQuery } from '@apollo/client'
+import { useState } from 'react'
 import { BookCheck } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
@@ -10,25 +8,11 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import Spinner from '@/components/spinner'
+import { useAuditQuery } from '@/features/tickets/hooks/useAuditQuery'
 
 export default function AuditLogsContent({ ticketId }: { ticketId: string }) {
   const [open, setOpen] = useState(false)
-
-  const [fetchAuditLogs, { data, loading, error }] = useLazyQuery(
-    FIND_TICKET_AUDIT_LOGS,
-    { fetchPolicy: 'network-only' }
-  )
-
-  useEffect(() => {
-    if (open && ticketId) {
-      fetchAuditLogs({ variables: { findTicketbyIdId: ticketId } })
-    }
-  }, [open, ticketId, fetchAuditLogs])
-
-  const logs = data?.findTicketbyID?.auditLogs || []
-  const sortedLogs = [...logs].sort(
-    (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-  )
+  const { logs, loading, error } = useAuditQuery(open ? ticketId : undefined)
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -38,7 +22,7 @@ export default function AuditLogsContent({ ticketId }: { ticketId: string }) {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className='max-h-[90vh] w-full max-w-lg overflow-y-auto sm:max-w-2xl lg:max-w-4xl'>
+      <DialogContent className='max-h-[90vh] w-full max-w-lg overflow-y-auto sm:max-w-2xl lg:max-w-xl'>
         <DialogTitle className='flex flex-row items-center gap-2'>
           <BookCheck className='text-yellow-500' /> Audit Logs
         </DialogTitle>
@@ -50,7 +34,7 @@ export default function AuditLogsContent({ ticketId }: { ticketId: string }) {
         {!loading && !error && logs.length === 0 && <p>No audit logs found.</p>}
         {!loading && !error && logs.length > 0 && (
           <ul className='max-h-[70vh] space-y-2 overflow-y-auto'>
-            {sortedLogs.map((log) => {
+            {logs.map((log) => {
               const timestamp = new Date(log.timestamp)
               const formattedDate = timestamp.toLocaleDateString('en-US', {
                 month: 'short',

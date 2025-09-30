@@ -68,7 +68,7 @@ export default function ReceivedTickets() {
         </div>
 
         <div className='flex gap-2'>
-          <Link to='/assigned-ticket'>
+          <Link to='/department-ticket'>
             <Button
               variant='outline'
               size='sm'

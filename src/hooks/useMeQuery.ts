@@ -2,10 +2,26 @@ import { Query } from '@/graphql/codegen/graphql'
 import { ME_QUERY } from '@/graphql/operation/query/user'
 import { useQuery } from '@apollo/client'
 
-export const useMeQuery = () => {
-  const { data, loading, error } = useQuery<Query>(ME_QUERY)
+export default function useMeQuery() {
+  const { data, loading, error, refetch } = useQuery<Query>(ME_QUERY, {
+    fetchPolicy: 'cache-and-network',
+  })
 
-  const employeeID = data?.meQuery?.user?.profile?.employeeID ?? null
+  const user = data?.meQuery?.user || null
+  const userId = user?.id ?? null
+  const employeeID = user?.profile?.employeeID ?? null
+  const departmentId = user?.department?.id ?? null
+  const departmentName = user?.department?.name ?? null
 
-  return { data, loading, error, employeeID }
+  return {
+    data,
+    user,
+    userId,
+    employeeID,
+    departmentId,
+    departmentName,
+    loading,
+    error,
+    refetch,
+  }
 }

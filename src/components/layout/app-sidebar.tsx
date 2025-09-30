@@ -1,7 +1,7 @@
 import { Role } from '@/graphql/codegen/graphql'
 import { LogOut } from 'lucide-react'
 import { useLogout } from '@/hooks/useLogout'
-import { useMeQuery } from '@/hooks/useMeQuery'
+import useMeQuery from '@/hooks/useMeQuery'
 import { Button } from '@/components/ui/button'
 import {
   Sidebar,
@@ -10,8 +10,8 @@ import {
   SidebarRail,
 } from '@/components/ui/sidebar'
 import { NavGroup } from '@/components/layout/nav-group'
-import { sidebarData } from './data/sidebar-data'
 import Avatar from '../avatar'
+import { sidebarData } from './data/sidebar-data'
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { data, loading } = useMeQuery()
