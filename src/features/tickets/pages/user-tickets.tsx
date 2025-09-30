@@ -9,10 +9,12 @@ import useTicketQuery from '../hooks/useTicketQuery'
 
 export default function UserTickets() {
   const { userId, loading, error: meError } = useMeQuery()
-  const { tickets, page, setPage, totalPages, error } = useTicketQuery({
-    userId,
-    mode: 'user',
-  })
+  const { tickets, page, setPage, totalPages, error, refetch } = useTicketQuery(
+    {
+      userId,
+      mode: 'user',
+    }
+  )
 
   if (loading) return <Spinner />
   if (meError) return <p className='text-red-500'>Error: {meError.message}</p>
@@ -22,17 +24,14 @@ export default function UserTickets() {
     <div>
       <div className='mb-4 flex flex-col items-center justify-between gap-4 md:flex-row'>
         <div>
-          <h1 className='mb-2 flex items-center gap-2 text-3xl font-semibold'>
+          <h1 className='flex items-center gap-2 text-3xl font-semibold'>
             <Ticket className='h-10 w-10 text-green-500' />
             My Tickets
           </h1>
-          <p className='text-muted-foreground text-sm'>
-            View your submitted tickets
-          </p>
         </div>
 
         <div>
-          <CreateTickets />
+          <CreateTickets onCreated={refetch} />
         </div>
       </div>
       <ListView

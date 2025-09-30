@@ -83,7 +83,7 @@ export default function EditUser({ user, onUpdated }: EditUserProps) {
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={setOpen} modal={false}>
       <DialogTrigger asChild>
         <Button variant='outline' size='sm'>
           <PencilLine className='text-blue-500' /> Edit

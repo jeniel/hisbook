@@ -56,7 +56,7 @@ export default function ViewTicket({ ticket }: ViewTicketProps) {
   if (!ticket) return <Spinner />
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={setOpen} modal={false}>
       <DialogTrigger asChild>
         <Button variant='outline' size='sm'>
           <Eye className='text-green-500' /> View

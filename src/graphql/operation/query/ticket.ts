@@ -60,6 +60,7 @@ export const FIND_ALL_TICKETS_BY_USER = gql`
         subject
         statusFormatted
         remarks
+        message
         missedAt
         screenshot
         status

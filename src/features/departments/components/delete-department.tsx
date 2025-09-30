@@ -30,7 +30,7 @@ export default function DeleteDepartment({
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={setOpen} modal={false}>
       <DialogTrigger asChild>
         <Button variant='destructive' size='sm'>
           <Trash2 />

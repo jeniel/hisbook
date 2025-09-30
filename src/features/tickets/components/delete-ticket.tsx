@@ -30,7 +30,7 @@ export default function DeleteTicket({
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={setOpen} modal={false}>
       <DialogTrigger asChild>
         <Button variant='outline' size='sm'>
           <Trash2 className='text-red-500' />

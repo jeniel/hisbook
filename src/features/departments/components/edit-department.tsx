@@ -54,7 +54,7 @@ export default function EditDepartment({
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={setOpen} modal={false}>
       <DialogTrigger asChild>
         <Button variant='outline' size='sm'>
           <PencilLine className='text-blue-500' /> Edit

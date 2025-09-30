@@ -83,7 +83,7 @@ export default function SignUp() {
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={setOpen} modal={false}>
       <DialogTrigger asChild>
         <Button
           className='flex w-full items-center gap-2 font-semibold'

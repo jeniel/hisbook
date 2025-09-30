@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -31,6 +31,7 @@ import {
   SelectItem,
   SelectValue,
 } from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
 import useTicketMutation from '../hooks/useTicketMutation'
 
 // ---------------- Validation ----------------
@@ -41,14 +42,25 @@ const TicketSchema = z.object({
   departmentId: z.string().min(1, { message: 'Department is required' }),
 })
 
-export default function CreateTickets() {
+type CreateTicketProps = {
+  onCreated?: () => void
+}
+
+export default function CreateTickets({ onCreated }: CreateTicketProps) {
   const [open, setOpen] = useState(false)
 
   // Hooks
-  const { createTicket, creating } = useTicketMutation()
+  const { createTicket, creating } = useTicketMutation(onCreated)
   const { user, userId } = useMeQuery()
-  const { departments: supportDepartments, loading: deptLoading } =
-    useDepartments({ onlySupport: true })
+  const { fetchDepartments, departments } = useDepartments({
+    onlySupport: true,
+  })
+
+  useEffect(() => {
+    if (open) {
+      fetchDepartments()
+    }
+  }, [open, fetchDepartments])
 
   const form = useForm<z.infer<typeof TicketSchema>>({
     resolver: zodResolver(TicketSchema),
@@ -77,8 +89,6 @@ export default function CreateTickets() {
         message: data.message,
         departmentId: data.departmentId,
       })
-
-      toast.success('Ticket Created')
       form.reset()
       setOpen(false)
     } catch (_error) {
@@ -161,7 +171,6 @@ export default function CreateTickets() {
                 )}
               />
 
-              {/* Department */}
               <FormField
                 control={form.control}
                 name='departmentId'
@@ -171,16 +180,21 @@ export default function CreateTickets() {
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
-                      disabled={deptLoading}
                     >
-                      <SelectTrigger>
+                      <SelectTrigger className='w-full sm:w-80'>
                         <SelectValue placeholder='Select Department' />
                       </SelectTrigger>
-                      <SelectContent>
-                        {supportDepartments.map((dept) => (
+                      <SelectContent className='max-h-60 w-[var(--radix-select-trigger-width)] overflow-y-auto sm:w-80'>
+                        {departments.map((dept) => (
                           <SelectItem key={dept.id} value={dept.id}>
-                            {dept.name}{' '}
-                            {dept.description ? `- ${dept.description}` : ''}
+                            <div className='flex flex-col'>
+                              <span className='font-medium'>{dept.name}</span>
+                              {dept.description && (
+                                <span className='text-muted-foreground truncate text-xs'>
+                                  {dept.description}
+                                </span>
+                              )}
+                            </div>
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -198,13 +212,12 @@ export default function CreateTickets() {
                 control={form.control}
                 name='message'
                 render={({ field }) => (
-                  <FormItem className='h-full'>
+                  <FormItem>
                     <FormLabel>Message (Optional)</FormLabel>
                     <FormControl>
-                      <textarea
+                      <Textarea
                         placeholder='Additional details or context'
                         {...field}
-                        className='border-input bg-background focus-visible:ring-ring h-[180px] w-full resize-none rounded-md border px-3 py-2 text-sm shadow-sm focus-visible:ring-2 focus-visible:outline-none'
                       />
                     </FormControl>
                     <FormMessage />
@@ -214,17 +227,15 @@ export default function CreateTickets() {
             </div>
 
             {/* Submit Button */}
-            <div className='flex justify-end md:col-span-2'>
-              <Button
-                type='submit'
-                variant='outline'
-                disabled={creating}
-                className='flex items-center gap-2'
-              >
-                <Send className='h-4 w-4 text-green-500' />
-                {creating ? 'Submitting...' : 'Submit'}
-              </Button>
-            </div>
+            <Button
+              type='submit'
+              variant='outline'
+              disabled={creating}
+              className='flex items-center gap-2'
+            >
+              <Send className='h-4 w-4 text-green-500' />
+              {creating ? 'Submitting...' : 'Submit'}
+            </Button>
           </form>
         </Form>
       </DialogContent>

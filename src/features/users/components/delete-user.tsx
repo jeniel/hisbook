@@ -28,7 +28,7 @@ export default function DeleteUser({ user, onDelete }: DeleteUserProps) {
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={setOpen} modal={false}>
       <DialogTrigger asChild>
         <Button variant='outline' size='sm' disabled={deleting}>
           <Trash2 className='text-red-500' />

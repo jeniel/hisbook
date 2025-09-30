@@ -15,7 +15,7 @@ export default function AuditLogsContent({ ticketId }: { ticketId: string }) {
   const { logs, loading, error } = useAuditQuery(open ? ticketId : undefined)
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={setOpen} modal={false}>
       <DialogTrigger asChild>
         <Button variant='outline' size='sm'>
           <BookCheck className='text-yellow-500' /> View Logs
