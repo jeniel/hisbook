@@ -90,7 +90,7 @@ export default function EditUser({ user, onUpdated }: EditUserProps) {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className='max-w-2xl'>
+      <DialogContent className='max-w-2xl' aria-describedby={undefined}>
         <DialogHeader>
           <DialogTitle>Edit User</DialogTitle>
         </DialogHeader>

@@ -32,7 +32,7 @@ export default function AllTickets() {
         renderActions={(ticket) => (
           <>
             <ViewTicket ticket={ticket} />
-            <UpdateTicket ticket={ticket} onUpdated={() => refetch()} />
+            <UpdateTicket ticket={ticket} onUpdated={refetch} />
             <AuditLogsContent ticketId={ticket.id} />
             <DeleteTicket ticketId={ticket.id} onDelete={refetch} />
           </>

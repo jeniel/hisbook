@@ -63,7 +63,10 @@ export default function ViewTicket({ ticket }: ViewTicketProps) {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className='max-h-[90vh] w-full max-w-4xl overflow-y-auto'>
+      <DialogContent
+        className='max-h-[90vh] w-full max-w-4xl overflow-y-auto'
+        aria-describedby={undefined}
+      >
         <DialogHeader>
           <DialogTitle className='flex items-center gap-2'>
             <Eye className='text-green-500' /> Ticket Details
@@ -74,11 +77,11 @@ export default function ViewTicket({ ticket }: ViewTicketProps) {
           {/* General Info */}
           <div className='rounded-lg border bg-gray-50 p-4 dark:bg-zinc-950'>
             <h2 className='mb-3 flex items-center gap-2 text-lg font-semibold'>
-              <User className="text-blue-500"/> General Information
+              <User className='text-blue-500' /> General Information
             </h2>
             <p>
               <strong>
-                <User className='mr-1 inline h-4 w-4 ' /> Name:
+                <User className='mr-1 inline h-4 w-4' /> Name:
               </strong>{' '}
               {ticket.createdBy?.profile
                 ? `${ticket.createdBy.profile.firstName} ${ticket.createdBy.profile.lastName}`
@@ -108,7 +111,7 @@ export default function ViewTicket({ ticket }: ViewTicketProps) {
           {/* Status & Updates */}
           <div className='rounded-lg border bg-gray-50 p-4 dark:bg-zinc-950'>
             <h2 className='mb-3 flex items-center gap-2 text-lg font-semibold'>
-              <ClipboardList className="text-red-500"/> Status & Updates
+              <ClipboardList className='text-red-500' /> Status & Updates
             </h2>
             <p>
               <strong>
@@ -141,7 +144,7 @@ export default function ViewTicket({ ticket }: ViewTicketProps) {
           {preview && (
             <div className='rounded-lg border bg-gray-50 p-4 dark:bg-zinc-950'>
               <h2 className='mb-3 flex items-center gap-2 text-lg font-semibold'>
-                <FileImage className="text-yellow-500"/> Attached File
+                <FileImage className='text-yellow-500' /> Attached File
               </h2>
               <img
                 src={preview}

@@ -2,6 +2,7 @@ import { Mutation } from '@/graphql/codegen/graphql'
 import {
   CREATE_TICKET,
   DELETE_TICKET,
+  EDIT_TICKET,
 } from '@/graphql/operation/mutation/ticket'
 import { useMutation } from '@apollo/client'
 import { toast } from 'sonner'
@@ -16,8 +17,17 @@ type CreateTicketPayload = {
   createdById: string
 }
 
+type UpdateTicketPayload = {
+  screenshot?: string | null
+  status: string
+  updatedBy: string
+  remarks?: string | null
+  departmentId?: string | null
+  missedAt?: string | null
+}
+
 export default function useTicketMutation(refetch?: () => void) {
-  // Create Ticket
+  // ---------------- Create ----------------
   const [createTicketMutation, { loading: creating }] =
     useMutation<Mutation>(CREATE_TICKET)
 
@@ -31,7 +41,21 @@ export default function useTicketMutation(refetch?: () => void) {
     }
   }
 
-  // Delete Ticket
+  // ---------------- Update ----------------
+  const [updateTicketMutation, { loading: updating }] =
+    useMutation<Mutation>(EDIT_TICKET)
+
+  const updateTicket = async (id: string, payload: UpdateTicketPayload) => {
+    try {
+      await updateTicketMutation({ variables: { updateTicketId: id, payload } })
+      toast.success('Ticket updated successfully!')
+      refetch?.()
+    } catch {
+      toast.error('Failed to update ticket')
+    }
+  }
+
+  // ---------------- Delete ----------------
   const [deleteTicketMutation, { loading: deleting }] =
     useMutation<Mutation>(DELETE_TICKET)
 
@@ -45,5 +69,12 @@ export default function useTicketMutation(refetch?: () => void) {
     }
   }
 
-  return { createTicket, creating, deleteTicket, deleting }
+  return {
+    createTicket,
+    creating,
+    updateTicket,
+    updating,
+    deleteTicket,
+    deleting,
+  }
 }

@@ -14,7 +14,7 @@ import ViewTicket from '../components/view-ticket'
 export default function DepartmentTickets() {
   const {
     departmentId,
-    // departmentName,
+    departmentName,
     loading: meLoading,
     error: meError,
   } = useMeQuery()
@@ -26,9 +26,6 @@ export default function DepartmentTickets() {
       mode: 'department',
     })
 
-  // console.log(departmentId)
-  // console.log(departmentName)
-
   if (meLoading || loading) return <Spinner />
   if (meError) return <p>Error loading user or department: {meError.message}</p>
   if (error) return <p>Error loading tickets: {error.message}</p>
@@ -36,16 +33,11 @@ export default function DepartmentTickets() {
   return (
     <>
       {/* Header */}
-      <div className='mb-4 flex flex-col justify-between gap-4 md:flex-row'>
-        <div>
-          <h1 className='mb-2 flex items-center gap-2 text-3xl font-semibold'>
-            <Ticket className='h-10 w-10 text-green-500' />
-            Department Tickets
-          </h1>
-          <p className='text-md text-muted-foreground'>
-            Update Tickets and Services
-          </p>
-        </div>
+      <div className='mb-4 flex flex-col items-center justify-between gap-4 md:flex-row'>
+        <h1 className='mb-2 flex items-center gap-2 text-3xl font-semibold'>
+          <Ticket className='h-10 w-10 text-green-500' />
+          {departmentName} Tickets
+        </h1>
 
         <div className='flex items-center gap-2'>
           <Link to='/received-tickets'>
@@ -67,7 +59,7 @@ export default function DepartmentTickets() {
         renderActions={(ticket) => (
           <>
             <ViewTicket ticket={ticket} />
-            <UpdateTicket ticket={ticket} onUpdated={() => refetch()} />
+            <UpdateTicket ticket={ticket} onUpdated={refetch} />
             <AuditLogsContent ticketId={ticket.id} />
             <DeleteTicket ticketId={ticket.id} onDelete={refetch} />
           </>

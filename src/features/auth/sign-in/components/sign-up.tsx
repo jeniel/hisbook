@@ -94,7 +94,7 @@ export default function SignUp() {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className='max-w-lg'>
+      <DialogContent className='max-w-lg' aria-describedby={undefined}>
         <DialogHeader>
           <DialogTitle className='text-lg font-semibold'>
             Sign Up Here

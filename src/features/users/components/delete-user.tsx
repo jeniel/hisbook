@@ -35,7 +35,7 @@ export default function DeleteUser({ user, onDelete }: DeleteUserProps) {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className='max-w-sm'>
+      <DialogContent className='max-w-sm' aria-describedby={undefined}>
         <DialogHeader>
           <DialogTitle>Delete User</DialogTitle>
           <DialogDescription>

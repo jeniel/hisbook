@@ -1,13 +1,9 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from 'react'
-import { Mutation } from '@/graphql/codegen/graphql'
-import { EDIT_TICKET } from '@/graphql/operation/mutation/ticket'
-import { FIND_ALL_DEPARTMENTS } from '@/graphql/operation/query/department'
-import { ME_QUERY } from '@/graphql/operation/query/user'
-import { useMutation, useLazyQuery } from '@apollo/client'
+import { Ticket } from '@/graphql/codegen/graphql'
 import { PencilLine } from 'lucide-react'
 import { toast } from 'sonner'
+import useDepartments from '@/hooks/useDepartmentDropdown'
+import useMeQuery from '@/hooks/useMeQuery'
 import { useUpload } from '@/hooks/useUpload'
 import { Button } from '@/components/ui/button'
 import {
@@ -26,65 +22,42 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import Spinner from '@/components/spinner'
+import useTicketMutation from '@/features/tickets/hooks/useTicketMutation'
 
 type UpdateTicketProps = {
-  ticket: any
+  ticket: Ticket
   onUpdated?: () => void
 }
 
 export default function UpdateTicket({ ticket, onUpdated }: UpdateTicketProps) {
   const [open, setOpen] = useState(false)
-  const [status, setStatus] = useState(ticket.status)
+  const [status] = useState(ticket.status)
   const [file, setFile] = useState<File | null>(null)
   const [updatedBy, setUpdatedBy] = useState('')
   const [remarks, setRemarks] = useState(ticket.remarks || '')
   const [departmentId, setDepartmentId] = useState(ticket.departmentId || '')
 
-  const [fetchMe, { data: meData }] = useLazyQuery(ME_QUERY)
-  const [updateTicket, { loading }] = useMutation<Mutation>(EDIT_TICKET)
+  const { user } = useMeQuery()
+  const { fetchDepartments, departments } = useDepartments({
+    onlySupport: true,
+  })
   const { uploadFile } = useUpload()
+  const { updateTicket, updating } = useTicketMutation(onUpdated)
 
-  // ✅ Fetch departments
-  const [fetchDepartments, { data: deptData, loading: deptLoading }] =
-    useLazyQuery(FIND_ALL_DEPARTMENTS, {
-      variables: { page: 1, perPage: 1000 },
-      fetchPolicy: 'network-only', // ensures fresh data every time
-    })
-
-  // Run department fetch when modal opens
   useEffect(() => {
     if (open) {
-      fetchMe()
       fetchDepartments()
-    }
-  }, [open])
-
-  const departments = deptData?.findAllDepartments?.data || []
-
-  // Fetch user only when modal opens
-  useEffect(() => {
-    if (open) {
-      fetchMe()
-    }
-  }, [open])
-
-  // Build updatedBy once we have user data
-  useEffect(() => {
-    if (meData?.meQuery?.user) {
-      const user = meData.meQuery.user
       setUpdatedBy(
         `${user?.profile?.firstName || ''} ${user?.profile?.lastName || ''} - ${
           user?.profile?.title || ''
         }`
       )
     }
-  }, [meData])
+  }, [open, user, fetchDepartments, setUpdatedBy])
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      const selectedFile = e.target.files[0]
-      setFile(selectedFile)
+      setFile(e.target.files[0])
     }
   }
 
@@ -98,40 +71,33 @@ export default function UpdateTicket({ ticket, onUpdated }: UpdateTicketProps) {
         screenshotUrl = uploadResult.url!
       }
 
-      await updateTicket({
-        variables: {
-          updateTicketId: ticket.id,
-          payload: {
-            missedAt: ticket.missedAt,
-            floor: ticket.floor,
-            screenshot: screenshotUrl,
-            status,
-            updatedBy,
-            remarks,
-            departmentId,
-          },
-        },
+      await updateTicket(ticket.id, {
+        missedAt: ticket.missedAt,
+        screenshot: screenshotUrl,
+        status,
+        updatedBy,
+        remarks,
+        departmentId,
       })
 
-      toast.success('Ticket updated successfully')
-      if (onUpdated) onUpdated()
       setOpen(false)
     } catch (_error) {
       toast.error('Failed to update ticket')
     }
   }
 
-  if (deptLoading) return <Spinner />
-
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant={'outline'} size='sm'>
+        <Button variant='outline' size='sm'>
           <PencilLine className='text-blue-500' /> Update
         </Button>
       </DialogTrigger>
 
-      <DialogContent className='max-h-[90vh] w-full max-w-lg overflow-y-auto sm:max-w-2xl lg:max-w-4xl'>
+      <DialogContent
+        className='max-h-[90vh] w-full max-w-lg overflow-y-auto sm:max-w-2xl lg:max-w-4xl'
+        aria-describedby={undefined}
+      >
         <DialogHeader>
           <DialogTitle className='flex flex-row items-center gap-2'>
             <PencilLine className='font-semibold text-blue-500' />
@@ -139,7 +105,7 @@ export default function UpdateTicket({ ticket, onUpdated }: UpdateTicketProps) {
           </DialogTitle>
         </DialogHeader>
 
-        {/* Ticket Details Section */}
+        {/* Ticket Details */}
         <div className='mb-4 rounded-lg border bg-gray-50 p-4 dark:bg-zinc-950'>
           <h2 className='mb-3 text-lg font-semibold'>Ticket Details</h2>
           <div className='space-y-2 text-sm'>
@@ -175,7 +141,7 @@ export default function UpdateTicket({ ticket, onUpdated }: UpdateTicketProps) {
           {/* Status */}
           <div className='space-y-2'>
             <strong>Status</strong>
-            <Select value={status} onValueChange={setStatus}>
+            <Select value={status}>
               <SelectTrigger className='w-full'>
                 <SelectValue placeholder='Select status' />
               </SelectTrigger>
@@ -196,7 +162,7 @@ export default function UpdateTicket({ ticket, onUpdated }: UpdateTicketProps) {
                 <SelectValue placeholder='Select department' />
               </SelectTrigger>
               <SelectContent>
-                {departments.map((dept: any) => (
+                {departments.map((dept) => (
                   <SelectItem key={dept.id} value={dept.id}>
                     {dept.name} - {dept.description}
                   </SelectItem>
@@ -230,15 +196,14 @@ export default function UpdateTicket({ ticket, onUpdated }: UpdateTicketProps) {
         </div>
 
         <DialogFooter>
-          <Button onClick={handleSubmit} disabled={loading}>
-            {loading ? 'Saving...' : 'Save'}
+          <Button onClick={handleSubmit} disabled={updating}>
+            {updating ? 'Saving...' : 'Save'}
           </Button>
-
           <Button
             type='button'
             variant='outline'
             onClick={() => setOpen(false)}
-            disabled={loading}
+            disabled={updating}
           >
             Close
           </Button>

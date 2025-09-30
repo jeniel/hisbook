@@ -34,7 +34,7 @@ export default function DeleteEvent({ event, onDeleted }: DeleteEventProps) {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className='max-w-sm'>
+      <DialogContent className='max-w-sm' aria-describedby={undefined}>
         <DialogHeader>
           <DialogTitle>Delete Event</DialogTitle>
           <DialogDescription>

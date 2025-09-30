@@ -98,7 +98,10 @@ export default function CreateTickets() {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className='max-h-[90vh] max-w-6xl overflow-y-auto'>
+      <DialogContent
+        className='max-h-[90vh] max-w-6xl overflow-y-auto'
+        aria-describedby={undefined}
+      >
         <DialogHeader>
           <DialogTitle>Create Ticket</DialogTitle>
         </DialogHeader>

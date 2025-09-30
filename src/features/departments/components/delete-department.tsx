@@ -37,7 +37,7 @@ export default function DeleteDepartment({
         </Button>
       </DialogTrigger>
 
-      <DialogContent className='max-w-sm'>
+      <DialogContent className='max-w-sm' aria-describedby={undefined}>
         <DialogHeader>
           <DialogTitle>Delete Department</DialogTitle>
           <DialogDescription>

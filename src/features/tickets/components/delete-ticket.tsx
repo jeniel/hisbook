@@ -37,7 +37,10 @@ export default function DeleteTicket({
         </Button>
       </DialogTrigger>
 
-      <DialogContent className='max-h-[90vh] w-full max-w-lg overflow-y-auto sm:max-w-2xl lg:max-w-4xl'>
+      <DialogContent
+        className='max-h-[90vh] w-full max-w-lg overflow-y-auto'
+        aria-describedby={undefined}
+      >
         <DialogHeader>
           <DialogTitle>Delete Ticket</DialogTitle>
           <DialogDescription>

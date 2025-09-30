@@ -64,7 +64,7 @@ export default function EditEvent({ event, onUpdated }: EditEventProps) {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className='max-w-md'>
+      <DialogContent className='max-w-md' aria-describedby={undefined}>
         <DialogHeader>
           <DialogTitle>Edit Event</DialogTitle>
         </DialogHeader>
