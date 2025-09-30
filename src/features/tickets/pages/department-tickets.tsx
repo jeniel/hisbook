@@ -1,8 +1,10 @@
+import { useState } from 'react'
 import { Link } from '@tanstack/react-router'
 import { Ticket, TicketIcon } from 'lucide-react'
 import useMeQuery from '@/hooks/useMeQuery'
 import { Button } from '@/components/ui/button'
 import Pagination from '@/components/pagination'
+import SearchBar from '@/components/search-bar'
 import Spinner from '@/components/spinner'
 import useTicketQuery from '@/features/tickets/hooks/useTicketQuery'
 import AuditLogsContent from '../components/audit-logs'
@@ -12,6 +14,8 @@ import UpdateTicket from '../components/update-tickets'
 import ViewTicket from '../components/view-ticket'
 
 export default function DepartmentTickets() {
+  const [search, setSearch] = useState('')
+
   const {
     departmentId,
     departmentName,
@@ -19,12 +23,21 @@ export default function DepartmentTickets() {
     error: meError,
   } = useMeQuery()
 
-  const { tickets, totalPages, loading, error, refetch, page, setPage } =
-    useTicketQuery({
-      departmentId,
-      initialPerPage: 10,
-      mode: 'department',
-    })
+  const {
+    tickets,
+    totalPages,
+    loading,
+    error,
+    refetch,
+    page,
+    perPage,
+    setPage,
+  } = useTicketQuery({
+    departmentId,
+    initialPerPage: 10,
+    mode: 'department',
+    initialSearch: search,
+  })
 
   if (meLoading || loading) return <Spinner />
   if (meError) return <p>Error loading user or department: {meError.message}</p>
@@ -34,7 +47,7 @@ export default function DepartmentTickets() {
     <>
       {/* Header */}
       <div className='mb-4 flex flex-col items-center justify-between gap-4 md:flex-row'>
-        <h1 className='mb-2 flex items-center gap-2 text-md md:text-3xl font-semibold'>
+        <h1 className='text-md mb-2 flex items-center gap-2 font-semibold md:text-3xl'>
           <Ticket className='h-10 w-10 text-green-500' />
           {departmentName} Tickets
         </h1>
@@ -51,6 +64,18 @@ export default function DepartmentTickets() {
             </Button>
           </Link>
         </div>
+      </div>
+
+      {/* 🔎 Search bar */}
+      <div className='mb-4'>
+        <SearchBar
+          placeholder='Search tickets...'
+          onSearch={(value) => {
+            setSearch(value)
+            refetch({ page: 1, perPage, search: value })
+            setPage(1)
+          }}
+        />
       </div>
 
       {/* Tickets List */}
@@ -71,7 +96,10 @@ export default function DepartmentTickets() {
         <Pagination
           currentPage={page}
           lastPage={totalPages}
-          onPageChange={setPage}
+          onPageChange={(newPage) => {
+            setPage(newPage)
+            refetch({ page: newPage, perPage, search })
+          }}
         />
       </div>
     </>

@@ -1,8 +1,18 @@
 import { gql } from '@apollo/client'
 
 export const FIND_ALL_TICKETS = gql`
-  query FindAllTickets($where: TicketWhereInput, $page: Int, $perPage: Int) {
-    findAllTickets(where: $where, page: $page, perPage: $perPage) {
+  query FindAllTickets(
+    $where: TicketWhereInput
+    $page: Int
+    $perPage: Int
+    $search: String
+  ) {
+    findAllTickets(
+      where: $where
+      page: $page
+      perPage: $perPage
+      search: $search
+    ) {
       data {
         createdAt
         createdBy {
@@ -43,8 +53,18 @@ export const FIND_ALL_TICKETS = gql`
 `
 
 export const FIND_ALL_TICKETS_BY_USER = gql`
-  query FindTicketsByUser($userId: String!, $perPage: Int, $page: Int) {
-    findTicketsByUser(userId: $userId, perPage: $perPage, page: $page) {
+  query FindTicketsByUser(
+    $userId: String!
+    $perPage: Int
+    $page: Int
+    $search: String
+  ) {
+    findTicketsByUser(
+      userId: $userId
+      perPage: $perPage
+      page: $page
+      search: $search
+    ) {
       data {
         createdAt
         createdBy {
@@ -83,6 +103,7 @@ export const FIND_ALL_TICKETS_BY_USER = gql`
     }
   }
 `
+
 export const FIND_TICKET_AUDIT_LOGS = gql`
   query FindTicketLogs($findTicketbyIdId: String!) {
     findTicketbyID(id: $findTicketbyIdId) {
@@ -99,8 +120,8 @@ export const FIND_TICKET_AUDIT_LOGS = gql`
 `
 
 export const FIND_TICKETS_WORKED_BY_USER = gql`
-  query FindTicketsWorkedByUser($userId: String!) {
-    findTicketsWorkedByUser(userId: $userId) {
+  query FindTicketsWorkedByUser($userId: String!, $search: String) {
+    findTicketsWorkedByUser(userId: $userId, search: $search) {
       data {
         subject
         status

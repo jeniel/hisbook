@@ -30,12 +30,18 @@ export default function ListView({ tickets, renderActions }: ListViewProps) {
               <CardContent>
                 {/* Header */}
                 <div className='flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between'>
+                  {/* Left side: Subject + createdBy + date */}
                   <div className='flex-1'>
                     <div className='flex items-center gap-2 text-sm'>
                       <TicketIcon className='h-5 w-5 shrink-0 text-red-500' />
                       <h2 className='text-base font-semibold break-words sm:text-lg'>
                         {ticket.subject || 'No subject'}
                       </h2>
+                      <span
+                        className={`inline-block rounded-full px-3 py-1 text-xs font-medium ${statusClass}`}
+                      >
+                        {ticket.statusFormatted || '—'}
+                      </span>
                     </div>
                     <p className='mt-1 flex flex-wrap items-center text-sm'>
                       <User className='mr-1 h-4 w-4 shrink-0 text-blue-500' />
@@ -47,12 +53,13 @@ export default function ListView({ tickets, renderActions }: ListViewProps) {
                     </p>
                   </div>
 
-                  <div className='sm:self-start'>
-                    <span
-                      className={`inline-block rounded-full px-3 py-1 text-xs font-medium ${statusClass}`}
-                    >
-                      {ticket.statusFormatted || '—'}
-                    </span>
+                  {/* Right side: Status + Actions */}
+                  <div className='flex flex-col items-start gap-2 sm:flex-row sm:items-center'>
+                    {renderActions && (
+                      <div className='flex flex-wrap justify-end gap-2'>
+                        {renderActions(ticket)}
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -70,13 +77,6 @@ export default function ListView({ tickets, renderActions }: ListViewProps) {
                     {ticket.floor || '—'}
                   </p>
                 </div>
-
-                {/* Actions (from parent) */}
-                {renderActions && (
-                  <div className='mt-3 flex flex-wrap gap-2'>
-                    {renderActions(ticket)}
-                  </div>
-                )}
               </CardContent>
             </Card>
           )

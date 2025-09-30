@@ -4,6 +4,7 @@ import {
   FIND_ALL_TICKETS_BY_USER,
   FIND_ALL_TICKETS,
   FIND_TICKETS_BY_DEPARTMENT,
+  FIND_TICKETS_WORKED_BY_USER, // 👈 add this
 } from '@/graphql/operation/query/ticket'
 import { useQuery } from '@apollo/client'
 
@@ -11,7 +12,8 @@ type UseTicketQueryOptions = {
   userId?: string | null
   departmentId?: string | null
   initialPerPage?: number
-  mode?: 'all' | 'user' | 'department' // 👈 added department
+  mode?: 'all' | 'user' | 'department' | 'worked' // 👈 add worked mode
+  initialSearch?: string
 }
 
 export default function useTicketQuery({
@@ -19,31 +21,36 @@ export default function useTicketQuery({
   departmentId,
   initialPerPage = 10,
   mode = 'user',
+  initialSearch = '',
 }: UseTicketQueryOptions) {
   const [page, setPage] = useState(1)
   const [perPage] = useState(initialPerPage)
+  const [search, setSearch] = useState(initialSearch)
 
   // Pick the query based on mode
   const query =
     mode === 'all'
       ? FIND_ALL_TICKETS
       : mode === 'department'
-      ? FIND_TICKETS_BY_DEPARTMENT
-      : FIND_ALL_TICKETS_BY_USER
+        ? FIND_TICKETS_BY_DEPARTMENT
+        : mode === 'worked'
+          ? FIND_TICKETS_WORKED_BY_USER
+          : FIND_ALL_TICKETS_BY_USER
 
   // Variables
   const variables =
     mode === 'all'
-      ? { page, perPage }
+      ? { page, perPage, search }
       : mode === 'department'
-      ? { departmentId, page, perPage }
-      : { userId, page, perPage }
+        ? { departmentId, page, perPage, search }
+        : { userId, page, perPage, search }
 
   const { data, loading, error, refetch } = useQuery<Query>(query, {
     variables,
     skip:
       (mode === 'user' && !userId) ||
-      (mode === 'department' && !departmentId), // skip if no required variable
+      (mode === 'worked' && !userId) || // 👈 skip when userId missing
+      (mode === 'department' && !departmentId),
     fetchPolicy: 'cache-and-network',
   })
 
@@ -52,16 +59,20 @@ export default function useTicketQuery({
     mode === 'all'
       ? data?.findAllTickets?.data || []
       : mode === 'department'
-      ? data?.findTicketsByDepartment?.data || []
-      : data?.findTicketsByUser?.data || []
+        ? data?.findTicketsByDepartment?.data || []
+        : mode === 'worked'
+          ? data?.findTicketsWorkedByUser?.data || []
+          : data?.findTicketsByUser?.data || []
 
   // Meta info
   const meta =
     mode === 'all'
       ? data?.findAllTickets?.meta
       : mode === 'department'
-      ? data?.findTicketsByDepartment?.meta
-      : data?.findTicketsByUser?.meta
+        ? data?.findTicketsByDepartment?.meta
+        : mode === 'worked'
+          ? data?.findTicketsWorkedByUser?.meta
+          : data?.findTicketsByUser?.meta
 
   const totalPages = meta?.lastPage || 1
 
@@ -72,6 +83,8 @@ export default function useTicketQuery({
     error,
     page,
     perPage,
+    search,
+    setSearch,
     setPage,
     refetch,
     totalPages,
