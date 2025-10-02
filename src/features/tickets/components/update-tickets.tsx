@@ -125,13 +125,13 @@ export default function UpdateTicket({ ticket, onUpdated }: UpdateTicketProps) {
             </p>
             <p>
               <strong className='mr-2'>Message:</strong>
-              {ticket.message || '-'}
             </p>
+            <p className='mr-2 ml-4'>{ticket.message || '-'}</p>
           </div>
         </div>
 
         {/* Update Section */}
-        <div className='grid grid-cols-2 gap-4 space-y-6'>
+        <div className='grid grid-cols-1 gap-4 space-y-6 md:grid-cols-2'>
           {/* Reviewed By */}
           <div className='space-y-2'>
             <strong>Reviewed By</strong>

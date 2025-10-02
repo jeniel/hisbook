@@ -104,8 +104,8 @@ export default function ViewTicket({ ticket }: ViewTicketProps) {
               <strong>
                 <MessageSquare className='mr-1 inline h-4 w-4' /> Message:
               </strong>{' '}
-              {ticket.message || '-'}
             </p>
+            <p className='mr-2 ml-5'>{ticket.message || '-'}</p>
           </div>
 
           {/* Status & Updates */}
