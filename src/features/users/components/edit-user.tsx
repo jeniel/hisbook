@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -55,8 +55,14 @@ export default function EditUser({ user, onUpdated }: EditUserProps) {
   const { updateUser, updating } = useUserMutation(onUpdated)
 
   // Roles and Departments
-  const { departments } = useDepartments()
+  const { fetchDepartments, departments } = useDepartments({
+    onlySupport: false,
+  })
   const roles = ['USER', 'ADMIN']
+
+  useEffect(() => {
+    fetchDepartments()
+  }, [fetchDepartments])
 
   const form = useForm<z.infer<typeof EditSchema>>({
     resolver: zodResolver(EditSchema),
@@ -159,7 +165,7 @@ export default function EditUser({ user, onUpdated }: EditUserProps) {
                   <FormLabel>Department</FormLabel>
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
-                      <SelectTrigger className='w-full truncate sm:w-80'>
+                      <SelectTrigger className='w-full truncate'>
                         <SelectValue placeholder='Select department' />
                       </SelectTrigger>
                     </FormControl>
@@ -168,11 +174,10 @@ export default function EditUser({ user, onUpdated }: EditUserProps) {
                         <SelectItem
                           key={dept.id}
                           value={dept.id}
-                          className='max-w-full truncate sm:max-w-[28rem]'
-                          title={`${dept.name}${dept.description ? ` - ${dept.description}` : ''}`}
+                          className='w-full truncate'
+                          title={dept.name}
                         >
                           {dept.name}
-                          {dept.description ? ` - ${dept.description}` : ''}
                         </SelectItem>
                       ))}
                     </SelectContent>

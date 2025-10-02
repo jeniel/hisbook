@@ -189,11 +189,6 @@ export default function CreateTickets({ onCreated }: CreateTicketProps) {
                           <SelectItem key={dept.id} value={dept.id}>
                             <div className='flex flex-col'>
                               <span className='font-medium'>{dept.name}</span>
-                              {dept.description && (
-                                <span className='text-muted-foreground truncate text-xs'>
-                                  {dept.description}
-                                </span>
-                              )}
                             </div>
                           </SelectItem>
                         ))}

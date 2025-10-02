@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -45,7 +46,14 @@ type CreateUserProps = {
 export default function CreateUser({ onCreated }: CreateUserProps) {
   const { createUser, creating } = useUserMutation(onCreated)
 
-  const { departments } = useDepartments()
+  const { fetchDepartments, departments } = useDepartments({
+    onlySupport: false,
+  })
+
+  useEffect(() => {
+    fetchDepartments()
+  }, [fetchDepartments])
+
   const roles = ['USER', 'ADMIN']
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -153,10 +161,9 @@ export default function CreateUser({ onCreated }: CreateUserProps) {
                             key={dept.id}
                             value={dept.id}
                             className='max-w-[28rem] truncate'
-                            title={`${dept.name}${dept.description ? ` - ${dept.description}` : ''}`}
+                            title={dept.name}
                           >
                             {dept.name}
-                            {dept.description ? ` - ${dept.description}` : ''}
                           </SelectItem>
                         ))}
                       </SelectContent>

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -52,7 +52,15 @@ const FormSchema = z
 export default function SignUp() {
   const [open, setOpen] = useState(false)
   const { createUser, creating } = useUserMutation()
-  const { departments } = useDepartments()
+  const { fetchDepartments, departments } = useDepartments({
+    onlySupport: false,
+  })
+
+  useEffect(() => {
+    if (open) {
+      fetchDepartments()
+    }
+  }, [open, fetchDepartments])
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -94,21 +102,50 @@ export default function SignUp() {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className='max-w-lg' aria-describedby={undefined}>
+      <DialogContent
+        className='my-4 max-h-screen max-w-lg overflow-y-auto'
+        aria-describedby={undefined}
+      >
         <DialogHeader>
           <DialogTitle className='text-lg font-semibold'>
             Sign Up Here
           </DialogTitle>
         </DialogHeader>
 
+        <div className='mb-4 rounded-md border border-gray-200 bg-gray-50 p-4'>
+          <h3 className='mb-2 text-sm font-semibold text-gray-700'>
+            Sign-Up Guide
+          </h3>
+          <ul className='list-inside list-disc space-y-1 text-sm text-gray-600'>
+            <li>
+              <strong>Username format:</strong>
+              <ul className='ml-5 list-inside list-disc space-y-1 text-sm text-gray-600'>
+                <li>1st letter of First Name</li>
+                <li>1st letter of Middle Name</li>
+                <li>Full Last Name.</li>
+                <li>
+                  <em>Example:</em> Ronald L. Ramiro → <code>rlramiro</code>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <strong>Password:</strong> minimum 6 characters
+            </li>
+            <li>
+              <strong>Department:</strong> select your designated department
+              from the dropdown
+            </li>
+            <li>
+              After signing up, update your profile with your full name and
+              other details
+            </li>
+          </ul>
+        </div>
+
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
             {/* Account Info */}
             <div className='grid gap-4'>
-              <h3 className='text-sm font-medium text-gray-500'>
-                Account Information
-              </h3>
-
               <FormField
                 control={form.control}
                 name='username'
@@ -168,7 +205,7 @@ export default function SignUp() {
                     <FormLabel>Department</FormLabel>
                     <Select onValueChange={field.onChange} value={field.value}>
                       <FormControl>
-                        <SelectTrigger className='w-full truncate sm:w-80'>
+                        <SelectTrigger className='w-full truncate'>
                           <SelectValue placeholder='Select department' />
                         </SelectTrigger>
                       </FormControl>
@@ -178,12 +215,9 @@ export default function SignUp() {
                             key={dept.id}
                             value={dept.id}
                             className='max-w-full truncate sm:max-w-[28rem]'
-                            title={`${dept.name}${
-                              dept.description ? ` - ${dept.description}` : ''
-                            }`}
+                            title={dept.name}
                           >
                             {dept.name}
-                            {dept.description ? ` - ${dept.description}` : ''}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -195,17 +229,15 @@ export default function SignUp() {
             </div>
 
             {/* Submit */}
-            <div className='flex justify-end'>
-              <Button
-                type='submit'
-                className='flex items-center gap-2'
-                variant='outline'
-                disabled={creating}
-              >
-                <SquareCheckBig className='h-4 w-4 text-green-500' />
-                {creating ? 'Signing Up...' : 'Sign Up'}
-              </Button>
-            </div>
+
+            <Button
+              type='submit'
+              className='flex w-full items-center gap-2 font-semibold'
+              disabled={creating}
+            >
+              <SquareCheckBig className='h-4 w-4' />
+              {creating ? 'Signing Up...' : 'Sign Up'}
+            </Button>
           </form>
         </Form>
       </DialogContent>
