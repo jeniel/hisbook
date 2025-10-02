@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
 import { useEffect, useState } from 'react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
@@ -78,8 +77,7 @@ export default function SignUp() {
         username: data.username,
         password: data.password,
         role: ['USER'], // default role
-        departmentName: departments.find((d) => d.id === data.department)
-          ?.name!,
+        departmentId: data.department, // pass the ID directly
       })
 
       toast.success('Sign up successful!')

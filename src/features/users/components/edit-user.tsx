@@ -31,6 +31,13 @@ import {
 import useDepartments from '../../../hooks/useDepartmentDropdown'
 import useUserMutation from '../hooks/useUserMutation'
 
+type UserPayload = {
+  username: string
+  password: string
+  role: string[]
+  departmentId: string
+}
+
 // Zod Schema
 const EditSchema = z
   .object({
@@ -76,15 +83,19 @@ export default function EditUser({ user, onUpdated }: EditUserProps) {
   })
 
   const onSubmit = async (data: z.infer<typeof EditSchema>) => {
-    const departmentName =
-      departments.find((d: { id: string }) => d.id === data.department)?.name ||
-      ''
-    await updateUser(user.id, {
+    const payload: UserPayload = {
       username: data.username,
-      password: data.password,
       role: [data.role],
-      departmentName,
-    })
+      departmentId: data.department,
+      password: ''
+    }
+
+    // Only send password if user entered something
+    if (data.password) {
+      payload.password = data.password
+    }
+
+    await updateUser(user.id, payload)
     setOpen(false)
   }
 

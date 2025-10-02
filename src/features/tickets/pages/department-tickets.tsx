@@ -39,6 +39,8 @@ export default function DepartmentTickets() {
     initialSearch: search,
   })
 
+  // console.log(departmentId, departmentName)
+
   if (meLoading || loading) return <Spinner />
   if (meError) return <p>Error loading user or department: {meError.message}</p>
   if (error) return <p>Error loading tickets: {error.message}</p>

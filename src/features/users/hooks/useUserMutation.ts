@@ -11,7 +11,7 @@ type UserPayload = {
   username: string
   password: string
   role: string[]
-  departmentName: string
+  departmentId: string
 }
 
 export default function useUserMutation(refetch?: () => void) {

@@ -31,7 +31,7 @@ type UpdateTicketProps = {
 
 export default function UpdateTicket({ ticket, onUpdated }: UpdateTicketProps) {
   const [open, setOpen] = useState(false)
-  const [status] = useState(ticket.status)
+  const [status, setStatus] = useState<string>(ticket.status)
   const [file, setFile] = useState<File | null>(null)
   const [updatedBy, setUpdatedBy] = useState('')
   const [remarks, setRemarks] = useState(ticket.remarks || '')
@@ -141,7 +141,7 @@ export default function UpdateTicket({ ticket, onUpdated }: UpdateTicketProps) {
           {/* Status */}
           <div className='space-y-2'>
             <strong>Status</strong>
-            <Select value={status}>
+            <Select value={status} onValueChange={setStatus}>
               <SelectTrigger className='w-full'>
                 <SelectValue placeholder='Select status' />
               </SelectTrigger>

@@ -72,7 +72,7 @@ export default function CreateUser({ onCreated }: CreateUserProps) {
       username: data.username,
       password: data.password,
       role: [data.role],
-      departmentName: data.department,
+      departmentId: data.department,
     })
     form.reset()
   }
