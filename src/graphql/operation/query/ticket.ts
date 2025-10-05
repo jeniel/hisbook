@@ -6,12 +6,14 @@ export const FIND_ALL_TICKETS = gql`
     $page: Int
     $perPage: Int
     $search: String
+    $status: Status
   ) {
     findAllTickets(
       where: $where
       page: $page
       perPage: $perPage
       search: $search
+      status: $status
     ) {
       data {
         createdAt
@@ -58,12 +60,14 @@ export const FIND_ALL_TICKETS_BY_USER = gql`
     $perPage: Int
     $page: Int
     $search: String
+    $status: Status
   ) {
     findTicketsByUser(
       userId: $userId
       perPage: $perPage
       page: $page
       search: $search
+      status: $status
     ) {
       data {
         createdAt
@@ -120,8 +124,8 @@ export const FIND_TICKET_AUDIT_LOGS = gql`
 `
 
 export const FIND_TICKETS_WORKED_BY_USER = gql`
-  query FindTicketsWorkedByUser($userId: String!, $search: String) {
-    findTicketsWorkedByUser(userId: $userId, search: $search) {
+  query FindTicketsWorkedByUser($userId: String!, $search: String, $status: Status) {
+    findTicketsWorkedByUser(userId: $userId, search: $search, status: $status) {
       data {
         subject
         status
@@ -148,8 +152,8 @@ export const FIND_TICKETS_WORKED_BY_USER = gql`
 `
 
 export const FIND_TICKETS_BY_DEPARTMENT = gql`
-  query FindTicketsByDepartment($page: Int, $perPage: Int, $search: String) {
-    findTicketsByDepartment(page: $page, perPage: $perPage, search: $search) {
+  query FindTicketsByDepartment($page: Int, $perPage: Int, $search: String, $status: Status) {
+    findTicketsByDepartment(page: $page, perPage: $perPage, search: $search, status: $status) {
       meta {
         currentPage
         lastPage

@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import Pagination from '@/components/pagination'
 import SearchBar from '@/components/search-bar'
 import Spinner from '@/components/spinner'
+import StatusFilter from '@/components/status-filter'
 import useTicketQuery from '@/features/tickets/hooks/useTicketQuery'
 import AuditLogsContent from '../components/audit-logs'
 import DeleteTicket from '../components/delete-ticket'
@@ -15,6 +16,7 @@ import ViewTicket from '../components/view-ticket'
 
 export default function DepartmentTickets() {
   const [search, setSearch] = useState('')
+  const [status, setStatusState] = useState<string | null>(null)
 
   const {
     departmentId,
@@ -32,6 +34,7 @@ export default function DepartmentTickets() {
     page,
     perPage,
     setPage,
+    setStatus,
   } = useTicketQuery({
     departmentId,
     initialPerPage: 10,
@@ -39,11 +42,23 @@ export default function DepartmentTickets() {
     initialSearch: search,
   })
 
-  // console.log(departmentId, departmentName)
-
   if (meLoading || loading) return <Spinner />
   if (meError) return <p>Error loading user or department: {meError.message}</p>
   if (error) return <p>Error loading tickets: {error.message}</p>
+
+  // Handlers
+  const handleSearch = (value: string) => {
+    setSearch(value)
+    refetch({ page: 1, perPage, search: value, status })
+    setPage(1)
+  }
+
+  const handleStatusChange = (newStatus: string | null) => {
+    setStatusState(newStatus)
+    setStatus(newStatus)
+    refetch({ page: 1, perPage, search, status: newStatus })
+    setPage(1)
+  }
 
   return (
     <>
@@ -68,16 +83,11 @@ export default function DepartmentTickets() {
         </div>
       </div>
 
-      {/* 🔎 Search bar */}
-      <div className='mb-4'>
-        <SearchBar
-          placeholder='Search tickets...'
-          onSearch={(value) => {
-            setSearch(value)
-            refetch({ page: 1, perPage, search: value })
-            setPage(1)
-          }}
-        />
+      {/* 🔎 Search bar + Status filter */}
+      <div className='mb-4 flex items-center gap-2'>
+        <SearchBar placeholder='Search tickets...' onSearch={handleSearch} />
+
+        <StatusFilter value={status} onChange={handleStatusChange} />
       </div>
 
       {/* Tickets List */}
@@ -100,7 +110,7 @@ export default function DepartmentTickets() {
           lastPage={totalPages}
           onPageChange={(newPage) => {
             setPage(newPage)
-            refetch({ page: newPage, perPage, search })
+            refetch({ page: newPage, perPage, search, status })
           }}
         />
       </div>

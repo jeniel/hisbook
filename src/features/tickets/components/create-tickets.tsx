@@ -99,11 +99,8 @@ export default function CreateTickets({ onCreated }: CreateTicketProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button
-          className='flex items-center gap-2 font-semibold'
-          variant='outline'
-        >
-          <TicketPlus className='h-5 w-5 text-green-500' />
+        <Button className='flex items-center gap-2 font-semibold'>
+          <TicketPlus className='h-5 w-5' />
           Create Ticket
         </Button>
       </DialogTrigger>

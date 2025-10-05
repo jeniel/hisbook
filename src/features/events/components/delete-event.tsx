@@ -29,9 +29,9 @@ export default function DeleteEvent({ event, onDeleted }: DeleteEventProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen} modal={false}>
       <DialogTrigger asChild>
-        <Button variant={'outline'} size='sm'>
-          <Trash2 className='text-red-500' />
-        </Button>
+        <Button variant='destructive' size='sm'>
+          <Trash2 />
+        </Button> 
       </DialogTrigger>
 
       <DialogContent className='max-w-sm' aria-describedby={undefined}>

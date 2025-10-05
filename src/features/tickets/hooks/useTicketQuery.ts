@@ -26,6 +26,7 @@ export default function useTicketQuery({
   const [page, setPage] = useState(1)
   const [perPage] = useState(initialPerPage)
   const [search, setSearch] = useState(initialSearch)
+  const [status, setStatus] = useState<string | null>(null)
 
   // Pick the query based on mode
   const query =
@@ -40,10 +41,10 @@ export default function useTicketQuery({
   // Variables
   const variables =
     mode === 'all'
-      ? { page, perPage, search }
+      ? { page, perPage, search, status }
       : mode === 'department'
-        ? { departmentId, page, perPage, search }
-        : { userId, page, perPage, search }
+        ? { departmentId, page, perPage, search, status }
+        : { userId, page, perPage, search, status }
 
   const { data, loading, error, refetch } = useQuery<Query>(query, {
     variables,
@@ -85,6 +86,7 @@ export default function useTicketQuery({
     perPage,
     search,
     setSearch,
+    setStatus,
     setPage,
     refetch,
     totalPages,
