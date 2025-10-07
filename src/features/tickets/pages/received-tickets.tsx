@@ -63,7 +63,7 @@ export default function ReceivedTickets() {
         </h1>
 
         <Link to='/department-ticket'>
-          <Button variant='outline' className='flex items-center gap-2'>
+          <Button variant='destructive' className='flex items-center gap-2'>
             <ArrowLeft className='h-4 w-4' />
             Back
           </Button>

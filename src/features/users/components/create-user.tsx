@@ -206,11 +206,10 @@ export default function CreateUser({ onCreated }: CreateUserProps) {
             {/* Submit */}
             <Button
               type='submit'
-              className='w-full shadow-md'
-              variant={'outline'}
+              className='w-full shadow-sm'
               disabled={creating}
             >
-              <SquareCheckBig className='h-4 w-4 text-green-500' />
+              <SquareCheckBig className='h-4 w-4' />
               {creating ? 'Submitting...' : 'Submit'}
             </Button>
           </form>

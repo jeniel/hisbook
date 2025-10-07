@@ -119,10 +119,9 @@ export default function CreateDepartment({ onCreated }: CreateDepartmentProps) {
             <Button
               type='submit'
               className='w-full shadow-md'
-              variant='outline'
               disabled={creating}
             >
-              <SquareCheckBig className='h-4 w-4 text-green-500' />
+              <SquareCheckBig className='h-4 w-4' />
               {creating ? 'Submitting...' : 'Submit'}
             </Button>
           </form>

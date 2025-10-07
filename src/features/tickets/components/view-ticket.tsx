@@ -58,8 +58,8 @@ export default function ViewTicket({ ticket }: ViewTicketProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen} modal={false}>
       <DialogTrigger asChild>
-        <Button variant='outline' size='sm'>
-          <Eye className='text-green-500' /> View
+        <Button size='sm'>
+          <Eye /> View
         </Button>
       </DialogTrigger>
 

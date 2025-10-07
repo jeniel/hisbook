@@ -71,12 +71,8 @@ export default function DepartmentTickets() {
 
         <div className='flex items-center gap-2'>
           <Link to='/received-tickets'>
-            <Button
-              variant='outline'
-              className='flex items-center gap-2'
-              size='lg'
-            >
-              <TicketIcon className='h-6 w-6 text-green-500' />
+            <Button className='flex items-center gap-2' size='lg'>
+              <TicketIcon className='h-6 w-6' />
               Received Tickets
             </Button>
           </Link>

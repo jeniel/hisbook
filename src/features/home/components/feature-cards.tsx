@@ -45,7 +45,7 @@ export default function Features() {
             to={feature.url}
             className='block hover:no-underline'
           >
-            <Card className='cursor-pointer rounded-2xl border shadow-lg transition hover:scale-105 hover:border-red-500 hover:shadow-xl'>
+            <Card className='cursor-pointer rounded-2xl border shadow-lg transition hover:scale-105 hover:border-blue-500 hover:shadow-xl'>
               <CardHeader className='flex flex-col items-center text-center'>
                 <div className='mb-4'>{feature.icon}</div>
                 <CardTitle className='text-xl'>{feature.title}</CardTitle>

@@ -78,11 +78,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
       {/* Footer with responsive logout */}
       <SidebarFooter>
-        <Button
-          variant='ghost'
-          className='w-full justify-start'
-          onClick={logout}
-        >
+        <Button className='w-full justify-start' onClick={logout}>
           <LogOut className='h-5 w-5' />
           <span className='ml-2 group-data-[collapsible=icon]:hidden'>
             Log out
