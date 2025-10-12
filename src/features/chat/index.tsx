@@ -1,28 +1,50 @@
 import { MessageCircle } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
-import Example from './components/Conversation'
-import Example2 from './components/PromptInput'
+import ChatbotGuidelinesDialog from './components/chat-guidelines'
+import ChatHistory from './components/chat-history'
+import ChatInput from './components/chat-input'
+import { useChat } from './hooks/useChat'
 
-const Chat = () => {
+export default function ChatUI() {
+  // Chat Webhook for n8n
+  const { messages, isLoading, sendMessage } = useChat(
+    import.meta.env.VITE_N8N_CHAT_WEBHOOK
+  )
+
+  // Handle message submission from ChatInput
+  const handleSubmit = async (text: string) => {
+    if (!text.trim()) return
+    await sendMessage(text)
+  }
+
   return (
-    <div>
-      <div className="mb-4">
-        <h1 className='mb-2 flex items-center gap-2 text-3xl font-semibold'>
-          <MessageCircle className='h-10 w-10 text-purple-500' />
-          Chat
-        </h1>
-        <p className='text-muted-foreground text-sm'>
-          Ask Questions of Our AI Agent Here
-        </p>
+    <>
+      <div className='mb-4 flex items-center justify-between'>
+        <div>
+          <h1 className='mb-2 flex items-center gap-2 text-3xl font-semibold'>
+            <MessageCircle className='h-10 w-10 text-purple-500' />
+            Chat
+          </h1>
+          <p className='text-muted-foreground text-sm'>Chat Our AI Assistant</p>
+        </div>
+
+        {/* Chatbot Guidelines Dialog */}
+        <ChatbotGuidelinesDialog initialOpen={true} />
       </div>
-      <Card>
-        <CardContent className="max-w-6xl mx-auto w-full">
-          <Example />
-          <Example2 />
+
+      <Card className='mb-4'>
+        <CardContent>
+          {/* Chat History */}
+          <div className='overflow-y-auto'>
+            <ChatHistory chatHistory={messages} isLoading={isLoading} />
+          </div>
+
+          {/* Chat Input */}
+          <div className='border-t pt-2'>
+            <ChatInput onSubmit={handleSubmit} loading={isLoading} />
+          </div>
         </CardContent>
       </Card>
-    </div>
+    </>
   )
 }
-
-export default Chat

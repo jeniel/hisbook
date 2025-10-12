@@ -56,7 +56,7 @@ export default function ReceivedTickets() {
   return (
     <>
       {/* Header */}
-      <div className='mb-4 flex flex-col items-center justify-between gap-4 md:flex-row'>
+      <div className='mb-4 flex flex-col justify-start gap-4 md:flex-row md:items-center'>
         <h1 className='mb-2 flex items-center gap-2 text-xl font-semibold md:text-3xl'>
           <Ticket className='h-10 w-10 text-green-500' />
           Your Received Tickets

@@ -1,9 +1,9 @@
-import { useEffect } from 'react'
+// import { useEffect } from 'react'
 import Cookies from 'js-cookie'
 import { Outlet } from '@tanstack/react-router'
 // n8n chat imports
-import { createChat } from '@n8n/chat'
-import '@n8n/chat/style.css'
+// import { createChat } from '@n8n/chat'
+// import '@n8n/chat/style.css'
 import { cn } from '@/lib/utils'
 import { SidebarProvider } from '@/components/ui/sidebar'
 import { AppSidebar } from '@/components/layout/app-sidebar'
@@ -17,30 +17,27 @@ interface Props {
 export function AuthenticatedLayout({ children }: Props) {
   const defaultOpen = Cookies.get('sidebar_state') !== 'false'
 
-  useEffect(() => {
-    // only create once, guard against duplicates
-    if (!document.querySelector('.n8n-chat')) {
-      createChat({
-        webhookUrl:
-          'https://n8n.acemcbohol.ph/webhook/2c8aa089-7afd-4b4a-81ba-6931cc3d2fd5/chat',
-        loadPreviousSession: false, // avoids auto-triggering executions
-        initialMessages: [
-          'Hi there! 🏥 ',
-          'My name is 🩺 Pulse. How can I assist you today?',
-        ],
-        i18n: {
-          en: {
-            title: 'Hi there! ❤️',
-            subtitle: "Start a chat. We're here to help you 24/7. 🕕",
-            footer: '',
-            getStarted: 'New Conversation',
-            inputPlaceholder: 'Ask. . .',
-            closeButtonTooltip: '',
-          },
-        },
-      })
-    }
-  }, [])
+  // useEffect(() => {
+  //   const n8nWebhook = import.meta.env.VITE_N8N_CHAT_WEBHOOK
+  //   // only create once, guard against duplicates
+  //   if (!document.querySelector('.n8n-chat')) {
+  //     createChat({
+  //       webhookUrl: n8nWebhook,
+  //       loadPreviousSession: false, // avoids auto-triggering executions
+  //       initialMessages: ['Hi there! 🏥 ', 'How can I assist you today?'],
+  //       i18n: {
+  //         en: {
+  //           title: 'Hi there! ❤️',
+  //           subtitle: "Start a chat. We're here to help you 24/7. 🕕",
+  //           footer: '',
+  //           getStarted: 'New Conversation',
+  //           inputPlaceholder: 'Ask. . .',
+  //           closeButtonTooltip: '',
+  //         },
+  //       },
+  //     })
+  //   }
+  // }, [])
 
   return (
     <SidebarProvider

@@ -22,12 +22,15 @@ export default function UserTickets() {
 
   return (
     <div>
-      <div className='mb-4 flex flex-col items-center justify-between gap-4 md:flex-row'>
+      <div className='mb-4 flex flex-col items-start justify-start gap-4 md:flex-row md:items-center md:justify-between'>
         <div>
-          <h1 className='flex items-center gap-2 text-3xl font-semibold'>
+          <h1 className='flex items-center gap-2 text-3xl font-semibold mb-2'>
             <Ticket className='h-10 w-10 text-green-500' />
             My Tickets
           </h1>
+          <p className='text-muted-foreground text-sm'>
+            Create or View Your Tickets
+          </p>
         </div>
 
         <div>

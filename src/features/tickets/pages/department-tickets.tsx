@@ -63,7 +63,7 @@ export default function DepartmentTickets() {
   return (
     <>
       {/* Header */}
-      <div className='mb-4 flex flex-col items-center justify-between gap-4 md:flex-row'>
+      <div className='mb-4 flex flex-col justify-start gap-4 md:flex-row md:items-center'>
         <h1 className='text-md mb-2 flex items-center gap-2 font-semibold md:text-3xl'>
           <Ticket className='h-10 w-10 text-green-500' />
           {departmentName} Tickets
