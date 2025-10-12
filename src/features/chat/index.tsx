@@ -8,7 +8,7 @@ import { useChat } from './hooks/useChat'
 export default function ChatUI() {
   // Chat Webhook for n8n
   const { messages, isLoading, sendMessage } = useChat(
-    import.meta.env.VITE_N8N_CHAT_WEBHOOK
+    'https://n8n.acemcbohol.ph/webhook/75cc266d-c92c-4ec6-b425-800ac12aa62e/chat'
   )
 
   // Handle message submission from ChatInput
