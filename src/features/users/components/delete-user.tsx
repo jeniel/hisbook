@@ -1,9 +1,5 @@
 import { useState } from 'react'
-import { Mutation } from '@/graphql/codegen/graphql'
-import { DELETE_USER } from '@/graphql/operation/mutation/user'
-import { useMutation } from '@apollo/client'
 import { Trash2 } from 'lucide-react'
-import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -14,6 +10,7 @@ import {
   DialogTrigger,
   DialogFooter,
 } from '@/components/ui/dialog'
+import useUserMutation from '../hooks/useUserMutation'
 
 // Props
 type DeleteUserProps = {
@@ -23,31 +20,22 @@ type DeleteUserProps = {
 
 export default function DeleteUser({ user, onDelete }: DeleteUserProps) {
   const [open, setOpen] = useState(false)
-  const [deleteUserMutation] = useMutation<Mutation>(DELETE_USER)
+  const { deleteUser, deleting } = useUserMutation(onDelete)
 
   const handleDelete = async () => {
-    try {
-      await deleteUserMutation({
-        variables: { deleteUserId: user.id },
-      })
-
-      toast.error('User deleted')
-      if (onDelete) onDelete()
-      setOpen(false)
-    } catch (_error) {
-      toast.error('Failed to delete user')
-    }
+    await deleteUser(user.id)
+    setOpen(false)
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={setOpen} modal={false}>
       <DialogTrigger asChild>
-        <Button variant={'outline'} size='sm'>
-          <Trash2 className='text-red-500' />
+        <Button variant='destructive' size='sm'>
+          <Trash2 />
         </Button>
       </DialogTrigger>
 
-      <DialogContent className='max-w-sm'>
+      <DialogContent className='max-w-sm' aria-describedby={undefined}>
         <DialogHeader>
           <DialogTitle>Delete User</DialogTitle>
           <DialogDescription>
@@ -61,7 +49,9 @@ export default function DeleteUser({ user, onDelete }: DeleteUserProps) {
           <Button variant='outline' onClick={() => setOpen(false)}>
             Cancel
           </Button>
-          <Button onClick={handleDelete}>Delete</Button>
+          <Button onClick={handleDelete} disabled={deleting}>
+            {deleting ? 'Deleting...' : 'Delete'}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

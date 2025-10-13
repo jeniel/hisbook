@@ -21,15 +21,3 @@ export const CENSUS_DATA = gql`
     }
   }
 `
-
-export const CENSUS_TICKET_DATA = gql`
-  query GetTicketData($userId: String!) {
-    getCensusSummary(userId: $userId) {
-      ticketByUserId {
-        status
-        count
-      }
-      totalTicketsByUserId
-    }
-  }
-`

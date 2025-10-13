@@ -1,31 +1,21 @@
-import { useState } from 'react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Mutation } from '@/graphql/codegen/graphql'
-import { CREATE_EVENT } from '@/graphql/operation/mutation/event'
-import { GET_ALL_EVENT } from '@/graphql/operation/query/event'
-import { useMutation } from '@apollo/client'
-import { CalendarPlus, SquareCheckBig } from 'lucide-react'
+import { SquareCheckBig, CalendarPlus } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import useEventsMutation from '../hooks/useEventMutation'
 
-// Validation Schema
 const FormSchema = z.object({
   title: z.string().min(1, { message: 'Title is required' }),
   location: z.string().min(1, { message: 'Location is required' }),
@@ -34,14 +24,12 @@ const FormSchema = z.object({
   detailsUrl: z.string().optional().or(z.literal('')),
 })
 
-export default function CreateEvent() {
-  const [open, setOpen] = useState(false)
+type CreateEventProps = {
+  onCreated?: () => void
+}
 
-  const [createEvent] = useMutation<Mutation>(CREATE_EVENT, {
-    refetchQueries: [GET_ALL_EVENT],
-    awaitRefetchQueries: true,
-  })
-
+export default function CreateEvent({ onCreated }: CreateEventProps) {
+  const { createEvent, creating } = useEventsMutation(onCreated)
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -61,35 +49,25 @@ export default function CreateEvent() {
         detailsUrl: data.detailsUrl || undefined,
       }
 
-      const res = await createEvent({ variables: { payload } })
-
-      toast.success(res.data?.createEvent?.message ?? 'Event created')
+      await createEvent(payload)
       form.reset()
-      setOpen(false)
     } catch {
       toast.error('Failed to create Event')
     }
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button className='flex items-center gap-2' variant={'outline'}>
-          <CalendarPlus className='h-5 w-5 text-red-500' />
-          Create
-        </Button>
-      </DialogTrigger>
-
-      <DialogContent className='max-w-2xl'>
-        <DialogHeader>
-          <DialogTitle>Create New Event</DialogTitle>
-        </DialogHeader>
-
+    <Card className='shadow-md'>
+      <CardHeader>
+        <CardTitle className='flex items-center gap-2'>
+          <CalendarPlus className='text-primary h-6 w-6' />
+          Create New Event
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className='grid grid-cols-1 gap-6 md:grid-cols-2'
-          >
+          <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
+            {/* Title */}
             <FormField
               control={form.control}
               name='title'
@@ -97,20 +75,14 @@ export default function CreateEvent() {
                 <FormItem>
                   <FormLabel>Title</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder='CHRISTMAS PARTY'
-                      {...field}
-                      value={field.value?.toUpperCase() || ''}
-                      onChange={(e) =>
-                        field.onChange(e.target.value.toUpperCase())
-                      }
-                      className='uppercase'
-                    />
+                    <Input placeholder='Christmas Party' {...field} />
                   </FormControl>
+                  <FormMessage /> {/* ✅ Shows "Title is required" */}
                 </FormItem>
               )}
             />
 
+            {/* Location */}
             <FormField
               control={form.control}
               name='location'
@@ -118,20 +90,14 @@ export default function CreateEvent() {
                 <FormItem>
                   <FormLabel>Location</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder='ACE'
-                      {...field}
-                      value={field.value?.toUpperCase() || ''}
-                      onChange={(e) =>
-                        field.onChange(e.target.value.toUpperCase())
-                      }
-                      className='uppercase'
-                    />
+                    <Input placeholder='ACE' {...field} />
                   </FormControl>
+                  <FormMessage /> {/* ✅ Shows "Location is required" */}
                 </FormItem>
               )}
             />
 
+            {/* Start Date */}
             <FormField
               control={form.control}
               name='startDate'
@@ -141,10 +107,12 @@ export default function CreateEvent() {
                   <FormControl>
                     <Input type='date' {...field} />
                   </FormControl>
+                  <FormMessage /> {/* ✅ Shows "Start Date is required" */}
                 </FormItem>
               )}
             />
 
+            {/* End Date */}
             <FormField
               control={form.control}
               name='endDate'
@@ -158,11 +126,12 @@ export default function CreateEvent() {
               )}
             />
 
+            {/* Details URL */}
             <FormField
               control={form.control}
               name='detailsUrl'
               render={({ field }) => (
-                <FormItem className='md:col-span-2'>
+                <FormItem>
                   <FormLabel>Details URL (Optional)</FormLabel>
                   <FormControl>
                     <Input
@@ -175,15 +144,17 @@ export default function CreateEvent() {
               )}
             />
 
-            <div className='md:col-span-2'>
-              <Button variant='outline' type='submit' className='shadow-md'>
-                <SquareCheckBig className='mr-2 text-green-500' />
-                Submit
-              </Button>
-            </div>
+            <Button
+              type='submit'
+              className='w-full shadow-md'
+              disabled={creating}
+            >
+              <SquareCheckBig className='h-4 w-4' />
+              {creating ? 'Submitting...' : 'Submit'}
+            </Button>
           </form>
         </Form>
-      </DialogContent>
-    </Dialog>
+      </CardContent>
+    </Card>
   )
 }

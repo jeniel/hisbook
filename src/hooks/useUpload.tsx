@@ -43,6 +43,7 @@ export const useUpload = () => {
         message: data.message,
         url: data.url,
       }
+      
     } catch (error: any) {
       setError(error.message || 'Unknown error')
       return { success: false, message: error.message || 'Unknown error' }

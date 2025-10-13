@@ -1,8 +1,20 @@
 import { gql } from '@apollo/client'
 
 export const FIND_ALL_TICKETS = gql`
-  query FindAllTickets($where: TicketWhereInput, $page: Int, $perPage: Int) {
-    findAllTickets(where: $where, page: $page, perPage: $perPage) {
+  query FindAllTickets(
+    $where: TicketWhereInput
+    $page: Int
+    $perPage: Int
+    $search: String
+    $status: Status
+  ) {
+    findAllTickets(
+      where: $where
+      page: $page
+      perPage: $perPage
+      search: $search
+      status: $status
+    ) {
       data {
         createdAt
         createdBy {
@@ -43,8 +55,20 @@ export const FIND_ALL_TICKETS = gql`
 `
 
 export const FIND_ALL_TICKETS_BY_USER = gql`
-  query FindTicketsByUser($userId: String!, $perPage: Int, $page: Int) {
-    findTicketsByUser(userId: $userId, perPage: $perPage, page: $page) {
+  query FindTicketsByUser(
+    $userId: String!
+    $perPage: Int
+    $page: Int
+    $search: String
+    $status: Status
+  ) {
+    findTicketsByUser(
+      userId: $userId
+      perPage: $perPage
+      page: $page
+      search: $search
+      status: $status
+    ) {
       data {
         createdAt
         createdBy {
@@ -60,6 +84,7 @@ export const FIND_ALL_TICKETS_BY_USER = gql`
         subject
         statusFormatted
         remarks
+        message
         missedAt
         screenshot
         status
@@ -82,6 +107,7 @@ export const FIND_ALL_TICKETS_BY_USER = gql`
     }
   }
 `
+
 export const FIND_TICKET_AUDIT_LOGS = gql`
   query FindTicketLogs($findTicketbyIdId: String!) {
     findTicketbyID(id: $findTicketbyIdId) {
@@ -98,8 +124,8 @@ export const FIND_TICKET_AUDIT_LOGS = gql`
 `
 
 export const FIND_TICKETS_WORKED_BY_USER = gql`
-  query FindTicketsWorkedByUser($userId: String!) {
-    findTicketsWorkedByUser(userId: $userId) {
+  query FindTicketsWorkedByUser($userId: String!, $search: String, $status: Status) {
+    findTicketsWorkedByUser(userId: $userId, search: $search, status: $status) {
       data {
         subject
         status
@@ -126,8 +152,8 @@ export const FIND_TICKETS_WORKED_BY_USER = gql`
 `
 
 export const FIND_TICKETS_BY_DEPARTMENT = gql`
-  query FindTicketsByDepartment($page: Int, $perPage: Int, $search: String) {
-    findTicketsByDepartment(page: $page, perPage: $perPage, search: $search) {
+  query FindTicketsByDepartment($page: Int, $perPage: Int, $search: String, $status: Status) {
+    findTicketsByDepartment(page: $page, perPage: $perPage, search: $search, status: $status) {
       meta {
         currentPage
         lastPage

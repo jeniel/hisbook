@@ -1,13 +1,13 @@
-import { Link } from '@tanstack/react-router'
 import { Ticket } from 'lucide-react'
-import { useCensus } from '@/hooks/useCensus'
-import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+import { useCensus } from '@/features/dashboard/hooks/useCensus'
 
 const statusColors: Record<string, string> = {
   Approved: 'text-yellow-400',
   Pending: 'text-blue-400',
   Completed: 'text-green-400',
+  OnHold: 'text-purple-400',
+  InProgess: 'text-red-400',
 }
 
 export default function TicketsOverview({
@@ -26,16 +26,11 @@ export default function TicketsOverview({
 
   return (
     <Card>
-      <CardHeader className='flex flex-row items-center justify-between'>
+      <CardHeader>
         <CardTitle className='flex flex-row items-center gap-2'>
           <Ticket className='h-6 w-6 text-green-500' />
           <p className='text-sm md:text-lg'>Tickets Overview by Status</p>
         </CardTitle>
-        <Link to='/all-ticket'>
-          <Button variant='outline'>
-            <Ticket className='h-6 w-6 text-green-500' /> Go To Tickets
-          </Button>
-        </Link>
       </CardHeader>
       <CardContent>
         <div className='grid grid-cols-1 gap-4 md:grid-cols-3'>

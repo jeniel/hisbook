@@ -1,103 +1,57 @@
-import { useState } from 'react'
-import { Query } from '@/graphql/codegen/graphql'
-import { FIND_ALL_DEPARTMENTS } from '@/graphql/operation/query/department'
-import { useQuery } from '@apollo/client'
-import { Hotel } from 'lucide-react'
+import { Department } from '@/graphql/codegen/graphql'
 import { Card, CardContent } from '@/components/ui/card'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
-import Pagination from '@/components/pagination'
-import Spinner from '@/components/spinner'
-import CreateDepartment from './create-department'
 import DeleteDepartment from './delete-department'
 import EditDepartment from './edit-department'
 
-export default function ViewDepartments() {
-  const [page, setPage] = useState(1)
-  const perPage = 10
+interface DepartmentListProps {
+  departments: Department[]
+  refetch: () => void
+}
 
-  const { data, loading, error, refetch } = useQuery<Query>(
-    FIND_ALL_DEPARTMENTS,
-    {
-      variables: { page, perPage },
-      fetchPolicy: 'cache-and-network',
-    }
-  )
-
-  if (loading) return <Spinner />
-  if (error) return <p>Error: {error.message}</p>
-
-  const departments = data?.findAllDepartments?.data || []
-  const meta = data?.findAllDepartments?.meta
-
-  const handlePageChange = (newPage: number) => {
-    setPage(newPage)
-    refetch({ page: newPage, perPage })
-  }
-
+export default function DepartmentList({
+  departments,
+  refetch,
+}: DepartmentListProps) {
   return (
-    <Card>
-      <CardContent>
-        <div className='mb-4 flex flex-row items-center justify-between'>
-          <h1 className='mb-2 flex items-center gap-2 text-xl font-semibold'>
-            <Hotel className='h-6 w-6 text-purple-500' />
-            Departments
-          </h1>
-          <CreateDepartment />
+    <div className='space-y-6'>
+      {departments.length === 0 ? (
+        <div className='text-muted-foreground text-center'>
+          No Departments Found
         </div>
+      ) : (
+        <div className='space-y-4'>
+          {departments.map((department) => (
+            <Card key={department.id} className='shadow-sm'>
+              <CardContent>
+                <div className='flex flex-col gap-3 space-y-0 sm:flex-row sm:items-center sm:justify-between'>
+                  <div className='flex items-center gap-2 text-lg font-semibold'>
+                    {department.name}
+                    {department.isSupport && (
+                      <span className='rounded-full bg-purple-100 px-2 py-0.5 text-xs font-medium text-purple-700'>
+                        Support
+                      </span>
+                    )}
+                  </div>
 
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>#</TableHead>
-              <TableHead>Department</TableHead>
-              <TableHead>Description</TableHead>
-              <TableHead>Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {departments.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={4} className='text-center'>
-                  No departments found
-                </TableCell>
-              </TableRow>
-            ) : (
-              departments.map((department, index) => (
-                <TableRow key={department.id}>
-                  <TableCell>{index + 1 + (page - 1) * perPage}</TableCell>
-                  <TableCell>{department.name}</TableCell>
-                  <TableCell>{department.description}</TableCell>
-                  <TableCell className='flex flex-row items-center space-x-2'>
+                  <div className='flex flex-wrap gap-2 sm:justify-end'>
                     <EditDepartment
                       department={department}
-                      onUpdated={() => refetch()}
+                      onUpdated={refetch}
                     />
                     <DeleteDepartment
                       department={department}
-                      onDelete={() => refetch()}
+                      onDeleted={refetch}
                     />
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-
-        {meta && (
-          <Pagination
-            currentPage={meta.currentPage}
-            lastPage={meta.lastPage}
-            onPageChange={handlePageChange}
-          />
-        )}
-      </CardContent>
-    </Card>
+                  </div>
+                </div>
+                <div className='text-muted-foreground space-y-1 text-sm'>
+                  {department.description || 'No description provided.'}
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
+    </div>
   )
 }

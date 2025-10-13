@@ -1,7 +1,6 @@
-import Events from '@/components/events'
+import Events from './components/events'
 import Features from './components/feature-cards'
 import Hero from './components/hero'
-import HomeTickets from './components/home-tickets'
 
 export default function HomePage() {
   return (
@@ -10,7 +9,6 @@ export default function HomePage() {
         <Hero />
         <Features />
         <Events />
-        <HomeTickets />
       </div>
     </div>
   )

@@ -247,8 +247,8 @@ export default function EditProfile() {
               </div>
             </div>
 
-            <Button variant='outline' type='submit' className='shadow-md'>
-              <SquareCheckBig className='text-green-500' />
+            <Button type='submit' className='shadow-md'>
+              <SquareCheckBig/>
               Update Profile
             </Button>
           </form>

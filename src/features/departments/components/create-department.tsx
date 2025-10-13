@@ -1,21 +1,10 @@
-import { useState } from 'react'
 import { z } from 'zod'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Mutation } from '@/graphql/codegen/graphql'
-import { CREATE_DEPARTMENT } from '@/graphql/operation/mutation/department'
-import { FIND_ALL_DEPARTMENTS } from '@/graphql/operation/query/department'
-import { useMutation } from '@apollo/client'
 import { Building2, SquareCheckBig } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   Form,
   FormControl,
@@ -24,68 +13,55 @@ import {
   FormLabel,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { Switch } from '@/components/ui/switch'
+import useDepartmentsMutation from '../hooks/useDepartmentsMutation'
 
-// Input Validation
+// ✅ Schema
 const FormSchema = z.object({
   department: z.string().min(1, { message: 'Department is required' }),
   description: z.string().min(1, { message: 'Description is required' }),
+  isSupport: z.boolean(),
 })
 
-export default function CreateDepartment() {
-  const [open, setOpen] = useState(false)
+type CreateDepartmentProps = {
+  onCreated?: () => void
+}
 
-  const [createDepartment] = useMutation<Mutation>(CREATE_DEPARTMENT, {
-    refetchQueries: [FIND_ALL_DEPARTMENTS], // After Submiting Refetch
-    awaitRefetchQueries: true,
-  })
+export default function CreateDepartment({ onCreated }: CreateDepartmentProps) {
+  const { createDepartment, creating } = useDepartmentsMutation(onCreated)
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-    defaultValues: {
-      department: '',
-      description: '',
-    },
+    defaultValues: { department: '', description: '', isSupport: false },
   })
 
-  // Submit Functionality
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     try {
-      const res = await createDepartment({
-        variables: {
-          payload: {
-            name: data.department,
-            description: data.description,
-          },
-        },
-      })
+      const payload = {
+        name: data.department,
+        description: data.description,
+        isSupport: data.isSupport,
+      }
 
-      toast.success(res.data?.createDepartment?.message ?? 'Department created')
+      await createDepartment(payload)
       form.reset()
-      setOpen(false) // close modal after success
-    } catch (_error) {
-      toast.error('Failed to Create Department')
+    } catch {
+      toast.error('Failed to create Department')
     }
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button
-          className='flex items-center gap-2 font-semibold'
-          variant={'outline'}
-        >
-          <Building2 className='h-5 w-5 text-purple-500' />
-          Create
-        </Button>
-      </DialogTrigger>
-
-      <DialogContent className='sm:max-w-lg'>
-        <DialogHeader>
-          <DialogTitle>Create New Department</DialogTitle>
-        </DialogHeader>
-
+    <Card className='shadow-sm'>
+      <CardHeader>
+        <CardTitle className='flex items-center gap-2'>
+          <Building2 className='h-6 w-6 text-purple-500' />
+          Create New Department
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
+            {/* Department Name */}
             <FormField
               control={form.control}
               name='department'
@@ -93,16 +69,13 @@ export default function CreateDepartment() {
                 <FormItem>
                   <FormLabel>Department</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder='MIS'
-                      {...field}
-                      value={field.value || ''}
-                    />
+                    <Input placeholder='MIS' {...field} />
                   </FormControl>
                 </FormItem>
               )}
             />
 
+            {/* Description */}
             <FormField
               control={form.control}
               name='description'
@@ -113,27 +86,47 @@ export default function CreateDepartment() {
                     <Input
                       placeholder='MANAGEMENT INFORMATION SYSTEM'
                       {...field}
-                      value={field.value || ''}
                     />
                   </FormControl>
                 </FormItem>
               )}
             />
 
-            {/* Submit button spans full width */}
-            <div className='flex justify-end md:col-span-2'>
-              <Button
-                type='submit'
-                className='flex items-center gap-2'
-                variant={'outline'}
-              >
-                <SquareCheckBig className='h-4 w-4 text-green-500' />
-                Submit
-              </Button>
-            </div>
+            {/* Is Support */}
+            <FormField
+              control={form.control}
+              name='isSupport'
+              render={() => (
+                <FormItem className='flex items-center justify-between'>
+                  <FormLabel>Is Support Department?</FormLabel>
+                  <FormControl>
+                    <Controller
+                      control={form.control}
+                      name='isSupport'
+                      render={({ field: switchField }) => (
+                        <Switch
+                          checked={switchField.value}
+                          onCheckedChange={switchField.onChange}
+                        />
+                      )}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+
+            {/* Submit Button */}
+            <Button
+              type='submit'
+              className='w-full shadow-md'
+              disabled={creating}
+            >
+              <SquareCheckBig className='h-4 w-4' />
+              {creating ? 'Submitting...' : 'Submit'}
+            </Button>
           </form>
         </Form>
-      </DialogContent>
-    </Dialog>
+      </CardContent>
+    </Card>
   )
 }

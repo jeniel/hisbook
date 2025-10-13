@@ -1,6 +1,6 @@
-import { Ticket, Hotel, UserPen, FileText } from 'lucide-react'
-import { useCensus } from '@/hooks/useCensus'
+import { Ticket, Hotel, UserPen } from 'lucide-react'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+import { useCensus } from '@/features/dashboard/hooks/useCensus'
 
 export default function Summary({
   summary,
@@ -29,17 +29,10 @@ export default function Summary({
       icon: <UserPen className='h-10 w-10 text-blue-500' />,
       color: 'text-blue-400',
     },
-    {
-      title: 'Posts',
-      description: 'Total posts',
-      value: summary?.totalPosts,
-      icon: <FileText className='h-10 w-10 text-yellow-500' />,
-      color: 'text-yellow-400',
-    },
   ]
 
   return (
-    <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4'>
+    <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3'>
       {cards.map((card) => (
         <Card key={card.title}>
           <CardHeader className='flex flex-row items-center justify-between'>

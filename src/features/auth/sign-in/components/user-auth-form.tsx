@@ -8,6 +8,7 @@ import { Mutation } from '@/graphql/codegen/graphql'
 import { SIGN_IN } from '@/graphql/operation/mutation/user'
 import { useMutation } from '@apollo/client'
 import _ from 'lodash'
+import { LogIn } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import {
@@ -76,7 +77,12 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       },
       onError: (error) => {
         console.log('error ===== >', error.message)
-        // Handle login error appropriately
+
+        // If you want a global error not tied to a field:
+        form.setError('root', {
+          type: 'server',
+          message: 'Invalid username or password',
+        })
       },
     })
   }
@@ -114,7 +120,16 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             </FormItem>
           )}
         />
-        <Button className='mt-2' disabled={loading}>
+
+        {/* Global error message */}
+        {form.formState.errors.root && (
+          <p className='text-sm text-red-500'>
+            {form.formState.errors.root.message}
+          </p>
+        )}
+
+        <Button className='mt-2 flex items-center gap-2' disabled={loading}>
+          <LogIn className='h-4 w-4' />
           Login
         </Button>
       </form>

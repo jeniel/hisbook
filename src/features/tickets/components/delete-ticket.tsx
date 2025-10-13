@@ -1,7 +1,5 @@
 import { useState } from 'react'
 import { Trash2 } from 'lucide-react'
-import { toast } from 'sonner'
-import { useTicket } from '@/hooks/useTicket'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -12,6 +10,7 @@ import {
   DialogTrigger,
   DialogFooter,
 } from '@/components/ui/dialog'
+import useTicketMutation from '@/features/tickets/hooks/useTicketMutation'
 
 type DeleteTicketProps = {
   ticketId: string
@@ -23,29 +22,25 @@ export default function DeleteTicket({
   onDelete,
 }: DeleteTicketProps) {
   const [open, setOpen] = useState(false)
-  const { deleteTicket } = useTicket({}) // only use mutation here
+  const { deleteTicket, deleting } = useTicketMutation(onDelete)
 
   const handleDelete = async () => {
-    try {
-      await deleteTicket(ticketId)
-
-      toast.success(`Ticket successfully deleted`)
-      if (onDelete) onDelete() // trigger parent refetch
-      setOpen(false)
-    } catch (_error) {
-      toast.error('Failed to delete ticket')
-    }
+    await deleteTicket(ticketId)
+    setOpen(false)
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={setOpen} modal={false}>
       <DialogTrigger asChild>
-        <Button variant='outline' size='sm'>
-          <Trash2 className='text-red-500' />
+        <Button variant='destructive' size='sm'>
+          <Trash2 />
         </Button>
       </DialogTrigger>
 
-      <DialogContent className='max-w-sm'>
+      <DialogContent
+        className='max-h-[90vh] w-full max-w-lg overflow-y-auto'
+        aria-describedby={undefined}
+      >
         <DialogHeader>
           <DialogTitle>Delete Ticket</DialogTitle>
           <DialogDescription>
@@ -57,8 +52,12 @@ export default function DeleteTicket({
           <Button variant='outline' onClick={() => setOpen(false)}>
             Cancel
           </Button>
-          <Button onClick={handleDelete} className='bg-red-600 text-white'>
-            Delete
+          <Button
+            onClick={handleDelete}
+            disabled={deleting}
+            className='bg-red-600 text-white'
+          >
+            {deleting ? 'Deleting...' : 'Delete'}
           </Button>
         </DialogFooter>
       </DialogContent>

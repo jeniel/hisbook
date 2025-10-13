@@ -1,5 +1,11 @@
 import { Link } from '@tanstack/react-router'
-import { CalendarCheck, FilePlus, Star, User } from 'lucide-react'
+import {
+  CalendarCheck,
+  FilePlus,
+  MessageCircle,
+  Star,
+  User,
+} from 'lucide-react'
 import {
   Card,
   CardHeader,
@@ -10,13 +16,6 @@ import {
 export default function Features() {
   const features = [
     {
-      icon: <User className='h-8 w-8 text-blue-600' />,
-      title: 'Profile',
-      url: '/profile',
-      description:
-        'Easily update your personal information and keep it up to date.',
-    },
-    {
       icon: <CalendarCheck className='h-8 w-8 text-red-600' />,
       title: 'Attendance',
       url: '/attendance',
@@ -24,11 +23,24 @@ export default function Features() {
         'Check and track your daily attendance records in real time.',
     },
     {
+      icon: <MessageCircle className='h-8 w-8 text-purple-600' />,
+      title: 'Chat',
+      url: '/chat',
+      description: 'Chat with our AI Assistan named "ACE-istant" ',
+    },
+    {
       icon: <FilePlus className='h-8 w-8 text-green-600' />,
       title: 'Tickets',
-      url: '/tickets',
+      url: '/user-tickets',
       description:
         'Create tickets or request IT, Engineering, or Maintenance services.',
+    },
+    {
+      icon: <User className='h-8 w-8 text-blue-600' />,
+      title: 'Profile',
+      url: '/profile',
+      description:
+        'Easily update your personal information and keep it up to date.',
     },
   ]
 
@@ -45,7 +57,7 @@ export default function Features() {
             to={feature.url}
             className='block hover:no-underline'
           >
-            <Card className='cursor-pointer rounded-2xl border shadow-lg transition hover:scale-105 hover:border-red-500 hover:shadow-xl'>
+            <Card className='h-full cursor-pointer rounded-2xl border shadow-lg transition hover:scale-105 hover:border-blue-500 hover:shadow-xl'>
               <CardHeader className='flex flex-col items-center text-center'>
                 <div className='mb-4'>{feature.icon}</div>
                 <CardTitle className='text-xl'>{feature.title}</CardTitle>
