@@ -43,12 +43,21 @@ export default function ListView({ tickets, renderActions }: ListViewProps) {
                         {ticket.statusFormatted || '—'}
                       </span>
                     </div>
+                    <div className='mt-1 flex flex-wrap items-center gap-2 text-sm'>
+                      <p className='flex flex-wrap items-center'>
+                        <User className='mr-1 h-4 w-4 shrink-0 text-blue-500' />
+                        {ticket.createdBy?.profile
+                          ? `${ticket.createdBy?.profile.firstName} ${ticket.createdBy?.profile.lastName}`
+                          : 'Unknown'}
+                      </p>
+
+                      <p className='flex flex-wrap items-center'>
+                        / @{ticket.createdBy.username}
+                      </p>
+                    </div>
+
                     <p className='mt-1 flex flex-wrap items-center text-sm'>
-                      <User className='mr-1 h-4 w-4 shrink-0 text-blue-500' />
-                      {ticket.createdBy?.profile
-                        ? `${ticket.createdBy.profile.firstName} ${ticket.createdBy.profile.lastName}`
-                        : ticket.createdBy?.username || 'Unknown'}
-                      <Calendar className='mr-1 ml-3 h-4 w-4 shrink-0 text-red-500' />
+                      <Calendar className='mr-1 h-4 w-4 shrink-0 text-red-500' />
                       {formatDate(ticket.createdAt)}
                     </p>
                   </div>

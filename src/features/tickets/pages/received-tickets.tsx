@@ -56,18 +56,29 @@ export default function ReceivedTickets() {
   return (
     <>
       {/* Header */}
-      <div className='mb-4 flex flex-col justify-start gap-4 md:flex-row md:items-center'>
-        <h1 className='mb-2 flex items-center gap-2 text-xl font-semibold md:text-3xl'>
-          <Ticket className='h-10 w-10 text-green-500' />
-          Your Received Tickets
-        </h1>
+      <div className='mb-4 flex flex-col items-start justify-start gap-4 md:flex-row md:items-center md:justify-between'>
+        <div>
+          <h1 className='mb-2 flex items-center gap-2 text-3xl font-semibold'>
+            <Ticket className='h-10 w-10 text-green-500' />
+            Your Received Tickets
+          </h1>
+          <p className='text-muted-foreground text-sm'>
+            View all tickets received by your department
+          </p>
+        </div>
 
-        <Link to='/department-ticket'>
-          <Button variant='destructive' className='flex items-center gap-2'>
-            <ArrowLeft className='h-4 w-4' />
-            Back
-          </Button>
-        </Link>
+        <div>
+          <Link to='/department-ticket'>
+            <Button
+              variant='destructive'
+              className='flex items-center gap-2'
+              size='lg'
+            >
+              <ArrowLeft className='h-4 w-4' />
+              Back
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {/* 🔎 Search and Filter */}

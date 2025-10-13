@@ -85,7 +85,8 @@ export default function ViewTicket({ ticket }: ViewTicketProps) {
               </strong>{' '}
               {ticket.createdBy?.profile
                 ? `${ticket.createdBy.profile.firstName} ${ticket.createdBy.profile.lastName}`
-                : '-'}
+                : '-'}{' '}
+              /{' '}{ticket.createdBy?.username}
             </p>
             <p>
               <strong>

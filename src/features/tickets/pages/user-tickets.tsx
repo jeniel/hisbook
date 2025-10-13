@@ -21,10 +21,10 @@ export default function UserTickets() {
   if (error) return <p className='text-red-500'>Error: {error.message}</p>
 
   return (
-    <div>
+    <>
       <div className='mb-4 flex flex-col items-start justify-start gap-4 md:flex-row md:items-center md:justify-between'>
         <div>
-          <h1 className='flex items-center gap-2 text-3xl font-semibold mb-2'>
+          <h1 className='mb-2 flex items-center gap-2 text-3xl font-semibold'>
             <Ticket className='h-10 w-10 text-green-500' />
             My Tickets
           </h1>
@@ -50,6 +50,6 @@ export default function UserTickets() {
           onPageChange={setPage}
         />
       </div>
-    </div>
+    </>
   )
 }

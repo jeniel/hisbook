@@ -63,11 +63,16 @@ export default function DepartmentTickets() {
   return (
     <>
       {/* Header */}
-      <div className='mb-4 flex flex-col justify-start gap-4 md:flex-row md:items-center'>
-        <h1 className='text-md mb-2 flex items-center gap-2 font-semibold md:text-3xl'>
-          <Ticket className='h-10 w-10 text-green-500' />
-          {departmentName} Tickets
-        </h1>
+      <div className='mb-4 flex flex-col items-start justify-start gap-4 md:flex-row md:items-center md:justify-between'>
+        <div>
+          <h1 className='mb-2 flex items-center gap-2 text-3xl font-semibold'>
+            <Ticket className='h-10 w-10 text-green-500' />
+            {departmentName} Tickets
+          </h1>
+          <p className='text-muted-foreground text-sm'>
+            View and Manage Department Tickets
+          </p>
+        </div>
 
         <div className='flex items-center gap-2'>
           <Link to='/received-tickets'>
