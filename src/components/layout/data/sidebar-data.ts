@@ -1,7 +1,5 @@
 import {
   IconLayoutDashboard,
-  IconUsers,
-  IconBriefcase,
   IconUserCog,
   IconLayoutBoard,
   IconCalendarWeek,
@@ -9,6 +7,8 @@ import {
   IconHome,
   IconDeviceDesktop,
   IconMessage,
+  IconBriefcase,
+  IconUsers,
 } from '@tabler/icons-react'
 import { type SidebarData } from '../types'
 
@@ -36,11 +36,14 @@ export const sidebarData: SidebarData = {
       ],
     },
     {
+      title: 'Settings',
+      items: [{ title: 'Events', url: '/events', icon: IconCalendarWeek }],
+    },
+    {
       title: 'Config',
       items: [
         { title: 'Users', url: '/users', icon: IconUsers },
         { title: 'Departments', url: '/departments', icon: IconBriefcase },
-        { title: 'Events', url: '/events', icon: IconCalendarWeek },
       ],
     },
   ],
