@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Calendar, RefreshCw } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import {
   Select,
   SelectContent,
@@ -54,13 +54,12 @@ export function CutoffSelector({
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle className='flex items-center gap-2'>
+      <CardContent className='space-y-4'>
+        <h2 className='flex items-center gap-2'>
           <Calendar className='h-8 w-8 text-red-500' />
           <p className='text-xl'>Select Cutoff Period</p>
-        </CardTitle>
-      </CardHeader>
-      <CardContent className='space-y-4'>
+        </h2>
+
         <div className='space-y-2'>
           <label className='text-sm font-medium'>Choose Period</label>
           <Select
@@ -83,10 +82,6 @@ export function CutoffSelector({
                 >
                   <div className='flex flex-col'>
                     <span className='font-medium'>{period.label}</span>
-                    <span className='text-muted-foreground text-xs'>
-                      {new Date(period.startDate).toLocaleDateString()} -{' '}
-                      {new Date(period.endDate).toLocaleDateString()}
-                    </span>
                   </div>
                 </SelectItem>
               ))}
