@@ -30,7 +30,7 @@ const AttendancePage = () => {
   }
 
   return (
-    <div className='space-y-4'>
+    <div>
       <div className='mb-4'>
         <div>
           <h1 className='mb-2 flex items-center gap-2 text-3xl font-semibold'>
@@ -43,23 +43,23 @@ const AttendancePage = () => {
         </div>
       </div>
 
-      <div className='space-y-4'>
+      <div className="space-y-4">
           {/* User Search Section */}
           <Information user={user} fetchUser={fetchUser} />
 
-      {/* Cutoff Period Selector */}
-      {hasUser && (
-        <CutoffSelector
-          onPeriodSelect={handlePeriodSelect}
-          loading={loadingAttendance}
-          disabled={!canFetchAttendance}
-        />
-      )}
+        {/* Cutoff Period Selector */}
+        {hasUser && (
+          <CutoffSelector
+            onPeriodSelect={handlePeriodSelect}
+            loading={loadingAttendance}
+            disabled={!canFetchAttendance}
+          />
+        )}
 
-      {/* Loading State */}
-      {loadingAttendance && (
-        <LoadingCard message='Fetching attendance records...' />
-      )}
+        {/* Loading State */}
+        {loadingAttendance && (
+          <LoadingCard message='Fetching attendance records...' />
+        )}
 
         {/* Attendance Results */}
         {hasAttendanceData && attendanceData && selectedPeriod && user && (
@@ -68,13 +68,13 @@ const AttendancePage = () => {
               <TabsTrigger value='summary'>Summary</TabsTrigger>
               <TabsTrigger value='details'>Daily Details</TabsTrigger>
             </TabsList>
-            <TabsContent value='summary' className='mt-4'>
+            <TabsContent value='summary' className='mt-2'>
               <AttendanceSummary
                 attendanceData={attendanceData}
                 periodLabel={selectedPeriod.label}
               />
             </TabsContent>
-            <TabsContent value='details' className='mt-4'>
+            <TabsContent value='details' className='mt-2'>
               <AttendanceCard
                 attendanceData={attendanceData}
                 periodLabel={selectedPeriod.label}

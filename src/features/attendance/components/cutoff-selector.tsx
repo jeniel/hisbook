@@ -60,7 +60,15 @@ export function CutoffSelector({
           <p className='text-xl'>Select Cutoff Period</p>
         </h2>
 
-        <div className='space-y-2'>
+        <div className='text-muted-foreground text-xs'>
+          <p>
+            <strong>Cutoff Info:</strong>
+          </p>
+          <p>• 1st Cutoff: 11th - 25th of the month</p>
+          <p>• 2nd Cutoff: 26th - 10th of next month</p>
+        </div>
+
+        <div>
           <label className='text-sm font-medium'>Choose Period</label>
           <Select
             value={
@@ -89,7 +97,7 @@ export function CutoffSelector({
           </Select>
         </div>
 
-        {selectedPeriod && (
+        {/* {selectedPeriod && (
           <div className='rounded-md border border-blue-200 bg-blue-50 p-3 dark:border-blue-800 dark:bg-zinc-900'>
             <div className='text-sm'>
               <p className='font-medium'>{selectedPeriod.label}</p>
@@ -111,7 +119,7 @@ export function CutoffSelector({
               </p>
             </div>
           </div>
-        )}
+        )} */}
 
         <div className='flex flex-col gap-2 md:flex-row'>
           <Button
@@ -138,14 +146,6 @@ export function CutoffSelector({
               </>
             )}
           </Button>
-        </div>
-
-        <div className='text-muted-foreground text-xs'>
-          <p>
-            <strong>Cutoff Info:</strong>
-          </p>
-          <p>• 1st Cutoff: 11th - 25th of the month</p>
-          <p>• 2nd Cutoff: 26th - 10th of next month</p>
         </div>
       </CardContent>
     </Card>

@@ -140,7 +140,7 @@ export function AttendanceSummary({
   }
 
   return (
-    <div className='space-y-6'>
+    <div className='space-y-4'>
       {/* Main Overview */}
       <Card>
         <CardHeader>
