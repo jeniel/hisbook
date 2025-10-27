@@ -1,9 +1,10 @@
+import { Event } from '@/graphql/codegen/graphql'
 import { MapPin, Calendar, ExternalLink } from 'lucide-react'
+import { formatDate } from '@/utils/formatDate'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import DeleteEvent from './delete-event'
 import EditEvent from './edit-event'
-import { Event } from '@/graphql/codegen/graphql'
 
 interface EventListProps {
   events: Event[]
@@ -49,17 +50,11 @@ export default function EventList({ events, refetch }: EventListProps) {
                 </p>
                 <p className='flex items-center gap-2'>
                   <Calendar className='h-4 w-4 text-green-500' />
-                  Start:{' '}
-                  {event.startDate
-                    ? new Date(event.startDate).toLocaleDateString()
-                    : '—'}
+                  Start: {formatDate(event.startDate, true)}
                 </p>
                 <p className='flex items-center gap-2'>
                   <Calendar className='h-4 w-4 text-red-500' />
-                  End:{' '}
-                  {event.endDate
-                    ? new Date(event.endDate).toLocaleDateString()
-                    : '—'}
+                  End: {formatDate(event.endDate, true)}
                 </p>
               </CardContent>
             </Card>
