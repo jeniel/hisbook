@@ -49,8 +49,8 @@ export default function UpdateTicket({ ticket, onUpdated }: UpdateTicketProps) {
       fetchDepartments()
       setUpdatedBy(
         `${user?.profile?.firstName || ''} ${user?.profile?.lastName || ''} - ${
-          user?.profile?.title || ''
-        }`
+          user?.profile?.title || '' 
+        } / ${user?.username}`
       )
     }
   }, [open, user, fetchDepartments, setUpdatedBy])
