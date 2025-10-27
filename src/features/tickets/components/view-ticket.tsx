@@ -12,7 +12,9 @@ import {
   StickyNote,
   ClipboardList,
   FileImage,
+  Calendar,
 } from 'lucide-react'
+import { formatDate } from '@/utils/formatDate'
 import { useUpload } from '@/hooks/useUpload'
 import { Button } from '@/components/ui/button'
 import {
@@ -83,16 +85,23 @@ export default function ViewTicket({ ticket }: ViewTicketProps) {
               <strong>
                 <User className='mr-1 inline h-4 w-4' /> Name:
               </strong>{' '}
-              {ticket.createdBy?.profile
+              {ticket.createdBy?.profile?.firstName &&
+              ticket.createdBy?.profile?.lastName
                 ? `${ticket.createdBy.profile.firstName} ${ticket.createdBy.profile.lastName}`
-                : '-'}{' '}
-              /{' '}{ticket.createdBy?.username}
+                : 'No Full Name'}{' '}
+              / {ticket.createdBy?.username || 'Unknown'}
             </p>
             <p>
               <strong>
                 <FileText className='mr-1 inline h-4 w-4' /> Subject:
               </strong>{' '}
               {ticket.subject || '-'}
+            </p>
+            <p>
+              <strong>
+                <Calendar className='mr-1 inline h-4 w-4' /> Submitted On:
+              </strong>{' '}
+              {formatDate(ticket.createdAt, false)}
             </p>
             <p>
               <strong>

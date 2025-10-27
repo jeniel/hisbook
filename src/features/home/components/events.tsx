@@ -2,6 +2,7 @@ import { Query } from '@/graphql/codegen/graphql'
 import { GET_ALL_EVENT } from '@/graphql/operation/query/event'
 import { useQuery } from '@apollo/client'
 import { Calendar } from 'lucide-react'
+import { formatDate } from '@/utils/formatDate'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -56,19 +57,13 @@ export default function Events() {
                 className={`min-w-[250px] flex-shrink-0 cursor-pointer rounded-2xl shadow-lg ${
                   isToday
                     ? 'border-green-500'
-                    : 'border-red-300 hover:border-red-500'
+                    : 'border-blue-300 hover:border-blue-500'
                 }`}
               >
                 <CardHeader className='flex flex-col items-center text-center'>
                   <CardTitle className='text-lg'>{event.title}</CardTitle>
                   <CardDescription className='mt-2 text-gray-500'>
-                    {event.startDate
-                      ? new Date(event.startDate).toLocaleDateString('en-US', {
-                          year: 'numeric',
-                          month: 'long',
-                          day: 'numeric',
-                        })
-                      : 'TBD'}
+                    {formatDate(event.startDate, true)}
                   </CardDescription>
                   <CardDescription className='text-muted-foreground'>
                     {event.location}

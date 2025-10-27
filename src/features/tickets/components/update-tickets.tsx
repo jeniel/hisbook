@@ -111,9 +111,11 @@ export default function UpdateTicket({ ticket, onUpdated }: UpdateTicketProps) {
           <div className='space-y-2 text-sm'>
             <p>
               <strong className='mr-2'>Name:</strong>
-              {ticket.createdBy?.profile
+              {ticket.createdBy?.profile?.firstName &&
+              ticket.createdBy?.profile?.lastName
                 ? `${ticket.createdBy.profile.firstName} ${ticket.createdBy.profile.lastName}`
-                : 'Unknown'}
+                : 'No Full Name'}{' '}
+              / {ticket.createdBy?.username || 'Unknown'}
             </p>
             <p>
               <strong className='mr-2'>Subject:</strong>

@@ -46,9 +46,10 @@ export default function ListView({ tickets, renderActions }: ListViewProps) {
                     <div className='mt-1 flex flex-wrap items-center gap-2 text-sm'>
                       <p className='flex flex-wrap items-center'>
                         <User className='mr-1 h-4 w-4 shrink-0 text-blue-500' />
-                        {ticket.createdBy?.profile
-                          ? `${ticket.createdBy?.profile.firstName} ${ticket.createdBy?.profile.lastName}`
-                          : 'Unknown'}
+                        {ticket.createdBy?.profile?.firstName &&
+                        ticket.createdBy?.profile?.lastName
+                          ? `${ticket.createdBy.profile.firstName} ${ticket.createdBy.profile.lastName}`
+                          : 'No Full Name'}{' '}
                       </p>
 
                       <p className='flex flex-wrap items-center'>
@@ -58,7 +59,7 @@ export default function ListView({ tickets, renderActions }: ListViewProps) {
 
                     <p className='mt-1 flex flex-wrap items-center text-sm'>
                       <Calendar className='mr-1 h-4 w-4 shrink-0 text-red-500' />
-                      {formatDate(ticket.createdAt)}
+                      {formatDate(ticket.createdAt, false)}
                     </p>
                   </div>
 
