@@ -12,6 +12,7 @@ type CreateTicketPayload = {
   floor: string
   screenshot?: string | null
   status: string | null
+  serialNumber: string | null
   message?: string | null
   departmentId: string
   createdById: string

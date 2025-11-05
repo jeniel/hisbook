@@ -1,5 +1,5 @@
 import { Ticket, Status } from '@/graphql/codegen/graphql'
-import { User, Calendar, Layers, Send, TicketIcon } from 'lucide-react'
+import { User, Calendar, Layers, Send, TicketIcon, Barcode } from 'lucide-react'
 import { formatDate } from '@/utils/formatDate'
 import { Card, CardContent } from '@/components/ui/card'
 
@@ -60,6 +60,11 @@ export default function ListView({ tickets, renderActions }: ListViewProps) {
                     <p className='mt-1 flex flex-wrap items-center text-sm'>
                       <Calendar className='mr-1 h-4 w-4 shrink-0 text-red-500' />
                       {formatDate(ticket.createdAt, false)}
+                    </p>
+
+                    <p className='mt-1 flex flex-wrap items-center text-sm'>
+                      <Barcode className='mr-1 h-4 w-4 shrink-0 text-green-500' />
+                      {ticket.serialNumber || 'N/A'}
                     </p>
                   </div>
 

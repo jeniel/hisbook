@@ -41,6 +41,7 @@ export const FIND_ALL_TICKETS = gql`
         statusFormatted
         status
         updatedBy
+        serialNumber
       }
       meta {
         currentPage
@@ -89,6 +90,7 @@ export const FIND_ALL_TICKETS_BY_USER = gql`
         screenshot
         status
         updatedBy
+        serialNumber
         createdById
         departmentId
         department {
@@ -138,6 +140,7 @@ export const FIND_TICKETS_WORKED_BY_USER = gql`
         id
         floor
         createdById
+        serialNumber
         createdAt
         createdBy {
           username
@@ -171,6 +174,7 @@ export const FIND_TICKETS_BY_DEPARTMENT = gql`
         createdAt
         updatedAt
         missedAt
+        serialNumber
         remarks
         screenshot
         floor
