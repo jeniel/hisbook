@@ -122,6 +122,10 @@ export default function UpdateTicket({ ticket, onUpdated }: UpdateTicketProps) {
               {ticket.subject || '-'}
             </p>
             <p>
+              <strong className='mr-2'>Serial Number / Property Tag:</strong>
+              {ticket.serialNumber || 'N/A'}
+            </p>
+            <p>
               <strong className='mr-2'>Department / Location:</strong>
               {ticket.floor || '-'}
             </p>

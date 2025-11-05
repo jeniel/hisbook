@@ -22,6 +22,7 @@ import {
   FormLabel,
   FormControl,
   FormMessage,
+  FormDescription,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import {
@@ -38,6 +39,7 @@ import useTicketMutation from '../hooks/useTicketMutation'
 const TicketSchema = z.object({
   floor: z.string().min(1, { message: 'Location is required' }),
   subject: z.string().min(1, { message: 'Subject is required' }),
+  serialNumber: z.string().min(1, { message: 'Serial Number is required' }),
   message: z.string().optional(),
   departmentId: z.string().min(1, { message: 'Department is required' }),
 })
@@ -67,6 +69,7 @@ export default function CreateTickets({ onCreated }: CreateTicketProps) {
     defaultValues: {
       subject: '',
       floor: '',
+      serialNumber: '',
       message: '',
       departmentId: '',
     },
@@ -83,6 +86,7 @@ export default function CreateTickets({ onCreated }: CreateTicketProps) {
       await createTicket({
         subject: data.subject,
         floor: data.floor,
+        serialNumber: data.serialNumber,
         screenshot: null,
         status: Status.Pending,
         createdById: userId,
@@ -110,7 +114,7 @@ export default function CreateTickets({ onCreated }: CreateTicketProps) {
         aria-describedby={undefined}
       >
         <DialogHeader>
-          <DialogTitle className="flex flex-row gap-2 items-center">
+          <DialogTitle className='flex flex-row items-center gap-2'>
             <PlusIcon className='text-green-500' />
             Create Ticket
           </DialogTitle>
@@ -169,6 +173,28 @@ export default function CreateTickets({ onCreated }: CreateTicketProps) {
                   )}
                 />
 
+                {/* Serial Number or Property Tag */}
+                <FormField
+                  control={form.control}
+                  name='serialNumber'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Serial Number / Property Tag</FormLabel>
+                      <FormDescription className='text-muted-foreground text-sm italic'>
+                        For Equipment Request. Enter the equipment serial number
+                        or property tag. If none, type “N/A”.
+                      </FormDescription>
+                      <FormControl>
+                        <Input
+                          placeholder='e.g., BIO-123456 or N/A'
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
                 <FormField
                   control={form.control}
                   name='departmentId'
@@ -179,7 +205,7 @@ export default function CreateTickets({ onCreated }: CreateTicketProps) {
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
-                        <SelectTrigger className='w-full sm:w-80'>
+                        <SelectTrigger className='w-full border border-black sm:w-80'>
                           <SelectValue placeholder='Select Department' />
                         </SelectTrigger>
                         <SelectContent className='max-h-60 w-[var(--radix-select-trigger-width)] overflow-y-auto sm:w-80'>

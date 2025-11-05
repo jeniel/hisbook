@@ -13,6 +13,7 @@ import {
   ClipboardList,
   FileImage,
   Calendar,
+  Barcode,
 } from 'lucide-react'
 import { formatDate } from '@/utils/formatDate'
 import { useUpload } from '@/hooks/useUpload'
@@ -102,6 +103,12 @@ export default function ViewTicket({ ticket }: ViewTicketProps) {
                 <Calendar className='mr-1 inline h-4 w-4' /> Submitted On:
               </strong>{' '}
               {formatDate(ticket.createdAt, false)}
+            </p>
+            <p>
+              <strong>
+                <Barcode className='mr-1 inline h-4 w-4' /> Serial Number / Property Tag:
+              </strong>{' '}
+              {ticket.serialNumber || 'N/A'}
             </p>
             <p>
               <strong>
