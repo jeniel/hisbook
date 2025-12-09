@@ -10,7 +10,7 @@ import { SquareCheckBig } from 'lucide-react'
 import { toast } from 'sonner'
 import { useUpload } from '@/hooks/useUpload'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import {
   Select,
@@ -130,11 +130,14 @@ export default function EditProfile() {
   return (
     <>
       <Card>
+        <CardHeader>
+          <CardTitle>Profile</CardTitle>
+        </CardHeader>
         <CardContent>
           <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
             {/* Profile Picture */}
             <div className='space-y-2'>
-              <label className='block font-semibold'>Profile Picture</label>
+              <label className='block text-sm font-semibold'>Profile Picture</label>
               <Input
                 type='file'
                 accept='image/*'
@@ -166,7 +169,7 @@ export default function EditProfile() {
             {/* Form Fields */}
             <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
               <div>
-                <label className='mb-1 block'>First Name</label>
+                <label className='mb-1 block text-sm'>First Name</label>
                 <Input
                   {...form.register('firstName')}
                   className='border border-black uppercase'
@@ -174,7 +177,7 @@ export default function EditProfile() {
               </div>
 
               <div>
-                <label className='mb-1 block'>Middle Name</label>
+                <label className='mb-1 block text-sm'>Middle Name</label>
                 <Input
                   {...form.register('middleName')}
                   className='border border-black uppercase'
@@ -182,7 +185,7 @@ export default function EditProfile() {
               </div>
 
               <div>
-                <label className='mb-1 block'>Last Name</label>
+                <label className='mb-1 block text-sm'>Last Name</label>
                 <Input
                   {...form.register('lastName')}
                   className='border border-black uppercase'
@@ -190,7 +193,7 @@ export default function EditProfile() {
               </div>
 
               <div>
-                <label className='mb-1 block'>Job Title</label>
+                <label className='mb-1 block text-sm'>Job Title</label>
                 <Input
                   {...form.register('title')}
                   className='border border-black uppercase'
@@ -198,7 +201,7 @@ export default function EditProfile() {
               </div>
 
               <div>
-                <label className='mb-1 block'>Gender</label>
+                <label className='mb-1 block text-sm'>Gender</label>
                 <Controller
                   name='gender'
                   control={form.control}
@@ -221,7 +224,7 @@ export default function EditProfile() {
               </div>
 
               <div>
-                <label className='mb-1 block'>Address</label>
+                <label className='mb-1 block text-sm'>Address</label>
                 <Input
                   {...form.register('address')}
                   className='border border-black uppercase'
@@ -229,7 +232,7 @@ export default function EditProfile() {
               </div>
 
               <div>
-                <label className='mb-1 block'>Contact</label>
+                <label className='mb-1 block text-sm'>Contact</label>
                 <Input
                   {...form.register('contact')}
                   className='border border-black uppercase'
@@ -237,7 +240,7 @@ export default function EditProfile() {
               </div>
 
               <div>
-                <label className='mb-1 block'>Employee ID</label>
+                <label className='mb-1 block text-sm'>Employee ID</label>
                 <Input
                   {...form.register('employeeID')}
                   className='border border-black uppercase'
@@ -248,7 +251,7 @@ export default function EditProfile() {
             </div>
 
             <Button type='submit' className='shadow-md'>
-              <SquareCheckBig/>
+              <SquareCheckBig />
               Update Profile
             </Button>
           </form>
