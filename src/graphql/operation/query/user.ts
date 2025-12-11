@@ -22,6 +22,8 @@ export const FIND_ALL_USER = gql`
           address
           birthDate
           contact
+          secondaryContact
+          email
           employeeID
           gender
           title
@@ -57,6 +59,8 @@ export const ME_QUERY = gql`
           address
           birthDate
           contact
+          secondaryContact
+          email
           createdAt
           employeeID
           firstName

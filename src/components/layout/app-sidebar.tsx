@@ -10,6 +10,7 @@ import {
   SidebarRail,
 } from '@/components/ui/sidebar'
 import { NavGroup } from '@/components/layout/nav-group'
+import Avatar from '../avatar'
 import { sidebarData } from './data/sidebar-data'
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -54,9 +55,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         {/* User Info (hides in collapsed mode) */}
         <div className='flex flex-row items-center gap-4 p-2 group-data-[collapsible=icon]:hidden'>
           <div>
-            <img
-              src='/images/logo.png'
-              className='h-18 w-auto object-contain'
+            <Avatar
+              avatarUrl={profile?.avatar ?? '/images/logo.png'}
+              size={64} // bigger than header avatar
             />
           </div>
           <div>

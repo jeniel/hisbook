@@ -1,5 +1,4 @@
 import { UserPen } from 'lucide-react'
-import Contacts from './components/contacts'
 import EditProfile from './components/edit-profile'
 
 export default function Profile() {
@@ -17,7 +16,6 @@ export default function Profile() {
 
       <div className="space-y-4 mb-4">
         <EditProfile />
-        <Contacts />
       </div>
     </>
   )

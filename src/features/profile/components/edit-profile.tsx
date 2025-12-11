@@ -43,6 +43,8 @@ export default function EditProfile() {
       gender: (profile?.gender as 'Male' | 'Female' | 'Others') || undefined,
       address: profile?.address || '',
       contact: profile?.contact || '',
+      secondaryContact: profile?.secondaryContact || '',
+      email: profile?.email || '',
       employeeID: profile?.employeeID || '',
     },
   })
@@ -103,6 +105,8 @@ export default function EditProfile() {
         gender: values.gender, // keep gender as is (since it's from a select)
         address: values.address?.toUpperCase() || '',
         contact: values.contact?.toUpperCase() || '',
+        secondaryContact: values.secondaryContact?.toUpperCase() || '',
+        email: values.email?.toUpperCase() || '',
         employeeID: values.employeeID?.toUpperCase() || '',
       }
 
@@ -137,7 +141,9 @@ export default function EditProfile() {
           <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
             {/* Profile Picture */}
             <div className='space-y-2'>
-              <label className='block text-sm font-semibold'>Profile Picture</label>
+              <label className='block text-sm font-semibold'>
+                Profile Picture
+              </label>
               <Input
                 type='file'
                 accept='image/*'
@@ -174,6 +180,11 @@ export default function EditProfile() {
                   {...form.register('firstName')}
                   className='border border-black uppercase'
                 />
+                {form.formState.errors.firstName && (
+                  <p className='text-sm text-red-600'>
+                    {form.formState.errors.firstName.message}
+                  </p>
+                )}
               </div>
 
               <div>
@@ -190,6 +201,11 @@ export default function EditProfile() {
                   {...form.register('lastName')}
                   className='border border-black uppercase'
                 />
+                {form.formState.errors.lastName && (
+                  <p className='text-sm text-red-600'>
+                    {form.formState.errors.lastName.message}
+                  </p>
+                )}
               </div>
 
               <div>
@@ -229,12 +245,42 @@ export default function EditProfile() {
                   {...form.register('address')}
                   className='border border-black uppercase'
                 />
+                {form.formState.errors.address && (
+                  <p className='text-sm text-red-600'>
+                    {form.formState.errors.address.message}
+                  </p>
+                )}
               </div>
 
               <div>
-                <label className='mb-1 block text-sm'>Contact</label>
+                <label className='mb-1 block text-sm'>
+                  Primary Contact Number
+                </label>
                 <Input
                   {...form.register('contact')}
+                  className='border border-black uppercase'
+                />
+                {form.formState.errors.contact && (
+                  <p className='text-sm text-red-600'>
+                    {form.formState.errors.contact.message}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <label className='mb-1 block text-sm'>
+                  Secondary Contact Number
+                </label>
+                <Input
+                  {...form.register('secondaryContact')}
+                  className='border border-black uppercase'
+                />
+              </div>
+
+              <div>
+                <label className='mb-1 block text-sm'>Email</label>
+                <Input
+                  {...form.register('email')}
                   className='border border-black uppercase'
                 />
               </div>
