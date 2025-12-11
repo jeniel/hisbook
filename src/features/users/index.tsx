@@ -3,7 +3,7 @@ import { UserPen } from 'lucide-react'
 import Pagination from '@/components/pagination'
 import SearchBar from '@/components/search-bar'
 import Spinner from '@/components/spinner'
-import UserList from './components/view-user'
+import UserList from './components/user-list'
 import CreateUser from './components/create-user'
 import useUserQuery from './hooks/useUserQuery'
 

@@ -10,7 +10,7 @@ import { SquareCheckBig } from 'lucide-react'
 import { toast } from 'sonner'
 import { useUpload } from '@/hooks/useUpload'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import {
   Select,
@@ -134,9 +134,6 @@ export default function EditProfile() {
   return (
     <>
       <Card>
-        <CardHeader>
-          <CardTitle>Profile</CardTitle>
-        </CardHeader>
         <CardContent>
           <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
             {/* Profile Picture */}
