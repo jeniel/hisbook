@@ -3,8 +3,9 @@ import { UserPen } from 'lucide-react'
 import Pagination from '@/components/pagination'
 import SearchBar from '@/components/search-bar'
 import Spinner from '@/components/spinner'
-import UserList from './components/user-list'
 import CreateUser from './components/create-user'
+import DownloadUsers from './components/export-excel'
+import UserList from './components/user-list'
 import useUserQuery from './hooks/useUserQuery'
 
 export default function Users() {
@@ -34,20 +35,21 @@ export default function Users() {
 
         {/* User List */}
         <div className='order-2 space-y-4 lg:order-1 lg:col-span-2'>
-          <SearchBar
-            placeholder='Search users...'
-            onSearch={(value) => refetch({ page: 1, perPage, search: value })}
-          />
+          <div className='flex items-center justify-between gap-2'>
+            <SearchBar
+              placeholder='Search users...'
+              onSearch={(value) => refetch({ page: 1, perPage, search: value })}
+            />
+
+            <DownloadUsers />
+          </div>
 
           {loading ? (
             <Spinner />
           ) : error ? (
             <p className='p-2 text-red-500'>{error.message}</p>
           ) : (
-            <UserList
-              users={users}
-              refetch={refetch}
-            />
+            <UserList users={users} refetch={refetch} />
           )}
 
           {/* Pagination */}

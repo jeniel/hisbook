@@ -1,15 +1,8 @@
 import { useState } from 'react'
 import { FIND_ONE_USER } from '@/graphql/operation/query/user'
 import { useQuery } from '@apollo/client'
-import {
-  Eye,
-  User,
-  Mail,
-  Users,
-  Calendar,
-  Home,
-  Phone,
-} from 'lucide-react'
+import { Eye, User, Mail, Users, Calendar, Home, Phone } from 'lucide-react'
+import { formatDate } from '@/utils/formatDate'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
@@ -96,11 +89,7 @@ export default function ViewUser({ userId }: ViewUserDialogProps) {
                 <Calendar className='h-5 w-5 text-orange-500' />
                 <div>
                   <div className='text-sm font-medium'>Created At</div>
-                  <div>
-                    {user.createdAt
-                      ? new Date(user.createdAt).toLocaleString()
-                      : 'N/A'}
-                  </div>
+                  <div>{formatDate(user.createdAt)}</div>
                 </div>
               </div>
             </div>
