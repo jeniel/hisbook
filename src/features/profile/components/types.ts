@@ -6,8 +6,10 @@ export const ProfileSchema = z.object({
   lastName: z.string().min(1, 'Last name is required'),
   title: z.string().optional(),
   gender: z.enum(['Male', 'Female', 'Others']).optional(),
-  address: z.string().optional(),
-  contact: z.string().optional(),
+  address: z.string().min(1, 'Address is required'),
+  contact: z.string().min(1, 'Contact Number is required'),
+  secondaryContact: z.string().optional(),
+  email: z.string().optional(),
   employeeID: z.any().optional(),
 })
 

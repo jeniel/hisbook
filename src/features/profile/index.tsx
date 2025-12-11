@@ -14,7 +14,9 @@ export default function Profile() {
         </p>
       </div>
 
-      <EditProfile />
+      <div className="space-y-4 mb-4">
+        <EditProfile />
+      </div>
     </>
   )
 }

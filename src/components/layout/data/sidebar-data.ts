@@ -2,7 +2,7 @@ import {
   IconLayoutDashboard,
   IconUserCog,
   IconLayoutBoard,
-  IconCalendarWeek,
+  // IconCalendarWeek,
   IconTimeDuration30,
   IconHome,
   IconDeviceDesktop,
@@ -35,10 +35,10 @@ export const sidebarData: SidebarData = {
         },
       ],
     },
-    {
-      title: 'Settings',
-      items: [{ title: 'Events', url: '/events', icon: IconCalendarWeek }],
-    },
+    // {
+    //   title: 'Settings',
+    //   items: [{ title: 'Events', url: '/events', icon: IconCalendarWeek }],
+    // },
     {
       title: 'Config',
       items: [

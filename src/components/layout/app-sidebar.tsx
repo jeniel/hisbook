@@ -56,7 +56,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <div className='flex flex-row items-center gap-4 p-2 group-data-[collapsible=icon]:hidden'>
           <div>
             <Avatar
-              avatarUrl={profile?.avatar ?? '/images/ace-logo-192px.webp'}
+              avatarUrl={profile?.avatar ?? '/images/logo.png'}
               size={64} // bigger than header avatar
             />
           </div>

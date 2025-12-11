@@ -22,6 +22,8 @@ export const FIND_ALL_USER = gql`
           address
           birthDate
           contact
+          secondaryContact
+          email
           employeeID
           gender
           title
@@ -57,6 +59,8 @@ export const ME_QUERY = gql`
           address
           birthDate
           contact
+          secondaryContact
+          email
           createdAt
           employeeID
           firstName
@@ -70,6 +74,36 @@ export const ME_QUERY = gql`
         role
       }
       isSignedIn
+    }
+  }
+`
+
+export const FIND_ONE_USER = gql`
+  query FindOneUser($id: String!) {
+    findOneUser(id: $id) {
+      id
+      email
+      username
+      role
+      createdAt
+      department {
+        id
+        name
+      }
+      profile {
+        id
+        firstName
+        lastName
+        middleName
+        address
+        birthDate
+        contact
+        secondaryContact
+        email
+        employeeID
+        gender
+        title
+      }
     }
   }
 `

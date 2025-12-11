@@ -1,5 +1,13 @@
 import { Ticket, Status } from '@/graphql/codegen/graphql'
-import { User, Calendar, Layers, Send, TicketIcon, Barcode } from 'lucide-react'
+import {
+  User,
+  Calendar,
+  Layers,
+  Send,
+  TicketIcon,
+  Barcode,
+  HashIcon,
+} from 'lucide-react'
 import { formatDate } from '@/utils/formatDate'
 import { Card, CardContent } from '@/components/ui/card'
 
@@ -43,6 +51,12 @@ export default function ListView({ tickets, renderActions }: ListViewProps) {
                         {ticket.statusFormatted || '—'}
                       </span>
                     </div>
+
+                    <p className='mt-1 flex flex-wrap items-center text-sm'>
+                      <HashIcon className='mr-1 h-4 w-4 shrink-0 text-green-500' />
+                      {ticket.ticketId || ticket.seq}
+                    </p>
+
                     <div className='mt-1 flex flex-wrap items-center gap-2 text-sm'>
                       <p className='flex flex-wrap items-center'>
                         <User className='mr-1 h-4 w-4 shrink-0 text-blue-500' />
@@ -51,7 +65,6 @@ export default function ListView({ tickets, renderActions }: ListViewProps) {
                           ? `${ticket.createdBy.profile.firstName} ${ticket.createdBy.profile.lastName}`
                           : 'No Full Name'}{' '}
                       </p>
-
                       <p className='flex flex-wrap items-center'>
                         / @{ticket.createdBy.username}
                       </p>

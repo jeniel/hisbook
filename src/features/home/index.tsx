@@ -1,4 +1,4 @@
-import Events from './components/events'
+// import Events from './components/events'
 import Features from './components/feature-cards'
 import Hero from './components/hero'
 
@@ -8,7 +8,7 @@ export default function HomePage() {
       <div className='order-2 space-y-2 p-4 py-10 md:container md:py-16'>
         <Hero />
         <Features />
-        <Events />
+        {/* <Events /> */}
       </div>
     </div>
   )
