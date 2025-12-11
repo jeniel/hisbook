@@ -6,6 +6,7 @@ import Spinner from '@/components/spinner'
 import StatusFilter from '@/components/status-filter'
 import AuditLogsContent from '../components/audit-logs'
 import DeleteTicket from '../components/delete-ticket'
+import DownloadTickets from '../components/download-tickets'
 import ListView from '../components/list-view'
 import UpdateTicket from '../components/update-tickets'
 import ViewTicket from '../components/view-ticket'
@@ -45,30 +46,25 @@ export default function AllTickets() {
 
   return (
     <>
-      <div className="mb-4">
-        <h1 className="mb-2 flex items-center gap-2 text-3xl font-semibold">
-          <Ticket className="h-10 w-10 text-green-500" />
+      <div className='mb-4'>
+        <h1 className='mb-2 flex items-center gap-2 text-3xl font-semibold'>
+          <Ticket className='h-10 w-10 text-green-500' />
           All Tickets
         </h1>
       </div>
 
       {/* 🔎 Search + Status Filter */}
-      <div className="mb-4 flex items-center gap-2">
-        <SearchBar
-          placeholder="Search tickets..."
-          onSearch={handleSearch}
-        />
+      <div className='mb-4 flex items-center gap-2'>
+        <SearchBar placeholder='Search tickets...' onSearch={handleSearch} />
 
-        <StatusFilter
-          value={status}
-          onChange={handleStatusChange}
-        />
+        <StatusFilter value={status} onChange={handleStatusChange} />
+        <DownloadTickets />
       </div>
 
       {loading ? (
         <Spinner />
       ) : error ? (
-        <p className="text-red-500">Error: {error.message}</p>
+        <p className='text-red-500'>Error: {error.message}</p>
       ) : (
         <ListView
           tickets={tickets}
@@ -84,7 +80,7 @@ export default function AllTickets() {
       )}
 
       {/* Pagination */}
-      <div className="my-4">
+      <div className='my-4'>
         <Pagination
           currentPage={page}
           lastPage={totalPages}

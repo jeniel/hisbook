@@ -4,7 +4,7 @@ import Pagination from '@/components/pagination'
 import SearchBar from '@/components/search-bar'
 import Spinner from '@/components/spinner'
 import CreateUser from './components/create-user'
-import DownloadUsers from './components/export-excel'
+import DownloadUsers from './components/download-user'
 import UserList from './components/user-list'
 import useUserQuery from './hooks/useUserQuery'
 

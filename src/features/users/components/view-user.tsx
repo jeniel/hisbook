@@ -62,7 +62,7 @@ export default function ViewUser({ userId }: ViewUserDialogProps) {
               <div className='flex items-center gap-2'>
                 <User className='h-5 w-5 text-blue-500' />
                 <div>
-                  <div className='text-sm font-medium'>Username</div>
+                  <div className='text-md font-medium'>Username</div>
                   <div className='text-lg font-semibold'>
                     {user.username || 'N/A'}
                   </div>
@@ -72,15 +72,15 @@ export default function ViewUser({ userId }: ViewUserDialogProps) {
               <div className='flex items-center gap-2'>
                 <Users className='h-5 w-5 text-green-500' />
                 <div>
-                  <div className='text-sm font-medium'>Role</div>
-                  <Badge>{user.role || 'N/A'}</Badge>
+                  <div className='text-md font-medium'>Role</div>
+                  <Badge className="text-white">{user.role || 'N/A'}</Badge>
                 </div>
               </div>
 
               <div className='flex items-center gap-2'>
                 <Users className='h-5 w-5 text-purple-500' />
                 <div>
-                  <div className='text-sm font-medium'>Department</div>
+                  <div className='text-md font-medium'>Department</div>
                   <div>{user.department?.name || 'N/A'}</div>
                 </div>
               </div>
@@ -88,7 +88,7 @@ export default function ViewUser({ userId }: ViewUserDialogProps) {
               <div className='flex items-center gap-2'>
                 <Calendar className='h-5 w-5 text-orange-500' />
                 <div>
-                  <div className='text-sm font-medium'>Created At</div>
+                  <div className='text-md font-medium'>Created At</div>
                   <div>{formatDate(user.createdAt)}</div>
                 </div>
               </div>
@@ -105,7 +105,7 @@ export default function ViewUser({ userId }: ViewUserDialogProps) {
                   <div className='flex items-center gap-2'>
                     <User className='h-4 w-4 text-blue-500' />
                     <div>
-                      <div className='text-sm font-medium'>Name</div>
+                      <div className='text-md font-medium'>Name</div>
                       <div>
                         {[
                           profile.firstName,
@@ -121,7 +121,7 @@ export default function ViewUser({ userId }: ViewUserDialogProps) {
                   <div className='flex items-center gap-2'>
                     <User className='h-4 w-4 text-indigo-500' />
                     <div>
-                      <div className='text-sm font-medium'>Employee ID</div>
+                      <div className='text-md font-medium'>Employee ID</div>
                       <div>{profile.employeeID || 'N/A'}</div>
                     </div>
                   </div>
@@ -129,7 +129,7 @@ export default function ViewUser({ userId }: ViewUserDialogProps) {
                   <div className='flex items-center gap-2'>
                     <Users className='h-4 w-4 text-purple-500' />
                     <div>
-                      <div className='text-sm font-medium'>Gender</div>
+                      <div className='text-md font-medium'>Gender</div>
                       <div>{profile.gender || 'N/A'}</div>
                     </div>
                   </div>
@@ -137,7 +137,7 @@ export default function ViewUser({ userId }: ViewUserDialogProps) {
                   <div className='flex items-center gap-2'>
                     <Phone className='h-4 w-4 text-teal-500' />
                     <div>
-                      <div className='text-sm font-medium'>Contact</div>
+                      <div className='text-md font-medium'>Contact</div>
                       <div>{profile.contact || 'N/A'}</div>
                     </div>
                   </div>
@@ -145,7 +145,7 @@ export default function ViewUser({ userId }: ViewUserDialogProps) {
                   <div className='flex items-center gap-2'>
                     <Phone className='h-4 w-4 text-teal-400' />
                     <div>
-                      <div className='text-sm font-medium'>
+                      <div className='text-md font-medium'>
                         Secondary Contact
                       </div>
                       <div>{profile.secondaryContact || 'N/A'}</div>
@@ -155,7 +155,7 @@ export default function ViewUser({ userId }: ViewUserDialogProps) {
                   <div className='flex items-center gap-2'>
                     <Mail className='h-5 w-5 text-red-500' />
                     <div>
-                      <div className='text-sm font-medium'>Email</div>
+                      <div className='text-md font-medium'>Email</div>
                       <div>{profile.email || user.email || 'N/A'}</div>
                     </div>
                   </div>
@@ -163,14 +163,14 @@ export default function ViewUser({ userId }: ViewUserDialogProps) {
                   <div className='col-span-1 flex items-center gap-2 sm:col-span-2'>
                     <Home className='h-4 w-4 text-yellow-500' />
                     <div>
-                      <div className='text-sm font-medium'>Address</div>
+                      <div className='text-md font-medium'>Address</div>
                       <div>{profile.address || 'N/A'}</div>
                     </div>
                   </div>
                 </div>
               </div>
             ) : (
-              <div className='border-t pt-4 text-sm text-gray-500 italic'>
+              <div className='border-t pt-4 text-md text-gray-500 italic'>
                 User has not updated their profile.
               </div>
             )}
