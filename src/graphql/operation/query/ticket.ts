@@ -42,6 +42,8 @@ export const FIND_ALL_TICKETS = gql`
         status
         updatedBy
         serialNumber
+        ticketId
+        seq
       }
       meta {
         currentPage
@@ -91,6 +93,8 @@ export const FIND_ALL_TICKETS_BY_USER = gql`
         status
         updatedBy
         serialNumber
+        ticketId
+        seq
         createdById
         departmentId
         department {
@@ -126,7 +130,11 @@ export const FIND_TICKET_AUDIT_LOGS = gql`
 `
 
 export const FIND_TICKETS_WORKED_BY_USER = gql`
-  query FindTicketsWorkedByUser($userId: String!, $search: String, $status: Status) {
+  query FindTicketsWorkedByUser(
+    $userId: String!
+    $search: String
+    $status: Status
+  ) {
     findTicketsWorkedByUser(userId: $userId, search: $search, status: $status) {
       data {
         subject
@@ -141,6 +149,8 @@ export const FIND_TICKETS_WORKED_BY_USER = gql`
         floor
         createdById
         serialNumber
+        ticketId
+        seq
         createdAt
         createdBy {
           username
@@ -155,8 +165,18 @@ export const FIND_TICKETS_WORKED_BY_USER = gql`
 `
 
 export const FIND_TICKETS_BY_DEPARTMENT = gql`
-  query FindTicketsByDepartment($page: Int, $perPage: Int, $search: String, $status: Status) {
-    findTicketsByDepartment(page: $page, perPage: $perPage, search: $search, status: $status) {
+  query FindTicketsByDepartment(
+    $page: Int
+    $perPage: Int
+    $search: String
+    $status: Status
+  ) {
+    findTicketsByDepartment(
+      page: $page
+      perPage: $perPage
+      search: $search
+      status: $status
+    ) {
       meta {
         currentPage
         lastPage
@@ -188,6 +208,8 @@ export const FIND_TICKETS_BY_DEPARTMENT = gql`
         }
         createdById
         updatedBy
+        ticketId
+        seq
         departmentId
         department {
           id
