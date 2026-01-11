@@ -1,6 +1,5 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import {
   Eye,
   User,
@@ -14,9 +13,9 @@ import {
   FileImage,
   Calendar,
   Barcode,
+  Hash,
 } from 'lucide-react'
 import { formatDate } from '@/utils/formatDate'
-import { useUpload } from '@/hooks/useUpload'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -33,29 +32,6 @@ type ViewTicketProps = {
 
 export default function ViewTicket({ ticket }: ViewTicketProps) {
   const [open, setOpen] = useState(false)
-  const [preview, setPreview] = useState<string | null>(null)
-  const { getFile } = useUpload()
-
-  useEffect(() => {
-    if (!open || !ticket?.screenshot) return
-    let active = true
-    const fetchScreenshot = async () => {
-      try {
-        const filename = ticket.screenshot.split('/').pop()!
-        const bucket = import.meta.env.VITE_MINIO_BUCKET
-        const url = await getFile('tickets', filename, bucket)
-        if (url && active) setPreview(url)
-      } catch {
-        setPreview(null)
-      }
-    }
-    fetchScreenshot()
-    return () => {
-      active = false
-      setPreview(null)
-    }
-  }, [open, ticket?.screenshot])
-
   if (!ticket) return <Spinner />
 
   return (
@@ -76,7 +52,7 @@ export default function ViewTicket({ ticket }: ViewTicketProps) {
           </DialogTitle>
         </DialogHeader>
 
-        <div className='space-y-4 text-sm'>
+        <div className='space-y-4 text-lg'>
           {/* General Info */}
           <div className='rounded-lg border bg-gray-50 p-4 dark:bg-zinc-950'>
             <h2 className='mb-3 flex items-center gap-2 text-lg font-semibold'>
@@ -94,6 +70,12 @@ export default function ViewTicket({ ticket }: ViewTicketProps) {
             </p>
             <p>
               <strong>
+                <Hash className='mr-1 inline h-4 w-4' /> Ticket No:
+              </strong>{' '}
+              {ticket.ticketId || '-'}
+            </p>
+            <p>
+              <strong>
                 <FileText className='mr-1 inline h-4 w-4' /> Subject:
               </strong>{' '}
               {ticket.subject || '-'}
@@ -106,7 +88,8 @@ export default function ViewTicket({ ticket }: ViewTicketProps) {
             </p>
             <p>
               <strong>
-                <Barcode className='mr-1 inline h-4 w-4' /> Serial Number / Property Tag:
+                <Barcode className='mr-1 inline h-4 w-4' /> Serial Number /
+                Property Tag:
               </strong>{' '}
               {ticket.serialNumber || 'N/A'}
             </p>
@@ -158,18 +141,23 @@ export default function ViewTicket({ ticket }: ViewTicketProps) {
           </div>
 
           {/* Screenshot */}
-          {preview && (
-            <div className='rounded-lg border bg-gray-50 p-4 dark:bg-zinc-950'>
-              <h2 className='mb-3 flex items-center gap-2 text-lg font-semibold'>
-                <FileImage className='text-yellow-500' /> Attached File
-              </h2>
+          <div className='rounded-lg border bg-gray-50 p-4 dark:bg-zinc-950'>
+            <h2 className='mb-3 flex items-center gap-2 text-lg font-semibold'>
+              <FileImage className='text-yellow-500' />Image
+            </h2>
+
+            {ticket?.screenshot ? (
               <img
-                src={preview}
+                src={ticket.screenshot}
                 alt='Ticket Screenshot'
                 className='max-h-96 w-full rounded border object-contain'
               />
-            </div>
-          )}
+            ) : (
+              <div className='flex h-40 items-center justify-center rounded border border-dashed text-sm text-gray-500'>
+                No image attached
+              </div>
+            )}
+          </div>
         </div>
       </DialogContent>
     </Dialog>

@@ -10,6 +10,7 @@ import {
   IconBriefcase,
   IconUsers,
 } from '@tabler/icons-react'
+import { TicketIcon } from 'lucide-react'
 import { type SidebarData } from '../types'
 
 export const sidebarData: SidebarData = {
@@ -25,9 +26,8 @@ export const sidebarData: SidebarData = {
       ],
     },
     {
-      title: 'Assigned Tickets',
+      title: 'Tickets',
       items: [
-        { title: 'Dashboard', url: '/dashboard', icon: IconLayoutDashboard },
         {
           title: 'Department Tickets',
           url: '/department-ticket',
@@ -35,16 +35,18 @@ export const sidebarData: SidebarData = {
         },
       ],
     },
-    // {
-    //   title: 'Settings',
-    //   items: [{ title: 'Events', url: '/events', icon: IconCalendarWeek }],
-    // },
     {
       title: 'Config',
       items: [
+        { title: 'Dashboard', url: '/dashboard', icon: IconLayoutDashboard },
         { title: 'Users', url: '/users', icon: IconUsers },
         { title: 'Departments', url: '/departments', icon: IconBriefcase },
+        { title: 'All Tickets', url: '/all-ticket', icon: TicketIcon },
       ],
+    },
+    {
+      title: 'Admin',
+      items: [{ title: 'All Tickets', url: '/all-ticket', icon: TicketIcon }],
     },
   ],
 }

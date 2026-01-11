@@ -8,6 +8,7 @@ import { useUpload } from '@/hooks/useUpload'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogFooter,
   DialogHeader,
@@ -49,7 +50,7 @@ export default function UpdateTicket({ ticket, onUpdated }: UpdateTicketProps) {
       fetchDepartments()
       setUpdatedBy(
         `${user?.profile?.firstName || ''} ${user?.profile?.lastName || ''} - ${
-          user?.profile?.title || '' 
+          user?.profile?.title || ''
         } / ${user?.username}`
       )
     }
@@ -116,6 +117,10 @@ export default function UpdateTicket({ ticket, onUpdated }: UpdateTicketProps) {
                 ? `${ticket.createdBy.profile.firstName} ${ticket.createdBy.profile.lastName}`
                 : 'No Full Name'}{' '}
               / {ticket.createdBy?.username || 'Unknown'}
+            </p>
+            <p>
+              <strong className='mr-2'>Ticket No:</strong>
+              {ticket.ticketId || '-'}
             </p>
             <p>
               <strong className='mr-2'>Subject:</strong>
@@ -205,14 +210,9 @@ export default function UpdateTicket({ ticket, onUpdated }: UpdateTicketProps) {
           <Button onClick={handleSubmit} disabled={updating}>
             {updating ? 'Saving...' : 'Save'}
           </Button>
-          <Button
-            type='button'
-            variant='outline'
-            onClick={() => setOpen(false)}
-            disabled={updating}
-          >
-            Close
-          </Button>
+          <DialogClose asChild>
+            <Button variant='destructive'>Close</Button>
+          </DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>

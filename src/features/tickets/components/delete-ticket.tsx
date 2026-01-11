@@ -9,6 +9,7 @@ import {
   DialogDescription,
   DialogTrigger,
   DialogFooter,
+  DialogClose,
 } from '@/components/ui/dialog'
 import useTicketMutation from '@/features/tickets/hooks/useTicketMutation'
 
@@ -49,13 +50,13 @@ export default function DeleteTicket({
         </DialogHeader>
 
         <DialogFooter className='flex justify-end gap-2'>
-          <Button variant='outline' onClick={() => setOpen(false)}>
-            Cancel
-          </Button>
+          <DialogClose asChild>
+            <Button variant='default'>Close</Button>
+          </DialogClose>
           <Button
             onClick={handleDelete}
             disabled={deleting}
-            className='bg-red-600 text-white'
+            variant='destructive'
           >
             {deleting ? 'Deleting...' : 'Delete'}
           </Button>
