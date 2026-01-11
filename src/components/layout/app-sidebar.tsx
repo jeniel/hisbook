@@ -10,7 +10,6 @@ import {
   SidebarRail,
 } from '@/components/ui/sidebar'
 import { NavGroup } from '@/components/layout/nav-group'
-import Avatar from '../avatar'
 import { sidebarData } from './data/sidebar-data'
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -35,6 +34,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       return user.department?.name === 'MIS (MANAGEMENT INFORMATION SYSTEM)'
     }
 
+    if (group.title === 'Admin') {
+      return user.department?.name === 'ADMINISTRATIVE OFFICE'
+    }
+
     // Always show other groups
     return true
   })
@@ -53,11 +56,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </div>
 
         {/* User Info (hides in collapsed mode) */}
-        <div className='flex flex-row items-center gap-4 p-2 group-data-[collapsible=icon]:hidden'>
+        <div className='flex flex-row items-center gap-2 p-2 group-data-[collapsible=icon]:hidden'>
           <div>
-            <Avatar
-              avatarUrl={profile?.avatar ?? '/images/logo.png'}
-              size={64} // bigger than header avatar
+            <img
+              src='/images/logo.png'
+              alt='ACE - Logo'
+              className='h-18 w-18 rounded-full object-cover'
             />
           </div>
           <div>
