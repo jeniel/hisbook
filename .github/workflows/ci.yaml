@@ -40,7 +40,7 @@ jobs:
           docker build -f Dockerfile . -t jeniel/hisbook:${{ steps.vars.outputs.sha_short }}-frontend
       - name: docker push
         run: |
-          docker push acemcbmis/acebook-v2:${{ steps.vars.outputs.sha_short }}-frontend
+          docker push jeniel/hisbook:${{ steps.vars.outputs.sha_short }}-frontend
 
     outputs:
       version: ${{ steps.vars.outputs.sha_short}}-frontend
