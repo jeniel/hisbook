@@ -37,7 +37,7 @@ jobs:
 
       - name: docker build nodejs
         run: |
-          docker build -f Dockerfile . -t acemcbmis/acebook-v2:${{ steps.vars.outputs.sha_short }}-frontend
+          docker build -f Dockerfile . -t jeniel/hisbook:${{ steps.vars.outputs.sha_short }}-frontend
       - name: docker push
         run: |
           docker push acemcbmis/acebook-v2:${{ steps.vars.outputs.sha_short }}-frontend
